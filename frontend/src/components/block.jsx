@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Block = ({
     size,
     frontHeader,
@@ -68,13 +70,13 @@ const Block = ({
                     </div>
 
                     {button && (
-                        <a
-                            href={button.href || '#'}
+                        <Link
+                            to={button.href || '#'}
                             className='bento-cta-button inline-block mt-8 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg font-semibold text-sm hover:bg-white/30 transition-colors duration-200 self-start'
                             style={{ color: textColor }}
                         >
                             {button.text || 'Learn More'}
-                        </a>
+                        </Link>
                     )}
                 </div>
             </div>
