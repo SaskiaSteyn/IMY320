@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import Block from './components/block.jsx';
+import Button from './components/button.jsx';
+import ChevronDown from './components/chevron-down.jsx';
 import PricingBlock from './components/pricing.jsx';
 import './global.css';
 
@@ -130,36 +131,14 @@ function App() {
                     </div>
 
                     {/* Scroll Down Chevron */}
-                    {showChevron && (
-                        <div className='absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce'>
-                            <svg
-                                className='w-8 h-8 text-white opacity-70 hover:opacity-100 transition-opacity cursor-pointer'
-                                fill='none'
-                                stroke='currentColor'
-                                viewBox='0 0 24 24'
-                                onClick={() =>
-                                    window.scrollBy({
-                                        top: window.innerHeight,
-                                        behavior: 'smooth',
-                                    })
-                                }
-                            >
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    strokeWidth={2}
-                                    d='M19 14l-7 7m0 0l-7-7m7 7V3'
-                                />
-                            </svg>
-                        </div>
-                    )}
+                    {showChevron && <ChevronDown />}
                 </div>
             </div>
 
             {/* Card 2: Write in Peace Details */}
-            <div className='h-screen w-full relative card-section bg-[#1E1E1E]'>
+            <div className='h-screen w-full relative card-section bg-[#D2C198]'>
                 <div className='p-8 flex flex-row items-center justify-center h-full'>
-                    <div className='flex-[4] pr-8'>
+                    <div className='flex-[4] pr-8 text-black'>
                         <h2 className='text-3xl font-bold mb-6'>
                             Try it now: Write in Peace
                         </h2>
@@ -184,12 +163,11 @@ function App() {
                             space designed to remove friction—so all that's left
                             is you and your words.
                         </p>
-                        <Link
-                            to='/write-in-peace'
-                            className='cta-button inline-block px-8 py-3 rounded-lg transition-colors font-semibold'
-                        >
-                            Try Write in Peace
-                        </Link>
+                        <Button
+                            text='Try Write in Peace'
+                            href='/write-in-peace'
+                            textColor='black'
+                        />
                     </div>
                     <div className='flex-[3]'>
                         <img
@@ -199,6 +177,9 @@ function App() {
                         />
                     </div>
                 </div>
+
+                {/* Scroll Down Chevron */}
+                <ChevronDown />
             </div>
 
             {/* Card 3: Pricing */}
@@ -207,8 +188,8 @@ function App() {
                     <h2 className='text-4xl font-bold text-center mb-12'>
                         Pricing
                     </h2>
-                    <div className='flex gap-8 justify-center max-w-6xl mx-auto items-stretch'>
-                        <div className='flex-1 max-w-sm'>
+                    <div className='flex gap-8 px-8 justify-center w-full mx-auto items-stretch'>
+                        <div className='flex-1'>
                             <PricingBlock
                                 tierName='Free'
                                 price='0'
@@ -222,7 +203,7 @@ function App() {
                                 ]}
                             />
                         </div>
-                        <div className='flex-1 max-w-sm'>
+                        <div className='flex-1'>
                             <PricingBlock
                                 tierName='Standard'
                                 price='35'
@@ -238,7 +219,7 @@ function App() {
                                 ]}
                             />
                         </div>
-                        <div className='flex-1 max-w-sm'>
+                        <div className='flex-1'>
                             <PricingBlock
                                 tierName='Plus'
                                 price='55'
@@ -257,6 +238,9 @@ function App() {
                         </div>
                     </div>
                 </div>
+
+                {/* Scroll Down Chevron */}
+                <ChevronDown />
             </div>
         </div>
     );
