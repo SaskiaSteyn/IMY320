@@ -8,6 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
+
 mongoose.connect('mongodb://localhost:27017/TheeeStooges', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -25,6 +26,8 @@ const User = mongoose.model('User', UserSchema);
 //
 // ROUTES
 //
+
+// mongodb://localhost:27017/TheeeStooges/register
 app.post('/register', async (req, res) => {
     const {username, email, password} = req.body;
     const hashedPassword = require('bcryptjs').hashSync(password, 10);
@@ -37,6 +40,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
+// mongodb://localhost:27017/TheeeStooges/login
 app.post('/login', async (req, res) => {
     const {email, password} = req.body;
     const user = await User.findOne({email});
