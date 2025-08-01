@@ -14,6 +14,9 @@
     --fog: #bac7cb;
     --forest: #222600;
 
+    /* Custom cursor variable */
+    --custom-cursor: url('/images/cursor/cursor-custom.png') 4 4, pointer;
+
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -31,6 +34,26 @@ body {
     background-color: var(--background);
     color: var(--text);
     /* margin: 50px; */
+    cursor: var(--custom-cursor);
+}
+
+* {
+    cursor: var(--custom-cursor);
+}
+
+/* Ensure custom cursor works for interactive elements */
+a,
+button,
+[role='button'],
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+/* Fallback for text selection areas */
+input,
+textarea,
+[contenteditable] {
+    cursor: text;
 }
 
 h1 {
