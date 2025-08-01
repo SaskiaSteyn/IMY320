@@ -176,6 +176,44 @@ html {
 .card-section:nth-child(3) {
     z-index: 3;
 }
+.card-section:nth-child(4) {
+    z-index: 4;
+}
+
+/* Testimonial Component Styles */
+.testimonial-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-card blockquote {
+    font-family: 'American Typewriter', serif;
+    font-style: italic;
+    position: relative;
+}
+
+.testimonial-card blockquote::before {
+    content: '"';
+    font-size: 4rem;
+    color: var(--candle-light);
+    position: absolute;
+    left: -2rem;
+    top: -1rem;
+    font-family: serif;
+    opacity: 0.3;
+}
+
+.testimonial-card cite {
+    color: var(--cafe);
+    font-weight: 500;
+}
 
 /* Full height sections with scroll snap */
 @media (min-width: 768px) {
