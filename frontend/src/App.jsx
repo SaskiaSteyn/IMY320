@@ -1,11 +1,22 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Block from './components/block.jsx';
 import './global.css';
 
 function App() {
+    const [showChevron, setShowChevron] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowChevron(true);
+        }, 5000); // Show after 10 seconds
+
+        return () => clearTimeout(timer);
+    }, []);
     return (
-        <div className='min-h-screen h-screen overflow-hidden'>
+        <div className='min-h-screen relative'>
             {/* Main Bento Grid Layout */}
-            <div className='flex gap-4 p-8 h-full'>
+            <div className='flex gap-4 p-8 h-screen relative'>
                 {/* Left Column - Large Hero Block */}
                 <div className='flex-[1]'>
                     <Block
@@ -113,6 +124,71 @@ function App() {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                {/* Scroll Down Chevron */}
+                {showChevron && (
+                    <div className='absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce'>
+                        <svg
+                            className='w-8 h-8 text-white opacity-70 hover:opacity-100 transition-opacity cursor-pointer'
+                            fill='none'
+                            stroke='currentColor'
+                            viewBox='0 0 24 24'
+                            onClick={() =>
+                                window.scrollBy({
+                                    top: window.innerHeight,
+                                    behavior: 'smooth',
+                                })
+                            }
+                        >
+                            <path
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                strokeWidth={2}
+                                d='M19 14l-7 7m0 0l-7-7m7 7V3'
+                            />
+                        </svg>
+                    </div>
+                )}
+            </div>
+            <div className='p-8 flex flex-row items-center justify-center'>
+                <div className='flex-[4] pr-8'>
+                    <h2 className='text-3xl font-bold mb-6'>
+                        Try it now: Write in Peace
+                    </h2>
+                    <p className=' mb-6 leading-relaxed'>
+                        Write in Peace is a focused writing app designed to
+                        silence all the noise and help you get into flow. With
+                        one tap you can block notifications, set structured
+                        writing sessions, and create a calm environment where
+                        your ideas can bloom. Whether you're drafting a novel,
+                        blogging, or tackling essays, this app helps you create
+                        the calmest, cozy space for your crafting needs.
+                    </p>
+                    <p className='mb-8 leading-relaxed'>
+                        Set custom session timers, track your daily streaks, and
+                        get insights into your productivity over time. With
+                        flexible features like theme switching, writing goals,
+                        and smart scheduling, Write in Peace adapts to your
+                        routine and preferences. Whether you write in short
+                        bursts or long creative sprints, Write in Peace keeps
+                        you in control. It’s a simple, elegant space designed to
+                        remove friction—so all that’s left is you and your
+                        words.
+                    </p>
+                    <Link
+                        to='/write-in-peace'
+                        className='cta-button inline-block px-8 py-3 rounded-lgtransition-colors font-semibold'
+                    >
+                        Try Write in Peace
+                    </Link>
+                </div>
+                <div className='flex-[3]'>
+                    <img
+                        src='/images/AdobeStock_1452587198.jpeg'
+                        alt='Description'
+                        className='w-full h-auto rounded-lg shadow-md'
+                    />
                 </div>
             </div>
         </div>
