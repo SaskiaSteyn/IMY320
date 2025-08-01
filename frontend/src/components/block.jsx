@@ -6,6 +6,7 @@ const Block = ({
     button,
     image,
     color,
+    textColor = 'white',
 }) => {
     // Tailwind size classes mapping
     const sizeClasses = {
@@ -43,20 +44,25 @@ const Block = ({
 
                 {/* Back Face - Content */}
                 <div
-                    className='bento-back absolute w-full h-full rounded-lg p-6 flex flex-col justify-between'
+                    className='bento-back absolute w-full h-full rounded-lg p-6 flex flex-col justify-center items-center'
                     style={{ backgroundColor: color }}
                 >
                     <div>
-                        <h3 className='text-white font-bold text-xl mb-4'>
+                        <h3
+                            className='font-bold text-xl mb-4'
+                            style={{ color: textColor }}
+                        >
                             {backHeader}
                         </h3>
-                        <div className='text-white/90 text-sm leading-relaxed space-y-3'>
+                        <div className='text-sm leading-relaxed space-y-3'>
                             {Array.isArray(content) ? (
                                 content.map((paragraph, index) => (
-                                    <p key={index}>{paragraph}</p>
+                                    <p key={index} style={{ color: textColor }}>
+                                        {paragraph}
+                                    </p>
                                 ))
                             ) : (
-                                <p>{content}</p>
+                                <p style={{ color: textColor }}>{content}</p>
                             )}
                         </div>
                     </div>
@@ -64,7 +70,8 @@ const Block = ({
                     {button && (
                         <a
                             href={button.href || '#'}
-                            className='bento-cta-button inline-block mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-white font-semibold text-sm hover:bg-white/30 transition-colors duration-200 self-start'
+                            className='bento-cta-button inline-block mt-8 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg font-semibold text-sm hover:bg-white/30 transition-colors duration-200 self-start'
+                            style={{ color: textColor }}
                         >
                             {button.text || 'Learn More'}
                         </a>

@@ -72,7 +72,7 @@ h3 {
 
 .bento-block:hover .bento-flip-card {
     transform: rotateY(180deg);
-    transition-delay: 0.1s;
+    transition-delay: 0.2s;
 }
 
 .bento-front,

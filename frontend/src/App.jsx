@@ -18,9 +18,10 @@ function App() {
                         ]}
                         button={{
                             text: 'Start Writing in Peace',
-                            href: '/start',
+                            href: '/write-in-peace',
                         }}
-                        image='https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&h=600&fit=crop'
+                        image='/images/AdobeStock_1575577074.jpeg'
+                        textColor='black'
                         color='var(--olive)'
                     />
                 </div>
@@ -32,28 +33,30 @@ function App() {
                         <div className='flex-1'>
                             <Block
                                 size='large'
-                                frontHeader='About Us'
-                                backHeader='Our Mission'
-                                content='We believe every writer deserves a peaceful space to create. Our team is dedicated to building tools that help you focus on what matters most - your words and ideas.'
+                                frontHeader='Prompts.'
+                                backHeader='Prompt Generator'
+                                content="Helps you choose random writing prompts to help you get started. Whether you're journaling, practicing creative writing, or just want a fun idea to explore, click the button and start writing. No pressure—just inspiration."
                                 button={{
-                                    text: 'Learn Our Story',
-                                    href: '/about',
+                                    text: 'Start Generating',
+                                    href: '/generate',
                                 }}
-                                image='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&h=400&fit=crop'
-                                color='var(--candle-light)'
+                                image='/images/chill-reading.jpeg'
+                                textColor='white'
+                                color='var(--forest)'
                             />
                         </div>
                         <div className='flex-1'>
                             <Block
                                 size='large'
-                                frontHeader='Features'
-                                backHeader='Built for Writers'
-                                content='Discover powerful features designed to enhance your writing experience. From distraction-free modes to progress tracking, every tool is crafted with writers in mind.'
+                                frontHeader='Challenges.'
+                                backHeader='Weekly Challenges '
+                                content='Check out this week’s writing challenge to help you stay creative and consistent. Each challenge offers a simple prompt, theme, or twist to get you writing and keep your ideas flowing. Come back every week for something new.'
                                 button={{
-                                    text: 'Explore Features',
-                                    href: '/features',
+                                    text: 'Start the Weekly Challenge',
+                                    href: '/weekly-challenge',
                                 }}
-                                image='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&h=400&fit=crop'
+                                image='/images/AdobeStock_1452587198.jpeg'
+                                textColor='var(--forest)'
                                 color='var(--fog)'
                             />
                         </div>
@@ -64,11 +67,14 @@ function App() {
                         <div className='flex-1'>
                             <Block
                                 size='medium'
-                                frontHeader='Writing Guides'
-                                backHeader='Master Your Craft'
-                                content='Comprehensive guides to help you improve your writing skills. From character development to plot structure, discover techniques used by professional writers.'
-                                button={{ text: 'Learn More', href: '/guides' }}
-                                image='https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=500&h=400&fit=crop'
+                                frontHeader='Guide.'
+                                backHeader='Guiding your story'
+                                content='Our writing guides are here to help you grow your skills without the pressure. Whether you’re just getting started or looking to try something new, these guides cover the basics in a simple, approachable way. No jargon, no gatekeeping - just helpful tips from fellow writers who love the craft. Take what you need, skip what you don’t, and write at your own pace.'
+                                button={{
+                                    text: 'Get the Guide!',
+                                    href: '/guides',
+                                }}
+                                image='/images/bookstack.jpeg'
                                 color='var(--cafe)'
                             />
                         </div>
@@ -78,29 +84,31 @@ function App() {
                             <div className='flex-1'>
                                 <Block
                                     size='medium'
-                                    frontHeader='Community Stories'
+                                    frontHeader='Community.'
                                     backHeader='Share & Discover'
-                                    content='Connect with fellow writers and share your stories. Get feedback, find inspiration, and be part of a supportive writing community.'
+                                    content='Read stories, thoughts, and experiences shared by writers in our community. Everyone writes for different reasons—this is where we celebrate them all.'
                                     button={{
                                         text: 'Join Community',
                                         href: '/community',
                                     }}
-                                    image='https://images.unsplash.com/photo-1455390582262-044cdead277a?w=500&h=400&fit=crop'
+                                    image='/images/typewriter.jpeg'
+                                    textColor='black'
                                     color='var(--hazelwood)'
                                 />
                             </div>
                             <div className='flex-1'>
                                 <Block
                                     size='small'
-                                    frontHeader='Daily Prompts'
-                                    backHeader='Spark Your Creativity'
-                                    content='Get fresh writing prompts delivered daily to inspire your next story, poem, or creative piece.'
+                                    frontHeader='About.'
+                                    backHeader='Get to know us'
+                                    content='Learn about who we are and what this space is all about. Why it was created, what it’s for, and the values behind it.'
                                     button={{
-                                        text: 'Get Prompts',
-                                        href: '/prompts',
+                                        text: 'Read more about us!',
+                                        href: '/about',
                                     }}
-                                    image='https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&h=400&fit=crop'
-                                    color='var(--forest)'
+                                    image='/images/AdobeStock_445827520.jpeg'
+                                    textColor='var(--forest)'
+                                    color='var(--candle-light)'
                                 />
                             </div>
                         </div>
