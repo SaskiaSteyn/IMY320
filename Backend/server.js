@@ -9,38 +9,43 @@ app.use(express.json());
 
 // Connect to MongoDB
 
-mongoose.connect('mongodb://localhost:27017/TheeeStooges', {
+// connection string
+let username = process.env.DB_USERNAME;
+let password = process.env.DB_PASSWORD;
+mongoose.connect(`mongodb+srv://${username}:${password}@theeestooges.7wpudcx.mongodb.net/?retryWrites=true&w=majority&appName=TheeeStooges`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB'));
 
 // Entry in DB
 const UserSchema = new mongoose.Schema({
+    userIDNumber: Number,
     username: String,
     email: String,
-    password: String
+    password: String,
+    role: String,
 });
 
 const User = mongoose.model('User', UserSchema);
 
 //
-// ROUTES
+// REGISTRATION ROUTE
 //
-
-// mongodb://localhost:27017/TheeeStooges/register
 app.post('/register', async (req, res) => {
-    const {username, email, password} = req.body;
+    const {userIDNumber, username, email, password, role} = req.body;
     const hashedPassword = require('bcryptjs').hashSync(password, 10);
 
     try {
-        const user = await User.create({username, email, password: hashedPassword});
+        const user = await User.create({userIDNumber, username, email, password: hashedPassword, role});
         res.json(user);
     } catch (err) {
         res.status(500).json({error: 'Registration failed'});
     }
 });
 
-// mongodb://localhost:27017/TheeeStooges/login
+//
+// LOGIN ROUTE
+//
 app.post('/login', async (req, res) => {
     const {email, password} = req.body;
     const user = await User.findOne({email});
