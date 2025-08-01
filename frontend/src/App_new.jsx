@@ -18,7 +18,7 @@ function App() {
     return (
         <div className='relative'>
             {/* Card 1: Main Bento Grid Layout */}
-            <div className='h-screen w-full relative card-section'>
+            <div className='h-screen w-full relative bg-white z-10 rounded-b-3xl shadow-2xl overflow-hidden'>
                 <div className='flex gap-4 p-8 h-full relative'>
                     {/* Left Column - Large Hero Block */}
                     <div className='flex-[1]'>
@@ -157,7 +157,7 @@ function App() {
             </div>
 
             {/* Card 2: Write in Peace Details */}
-            <div className='h-screen w-full relative card-section bg-[#1E1E1E]'>
+            <div className='h-screen w-full relative bg-gradient-to-br from-gray-50 to-gray-100 z-20 rounded-b-3xl shadow-2xl overflow-hidden'>
                 <div className='p-8 flex flex-row items-center justify-center h-full'>
                     <div className='flex-[4] pr-8'>
                         <h2 className='text-3xl font-bold mb-6'>
@@ -202,7 +202,7 @@ function App() {
             </div>
 
             {/* Card 3: Pricing */}
-            <div className='h-screen w-full relative card-section bg-[#1E1E1E]'>
+            <div className='h-screen w-full relative bg-gradient-to-br from-gray-100 to-gray-200 z-30 rounded-b-3xl shadow-2xl overflow-hidden'>
                 <div className='p-8 h-full flex flex-col justify-center'>
                     <h2 className='text-4xl font-bold text-center mb-12'>
                         Pricing

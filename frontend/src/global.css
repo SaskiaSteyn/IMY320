@@ -130,3 +130,38 @@ h3 {
 .cta-button:active {
     transform: translateY(0);
 }
+
+/* Smooth scrolling for full-height sections */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Card stacking effect - each card sticks and gets covered by the next */
+.card-section {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+/* Each subsequent card should have a higher z-index to slide over previous ones */
+.card-section:nth-child(1) {
+    z-index: 1;
+}
+.card-section:nth-child(2) {
+    z-index: 2;
+}
+.card-section:nth-child(3) {
+    z-index: 3;
+}
+
+/* Full height sections with scroll snap */
+@media (min-width: 768px) {
+    body {
+        scroll-snap-type: y mandatory;
+    }
+
+    .card-section {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+    }
+}
