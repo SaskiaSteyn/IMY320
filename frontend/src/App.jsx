@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Block from './components/block.jsx';
+import PricingBlock from './components/pricing.jsx';
 import './global.css';
 
 function App() {
@@ -189,6 +190,60 @@ function App() {
                         alt='Description'
                         className='w-full h-auto rounded-lg shadow-md'
                     />
+                </div>
+            </div>
+            <div className='p-8'>
+                <h2 className='text-4xl font-bold text-center mb-12'>
+                    Pricing
+                </h2>
+                <div className='flex gap-8 justify-center max-w-6xl mx-auto items-stretch'>
+                    <div className='flex-1 max-w-sm'>
+                        <PricingBlock
+                            tierName='Free'
+                            price='0'
+                            headerColor='var(--fog)'
+                            features={[
+                                'Distraction blocker',
+                                'Pomodoro session timer',
+                                'Light theme',
+                                'Daily writing streak tracker',
+                                '1-2 writing sessions per day',
+                            ]}
+                        />
+                    </div>
+                    <div className='flex-1 max-w-sm'>
+                        <PricingBlock
+                            tierName='Standard'
+                            price='35'
+                            headerColor='var(--hazelwood)'
+                            features={[
+                                'Distraction blocker',
+                                'Custom session timer',
+                                'Light theme and Dark theme',
+                                'Daily writing streak tracker',
+                                '3–5 writing sessions per day',
+                                'Cloud sync across devices',
+                                'Basic writing stats',
+                            ]}
+                        />
+                    </div>
+                    <div className='flex-1 max-w-sm'>
+                        <PricingBlock
+                            tierName='Plus'
+                            price='55'
+                            headerColor='var(--candle-light)'
+                            features={[
+                                'Distraction blocker',
+                                'Custom session timer',
+                                'Dark theme and other themes',
+                                'Daily writing streak tracker',
+                                'Unlimited writing sessions',
+                                'Cloud sync across devices',
+                                'Advanced analytics & insights',
+                                'Access to beta features',
+                            ]}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
