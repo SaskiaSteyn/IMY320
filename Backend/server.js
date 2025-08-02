@@ -56,6 +56,14 @@ app.post('/login', async (req, res) => {
     res.json({token});
 });
 
+//
+// LOGOUT ROUTE
+//
+app.post('/logout', (req, res) => {
+    res.json({message: 'Logged out successfully'});
+});
+
 app.listen(5000, () => {
     console.log('Server running on port 5000');
 });
+

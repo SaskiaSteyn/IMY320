@@ -29,3 +29,21 @@ export async function login(email, password) {
         return error;
     }
 }
+
+export async function logout() {
+    try {
+        const response = await fetch(`${API_URL}/logout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        // Clear token from localStorage
+        localStorage.removeItem('token');
+
+        return await response.json();
+    } catch {
+        return {error: 'Network error'};
+    }
+}
