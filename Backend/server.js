@@ -7,8 +7,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
-
 // connection string
 let username = process.env.DB_USERNAME;
 let password = process.env.DB_PASSWORD;
