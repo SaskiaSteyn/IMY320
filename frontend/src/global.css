@@ -23,12 +23,12 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
     :root {
         --background: var(--fog);
         --text: #000000;
     }
-}
+} */
 
 body {
     background-color: var(--background);

@@ -1,6 +1,6 @@
-export { default as CallToActionCard } from './CallToActionCard.jsx'
-export { default as HeroCard } from './HeroCard.jsx'
-export { default as PricingCard } from './PricingCard.jsx'
-export { default as TestimonialsCard } from './TestimonialsCard.jsx'
-export { default as WriteInPeaceCard } from './WriteInPeaceCard.jsx';
+export { default as CallToActionCard } from './call-to-action-card.jsx'
+export { default as HeroCard } from './hero-card.jsx'
+export { default as PricingCard } from './pricing-card.jsx'
+export { default as TestimonialsCard } from './testimonials-card.jsx'
+export { default as WriteInPeaceCard } from './write-in-peace-card.jsx'
 
