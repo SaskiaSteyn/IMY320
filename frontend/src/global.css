@@ -154,6 +154,43 @@ h3 {
     transform: translateY(0);
 }
 
+/* Header Styles */
+.header-nav {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.header-logo {
+    transition: all 0.2s ease-in-out;
+}
+
+.header-logo:hover {
+    transform: scale(1.05);
+}
+
+.header-nav-item {
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+/* Responsive header adjustments */
+@media (max-width: 768px) {
+    .header-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+
+    .header-nav-item {
+        font-size: 0.75rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
 /* Smooth scrolling for full-height sections */
 html {
     scroll-behavior: smooth;
@@ -166,19 +203,7 @@ html {
     height: 100vh;
 }
 
-/* Each subsequent card should have a higher z-index to slide over previous ones */
-.card-section:nth-child(1) {
-    z-index: 1;
-}
-.card-section:nth-child(2) {
-    z-index: 2;
-}
-.card-section:nth-child(3) {
-    z-index: 3;
-}
-.card-section:nth-child(4) {
-    z-index: 4;
-}
+/* Dynamic z-index will be set via inline styles in React */
 
 /* Testimonial Component Styles */
 .testimonial-card {

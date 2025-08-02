@@ -6,6 +6,7 @@ const Block = ({
     backHeader,
     content,
     button,
+    buttons,
     image,
     color,
     textColor = 'white',
@@ -69,14 +70,29 @@ const Block = ({
                         </div>
                     </div>
 
-                    {button && (
-                        <Link
-                            to={button.href || '#'}
-                            className='bento-cta-button inline-block mt-8 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg font-semibold text-sm hover:bg-white/30 transition-colors duration-200 self-start'
-                            style={{ color: textColor }}
-                        >
-                            {button.text || 'Learn More'}
-                        </Link>
+                    {(button || buttons) && (
+                        <div className='flex gap-3 mt-8 self-start'>
+                            {buttons ? (
+                                buttons.map((btn, index) => (
+                                    <Link
+                                        key={index}
+                                        to={btn.href || '#'}
+                                        className='bento-cta-button inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg font-semibold text-sm hover:bg-white/30 transition-colors duration-200'
+                                        style={{ color: textColor }}
+                                    >
+                                        {btn.text || 'Learn More'}
+                                    </Link>
+                                ))
+                            ) : (
+                                <Link
+                                    to={button.href || '#'}
+                                    className='bento-cta-button inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg font-semibold text-sm hover:bg-white/30 transition-colors duration-200'
+                                    style={{ color: textColor }}
+                                >
+                                    {button.text || 'Learn More'}
+                                </Link>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>
