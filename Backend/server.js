@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({path: '../.env'});
 
 const app = express();
 app.use(cors());
@@ -12,7 +12,7 @@ app.use(express.json());
 // connection string
 let username = process.env.DB_USERNAME;
 let password = process.env.DB_PASSWORD;
-mongoose.connect(`mongodb+srv://${username}:${password}@theeestooges.7wpudcx.mongodb.net/?retryWrites=true&w=majority&appName=TheeeStooges`, {
+mongoose.connect(`mongodb+srv://${username}:${password}@theeestooges.7wpudcx.mongodb.net/stooges?retryWrites=true&w=majority&appName=TheeeStooges`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB'));
@@ -47,8 +47,8 @@ app.post('/register', async (req, res) => {
 // LOGIN ROUTE
 //
 app.post('/login', async (req, res) => {
-    const {email, password} = req.body;
-    const user = await User.findOne({email});
+    const {username, password} = req.body;
+    const user = await User.findOne({username});
     if (!user) return res.status(400).json({error: 'User not found'});
 
     const valid = require('bcryptjs').compareSync(password, user.password);
