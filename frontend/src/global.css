@@ -1,9 +1,19 @@
 @import 'tailwindcss';
 
+/* Font Face Declaration */
+@font-face {
+    font-family: 'American Typewriter';
+    src: url('/fonts/American Typewriter Regular/American Typewriter Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
-    font-family: 'American Typewriter', serif;
+    font-family: 'American Typewriter', 'Courier Prime', 'Georgia', serif;
     line-height: 1.5;
     font-weight: 400;
+    letter-spacing: 1px;
 
     --background: #19191a;
     --text: #f0f0f0;
@@ -23,12 +33,12 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
     :root {
         --background: var(--fog);
         --text: #000000;
     }
-}
+} */
 
 body {
     background-color: var(--background);
@@ -79,8 +89,10 @@ h3 {
 
 /* Bento Block Styles */
 .bento-block {
-    min-height: 8rem; /* Reduced from 16rem to allow better fitting */
-    height: 100%; /* Ensure blocks fill their container */
+    min-height: 8rem;
+    /* Reduced from 16rem to allow better fitting */
+    height: 100%;
+    /* Ensure blocks fill their container */
 }
 
 .perspective-1000 {
@@ -134,7 +146,7 @@ h3 {
     padding: 0.75rem 1.5rem;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(8px);
-    border-radius: 0.5rem;
+    border-radius: 7px;
     font-weight: 600;
     font-size: 0.875rem;
     /* color: white; */
@@ -154,6 +166,43 @@ h3 {
     transform: translateY(0);
 }
 
+/* Header Styles */
+.header-nav {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.header-logo {
+    transition: all 0.2s ease-in-out;
+}
+
+.header-logo:hover {
+    transform: scale(1.05);
+}
+
+.header-nav-item {
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+/* Responsive header adjustments */
+@media (max-width: 768px) {
+    .header-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+
+    .header-nav-item {
+        font-size: 0.75rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
 /* Smooth scrolling for full-height sections */
 html {
     scroll-behavior: smooth;
@@ -166,19 +215,7 @@ html {
     height: 100vh;
 }
 
-/* Each subsequent card should have a higher z-index to slide over previous ones */
-.card-section:nth-child(1) {
-    z-index: 1;
-}
-.card-section:nth-child(2) {
-    z-index: 2;
-}
-.card-section:nth-child(3) {
-    z-index: 3;
-}
-.card-section:nth-child(4) {
-    z-index: 4;
-}
+/* Dynamic z-index will be set via inline styles in React */
 
 /* Testimonial Component Styles */
 .testimonial-card {
