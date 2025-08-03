@@ -15,18 +15,18 @@ export async function register(userData) {
     }
 }
 
-export async function login(email, password) {
+export async function login(username, password) {
     try {
         const response = await fetch(`${API_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({email, password}),
+            body: JSON.stringify({username, password}),
         });
         return await response.json();
-    } catch (error) {
-        return error;
+    } catch {
+        return {error: 'Network error'};
     }
 }
 
