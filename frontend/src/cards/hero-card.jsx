@@ -1,11 +1,11 @@
 import Block from '../components/block.jsx';
 import ChevronDown from '../components/chevron-down.jsx';
 
-const HeroCard = ({ showChevron, zIndex }) => {
+const HeroCard = ({showChevron, zIndex}) => {
     return (
         <div
             className='h-screen w-full relative card-section'
-            style={{ zIndex }}
+            style={{zIndex}}
         >
             <div className='flex gap-4 p-8 h-full relative'>
                 {/* Left Column - Large Hero Block */}
@@ -58,7 +58,7 @@ const HeroCard = ({ showChevron, zIndex }) => {
                                 size='large'
                                 frontHeader='Challenges.'
                                 backHeader='Weekly Challenges '
-                                content="Check out this week's writing challenge to help you stay creative and consistent. Each challenge offers a simple prompt, theme, or twist to get you writing and keep your ideas flowing. Come back every week for something new."
+                                content="Check out this week's writing challenge to help you stay creative and consistent."
                                 button={{
                                     text: 'Start the Weekly Challenge',
                                     href: '/weekly-challenge',
