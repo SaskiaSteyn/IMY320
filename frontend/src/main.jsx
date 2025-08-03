@@ -11,6 +11,8 @@ import WeeklyChallenge from './pages/weekly-challenge.jsx';
 import WriteInPeace from './pages/write-in-peace.jsx';
 import Login from './pages/login.jsx';
 import Signup from './pages/signup.jsx';
+import Account from './pages/account.jsx';
+
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
@@ -25,6 +27,7 @@ createRoot(document.getElementById('root')).render(
                 <Route path='/about' element={<About />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/signup' element={<Signup />} />
+                <Route path='/account' element={<Account />} />
             </Routes>
         </Router>
     </StrictMode>
