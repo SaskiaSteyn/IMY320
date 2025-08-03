@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
-import {register} from '../backend/api';
+import {useNavigate} from 'react-router-dom';
+import {register, login} from '../backend/api';
 
 const Signup = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         userIDNumber: '',
         username: '',
@@ -31,8 +33,22 @@ const Signup = () => {
             if (response.error) {
                 setError(response.error);
             } else {
-                // Handle successful registration (redirect, etc.)
+                // Registration successful, now log in the user
                 console.log('Registration successful:', response);
+
+                // Automatically log in with the same credentials
+                const loginResponse = await login(formData.username, formData.password);
+
+                if (loginResponse.error) {
+                    setError('Registration successful, but auto-login failed. Please log in manually.');
+                } else {
+                    // Store the token and redirect to home page
+                    if (loginResponse.token) {
+                        localStorage.setItem('token', loginResponse.token);
+                    }
+                    console.log('Auto-login successful:', loginResponse);
+                    navigate('/'); // Redirect to home page
+                }
             }
         } catch {
             setError('An error occurred during registration');
@@ -42,7 +58,7 @@ const Signup = () => {
     };
 
     return (
-        <div className="min-h-screen flex bg-cover bg-center bg-no-repeat font-['American_Typewriter',serif] bg-[url('/images/login-fireplace.png')]">
+        <div className="min-h-screen flex bg-cover bg-center bg-no-repeat font-['American_Typewriter',serif] bg-[url('/images/fireplace-reading.jpeg')]">
             <div className="bg-white/75 backdrop-blur-sm p-12 w-full max-w-md h-screen flex flex-col justify-center shadow-lg">
                 {/* Brand Header */}
                 <div className="mb-8 flex justify-center">
@@ -73,7 +89,7 @@ const Signup = () => {
                             onChange={handleChange}
                             required
                             placeholder="Username"
-                            className="p-3 bg-transparent placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md"
+                            className="p-3 bg-transparent focus:bg-transparent hover:bg-transparent placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md"
                         />
                     </div>
 
@@ -86,7 +102,7 @@ const Signup = () => {
                             onChange={handleChange}
                             required
                             placeholder="Email"
-                            className="p-3 bg-transparent placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md"
+                            className="p-3 bg-transparent focus:bg-transparent hover:bg-transparent placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md"
                         />
                     </div>
 
@@ -99,7 +115,7 @@ const Signup = () => {
                             onChange={handleChange}
                             required
                             placeholder="Password"
-                            className="p-3 bg-transparent placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md"
+                            className="p-3 bg-transparent focus:bg-transparent hover:bg-transparent placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md"
                         />
                     </div>
 
