@@ -9,6 +9,7 @@ import Generate from './pages/generate.jsx';
 import Guides from './pages/guides.jsx';
 import WeeklyChallenge from './pages/weekly-challenge.jsx';
 import WriteInPeace from './pages/write-in-peace.jsx';
+import Account from './pages/account.jsx';
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')).render(
                 <Route path='/guides' element={<Guides />} />
                 <Route path='/community' element={<Community />} />
                 <Route path='/about' element={<About />} />
+                <Route path='/account' element={<Account />} />
             </Routes>
         </Router>
     </StrictMode>
