@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 
-const Header = ({ navigationItems = [] }) => {
+const Header = ({navigationItems = []}) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [hideTimer, setHideTimer] = useState(null);
 
     // Default navigation items if none provided
     const defaultNavItems = [
-        { text: 'Home', href: '/' },
-        { text: 'Write in Peace', href: '/write-in-peace' },
-        { text: 'Account', href: '/account' },
-        { text: 'About', href: '/about' },
+        {text: 'Home', href: '/'},
+        {text: 'Write in Peace', href: '/write-in-peace'},
+        {text: 'Account', href: '/account'},
+        {text: 'About', href: '/about'},
     ];
 
     const navItems =
@@ -80,11 +80,10 @@ const Header = ({ navigationItems = [] }) => {
 
     return (
         <header
-            className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 p-4 transition-all duration-300 ${
-                isVisible
+            className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 p-4 transition-all duration-300 ${isVisible
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 -translate-y-full'
-            }`}
+                }`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
@@ -104,7 +103,7 @@ const Header = ({ navigationItems = [] }) => {
                 <Link
                     to='/login'
                     className='header-nav-item cta-button text-white text-sm px-4 py-2'
-                    style={{ backgroundColor: 'var(--forest)' }}
+                    style={{backgroundColor: 'var(--forest)'}}
                 >
                     Login
                 </Link>
