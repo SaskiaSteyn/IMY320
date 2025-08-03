@@ -23,10 +23,6 @@ const HeroCard = ({showChevron, zIndex}) => {
                                 text: 'Start Writing in Peace',
                                 href: '/write-in-peace',
                             },
-                            {
-                                text: 'Login',
-                                href: '/login',
-                            },
                         ]}
                         image='/images/AdobeStock_1575577074.jpeg'
                         textColor='black'
@@ -43,7 +39,7 @@ const HeroCard = ({showChevron, zIndex}) => {
                                 size='large'
                                 frontHeader='Prompts.'
                                 backHeader='Prompt Generator'
-                                content="Helps you choose random writing prompts to help you get started. Whether you're journaling, practicing creative writing, or just want a fun idea to explore, click the button and start writing. No pressure—just inspiration."
+                                content="Helps you choose random writing prompts to help you get started."
                                 button={{
                                     text: 'Start Generating',
                                     href: '/generate',
@@ -94,7 +90,7 @@ const HeroCard = ({showChevron, zIndex}) => {
                                     size='medium'
                                     frontHeader='Community.'
                                     backHeader='Share & Discover'
-                                    content='Read stories, thoughts, and experiences shared by writers in our community. Everyone writes for different reasons—this is where we celebrate them all.'
+                                    content='Read stories, thoughts, and experiences shared by writers in our community.'
                                     button={{
                                         text: 'Join Community',
                                         href: '/community',
@@ -109,7 +105,7 @@ const HeroCard = ({showChevron, zIndex}) => {
                                     size='small'
                                     frontHeader='About.'
                                     backHeader='Get to know us'
-                                    content="Learn about who we are and what this space is all about. Why it was created, what it's for, and the values behind it."
+                                    content="Learn about who we are and what this space is all about. Why it was created, what it's for."
                                     button={{
                                         text: 'Read more about us!',
                                         href: '/about',

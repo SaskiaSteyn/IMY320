@@ -3,8 +3,7 @@
 /* Font Face Declaration */
 @font-face {
     font-family: 'American Typewriter';
-    src: url('/fonts/American Typewriter Regular/American Typewriter Regular.ttf')
-        format('truetype');
+    src: url('/fonts/American Typewriter Regular/American Typewriter Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -14,6 +13,7 @@
     font-family: 'American Typewriter', 'Courier Prime', 'Georgia', serif;
     line-height: 1.5;
     font-weight: 400;
+    letter-spacing: 1px;
 
     --background: #19191a;
     --text: #f0f0f0;
@@ -89,8 +89,10 @@ h3 {
 
 /* Bento Block Styles */
 .bento-block {
-    min-height: 8rem; /* Reduced from 16rem to allow better fitting */
-    height: 100%; /* Ensure blocks fill their container */
+    min-height: 8rem;
+    /* Reduced from 16rem to allow better fitting */
+    height: 100%;
+    /* Ensure blocks fill their container */
 }
 
 .perspective-1000 {
