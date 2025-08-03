@@ -5,17 +5,34 @@ const Header = ({navigationItems = []}) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [hideTimer, setHideTimer] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // Default navigation items if none provided
     const defaultNavItems = [
         {text: 'Home', href: '/'},
         {text: 'Write in Peace', href: '/write-in-peace'},
-        {text: 'Account', href: '/account'},
         {text: 'About', href: '/about'},
     ];
 
     const navItems =
         navigationItems.length > 0 ? navigationItems : defaultNavItems;
+
+    // Check if user is logged in
+    useEffect(() => {
+        const checkAuthStatus = () => {
+            const token = localStorage.getItem('token');
+            setIsLoggedIn(!!token);
+        };
+
+        checkAuthStatus();
+
+        // Listen for storage changes to update auth status
+        window.addEventListener('storage', checkAuthStatus);
+
+        return () => {
+            window.removeEventListener('storage', checkAuthStatus);
+        };
+    }, []);
 
     useEffect(() => {
         let scrollTimeout;
@@ -81,8 +98,8 @@ const Header = ({navigationItems = []}) => {
     return (
         <header
             className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 p-4 transition-all duration-300 ${isVisible
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 -translate-y-full'
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 -translate-y-full'
                 }`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -99,13 +116,13 @@ const Header = ({navigationItems = []}) => {
                     </Link>
                 ))}
 
-                {/* Special Login Button */}
+                {/* Dynamic Login/Account Button */}
                 <Link
-                    to='/login'
+                    to={isLoggedIn ? '/account' : '/login'}
                     className='header-nav-item cta-button text-white text-sm px-4 py-2'
                     style={{backgroundColor: 'var(--forest)'}}
                 >
-                    Login
+                    {isLoggedIn ? 'Account' : 'Login'}
                 </Link>
             </nav>
         </header>

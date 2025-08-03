@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {login} from '../backend/api';
 
 const Login = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
         password: ''
@@ -28,8 +30,16 @@ const Login = () => {
             if (response.error) {
                 setError(response.error);
             } else {
-                // Handle successful login (redirect, etc.)
+                // Handle successful login - store token and redirect
                 console.log('Login successful:', response);
+
+                // Store the token in localStorage if provided
+                if (response.token) {
+                    localStorage.setItem('token', response.token);
+                }
+
+                // Redirect to home page
+                navigate('/');
             }
         } catch {
             setError('An error occurred during login');
@@ -40,7 +50,7 @@ const Login = () => {
 
     return (
         <div className="min-h-screen flex bg-cover bg-center bg-no-repeat font-['American_Typewriter',serif] bg-[url('/images/login-fireplace.png')]">
-            <div className="bg-white/75 backdrop-blur-sm p-12 w-full max-w-md h-screen flex flex-col justify-center shadow-lg">
+            <div className="bg-white/75 backdrop-blur-sm p-20 w-full max-w-md h-screen flex flex-col justify-center shadow-lg">
                 {/* Brand Header */}
                 <div className="mb-8 flex justify-center">
                     <img
@@ -70,7 +80,12 @@ const Login = () => {
                             onChange={handleChange}
                             required
                             placeholder="Username"
-                            className="p-3 bg-transparent placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md"
+                            className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
+                            style={{
+                                backgroundColor: 'transparent !important',
+                                WebkitBoxShadow: '0 0 0 1000px transparent inset !important',
+                                WebkitTextFillColor: '#4e1f08 !important'
+                            }}
                         />
                     </div>
 
@@ -83,7 +98,12 @@ const Login = () => {
                             onChange={handleChange}
                             required
                             placeholder="Password"
-                            className="p-3 bg-transparent placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md"
+                            className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
+                            style={{
+                                backgroundColor: 'transparent !important',
+                                WebkitBoxShadow: '0 0 0 1000px transparent inset !important',
+                                WebkitTextFillColor: '#4e1f08 !important'
+                            }}
                         />
                     </div>
 
@@ -98,7 +118,7 @@ const Login = () => {
                     <div className="text-center text-sm mt-4 text-[#4e1f08]">
                         Don't have an account? {' '}
                         <a href="/signup"
-                            className="!font-bold hover:underline transition-colors duration-200 text-[#4e1f08]">
+                            className="hover:text-[#222600] !important underline transition-colors duration-200 text-[#4e1f08]">
                             Sign up
                         </a>
                     </div>
