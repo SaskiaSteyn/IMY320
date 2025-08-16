@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
 @import 'tailwindcss';
 
 /* Font Face Declaration */
@@ -9,11 +11,23 @@
     font-display: swap;
 }
 
-:root {
-    font-family: 'American Typewriter', 'Courier Prime', 'Georgia', serif;
-    line-height: 1.5;
+.raleway {
+    font-family: "raleway", sans-serif;
+    font-optical-sizing: auto;
     font-weight: 400;
-    letter-spacing: 1px;
+    font-style: normal;
+}
+
+.fredericka-the-great-regular {
+    font-family: "Fredericka the Great", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+:root {
+
+    font-family: 'raleway', sans-serif;
+
 
     --background: #19191a;
     --text: #f0f0f0;
@@ -45,6 +59,7 @@ body {
     color: var(--text);
     /* margin: 50px; */
     cursor: var(--custom-cursor);
+
 }
 
 * {
@@ -71,6 +86,7 @@ h1 {
     line-height: 2.5rem;
     font-weight: 700;
     letter-spacing: 0.1em;
+    font-family: "Fredericka the Great", serif;
 }
 
 h2 {
@@ -78,6 +94,7 @@ h2 {
     line-height: 2.25rem;
     font-weight: 600;
     letter-spacing: 0.1em;
+    font-family: "Fredericka the Great", serif;
 }
 
 h3 {
@@ -85,6 +102,7 @@ h3 {
     line-height: 2rem;
     font-weight: 600;
     letter-spacing: 0.1em;
+    font-family: "Fredericka the Great", serif;
 }
 
 /* Bento Block Styles */
