@@ -3,6 +3,7 @@ const PricingBlock = ({
     price,
     features,
     headerColor = '#9ca3af', // Default gray color
+    textColor = '#000000', // Default text color
     className = '',
 }) => {
     return (
@@ -12,15 +13,23 @@ const PricingBlock = ({
             {/* Header section with tier name and price */}
             <div
                 className='text-center py-6 px-8'
-                style={{ backgroundColor: headerColor }}
+                style={{ backgroundColor: headerColor, color: textColor }}
             >
-                <h3 className='text-2xl font-bold text-black mb-3'>
+                <h3
+                    className='text-2xl font-bold mb-3'
+                    style={{ color: textColor }}
+                >
                     {tierName}
                 </h3>
-                <div className='text-5xl font-bold text-black mb-1'>
+                <div
+                    className='text-5xl font-bold mb-1'
+                    style={{ color: textColor }}
+                >
                     R{price}
                 </div>
-                <p className='text-lg text-black'>per month</p>
+                <p className='text-lg' style={{ color: textColor }}>
+                    per month
+                </p>
             </div>
 
             {/* Features section */}
