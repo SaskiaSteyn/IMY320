@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 // import {login} from '../backend/api';
 import {FaGoogle, FaApple, FaDiscord} from "react-icons/fa";
-import {SiAdobe} from "react-icons/si";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -37,7 +36,7 @@ const Login = () => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
-
+      
         // Client-side validation
         if (!formData.username.trim()) {
             setError('Please enter your username');
@@ -99,7 +98,6 @@ const Login = () => {
                 <div className={`w-full transition-opacity duration-1000 delay-500 ${animationStarted ? 'opacity-100' : 'opacity-0'}`}>
                     {/* Spacer for logo */}
                     <div className="h-20 mb-8"></div>
-
                     <div className="!text-xl !font-medium mb-6 text-[#4e1f08] text-center">
                         We're glad to see you back!
                     </div>
@@ -218,7 +216,7 @@ const Login = () => {
                                 Sign up
                             </a>
                         </div>
-                        <div className="flex-1 h-px bg-[#4e1f08]/40" />
+                        <div className="flex-1 h-px bg-[#4e1f08]/40" />  
                     </div>
                 </div>
             </div>
