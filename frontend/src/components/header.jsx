@@ -1,22 +1,33 @@
-import {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
-import {FaShoppingCart} from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+import { FaShoppingCart } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-const Header = ({navigationItems = []}) => {
+const Header = ({ navigationItems = [] }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [hideTimer, setHideTimer] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
+    // Update cart count (unique items, not quantity)
+    useEffect(() => {
+        const updateCartCount = () => {
+            try {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                setCartCount(Array.isArray(cart) ? cart.length : 0);
+            } catch {
+                setCartCount(0);
+            }
+        };
+        updateCartCount();
+        window.addEventListener('storage', updateCartCount);
+        return () => window.removeEventListener('storage', updateCartCount);
+    }, []);
 
     // Default navigation items if none provided
     const defaultNavItems = [
-        {text: 'Home', href: '/'},
-        {text: 'About', href: '/about'},
-        {text: 'Write in Peace', href: '/write-in-peace'},
-        {text: 'Community', href: '/community'},
-        {text: 'Guides', href: '/guides'},
-        {text: 'Prompts', href: '/generate'},
-        {text: 'Challenges', href: '/weekly-challenge'},
+        { text: 'Home', href: '/' },
+        { text: 'About', href: '/about' },
+        { text: 'Write in Peace', href: '/write-in-peace' },
     ];
 
     const navItems =
@@ -116,10 +127,11 @@ const Header = ({navigationItems = []}) => {
                 onMouseLeave={handleMouseLeave}
             />
             <header
-                className={`fixed top-0 transform w-full z-50 transition-all duration-300 ${isVisible
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 -translate-y-full'
-                    }`}
+                className={`fixed top-0 transform w-full z-50 transition-all duration-300 ${
+                    isVisible
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 -translate-y-full'
+                }`}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
@@ -148,20 +160,30 @@ const Header = ({navigationItems = []}) => {
                         <div className='flex gap-3'>
                             <Link
                                 to='/cart'
-                                className='cta-button flex items-center justify-center w-32 h-10 text-white font-medium rounded-lg shadow transition-all duration-200'
-                                style={{backgroundColor: 'var(--forest)'}}
+                                className='cta-button flex items-center justify-center w-32 px-4 h-10 text-white font-medium rounded-lg shadow transition-all duration-200 relative'
+                                style={{ backgroundColor: 'var(--cafe)' }}
                             >
+                                {/* Cart badge absolutely positioned relative to the button */}
+                                {cartCount > 0 && (
+                                    <span className='absolute top-1 right-5 bg-white text-[var(--cafe)] text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-[var(--cafe)] shadow z-10'>
+                                        {cartCount}
+                                    </span>
+                                )}
                                 <span className='flex items-center justify-center w-full h-full'>
                                     <FaShoppingCart className='w-5 h-5 mr-2' />
-                                    <span className='flex items-center justify-center w-full h-full text-center'>Cart</span>
+                                    <span className='flex items-center justify-center w-full h-full text-center'>
+                                        Cart
+                                    </span>
                                 </span>
                             </Link>
                             <Link
                                 to={isLoggedIn ? '/account' : '/login'}
-                                className='cta-button flex items-center justify-center w-32 h-10 text-white font-medium rounded-lg shadow transition-all duration-200'
-                                style={{backgroundColor: 'var(--forest)'}}
+                                className='cta-button flex items-center justify-center w-32 px-4 h-10 text-white font-medium rounded-lg shadow transition-all duration-200'
+                                style={{ backgroundColor: 'var(--forest)' }}
                             >
-                                <span className='flex items-center justify-center w-full h-full text-center'>{isLoggedIn ? 'Account' : 'Login'}</span>
+                                <span className='flex items-center justify-center w-full h-full text-center'>
+                                    {isLoggedIn ? 'Account' : 'Login'}
+                                </span>
                             </Link>
                         </div>
                     </div>

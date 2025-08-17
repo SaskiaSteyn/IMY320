@@ -1,11 +1,10 @@
-import ChevronDown from '../components/chevron-down.jsx';
 import PricingBlock from '../components/pricing.jsx';
 
-const PricingCard = ({zIndex}) => {
+const PricingCard = ({ zIndex }) => {
     return (
         <div
             className='h-screen w-full relative bg-[#d1d6d7]'
-            style={{zIndex}}
+            style={{ zIndex }}
         >
             <div className='p-8 h-full flex flex-col justify-center'>
                 <h2 className='text-4xl font-bold text-center mb-12 text-[var(--background)]'>
@@ -16,7 +15,8 @@ const PricingCard = ({zIndex}) => {
                         <PricingBlock
                             tierName='Free'
                             price='0'
-                            headerColor='var(--fog)'
+                            headerColor='var(--hazelwood)'
+                            textColor='var(--text-hazelwood, #000000)'
                             features={[
                                 'Distraction blocker',
                                 'Pomodoro session timer',
@@ -30,7 +30,8 @@ const PricingCard = ({zIndex}) => {
                         <PricingBlock
                             tierName='Standard'
                             price='35'
-                            headerColor='var(--hazelwood)'
+                            headerColor='var(--forest)'
+                            textColor='var(--text-forest, #ffffff)'
                             features={[
                                 'Distraction blocker',
                                 'Custom session timer',
@@ -47,6 +48,7 @@ const PricingCard = ({zIndex}) => {
                             tierName='Plus'
                             price='55'
                             headerColor='var(--candle-light)'
+                            textColor='var(--text-candle-light, #000000)'
                             features={[
                                 'Distraction blocker',
                                 'Custom session timer',

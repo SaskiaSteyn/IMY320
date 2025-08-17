@@ -1,29 +1,29 @@
-import React from 'react';
-import {testimonials} from '../data/testimonials.js';
-import {PricingCard, TestimonialsCard} from '../cards';
-import Header from '../components/header.jsx';
-import StaticBlock from '../components/static-block.jsx';
-import Catalogue from '../components/catalogue.jsx';
-import TestimonialBlock from '../components/testimonial-block.jsx';
-import ChevronDown from '../components/chevron-down.jsx';
+import { PricingCard, StaticWriteInPeaceCard } from '../cards';
 import FooterCard from '../cards/footer.jsx';
-import {WriteInPeaceCard} from '../cards';
+import Catalogue from '../components/catalogue.jsx';
+import Header from '../components/header.jsx';
+import TestimonialBlock from '../components/testimonial-block.jsx';
+import { testimonials } from '../data/testimonials.js';
 
 function WriteInPeace() {
-
-
     return (
-        <div className='relative'>
+        <div className='relative bg-[var(--text)]'>
             <Header />
-            <WriteInPeaceCard />
+            <StaticWriteInPeaceCard />
 
             {/* Testimonials Section - Normal Component */}
-            <div className='py-16 bg-gradient-to-b from-[#d1d6d7] to-[#b8c1c3]'>
+            <div className='py-16 bg-[var(--text)]'>
                 <div className='text-center mb-12'>
-                    <h2 className='text-4xl font-bold mb-4' style={{color: 'var(--background)'}}>
+                    <h2
+                        className='text-4xl font-bold mb-4'
+                        style={{ color: 'var(--background)' }}
+                    >
                         What Writers Say
                     </h2>
-                    <p className='text-lg' style={{color: 'var(--background)'}}>
+                    <p
+                        className='text-lg'
+                        style={{ color: 'var(--background)' }}
+                    >
                         Real experiences from our writing community
                     </p>
                 </div>
