@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {login} from '../backend/api';
+// import {login} from '../backend/api';
+import {FaGoogle, FaApple, FaDiscord} from "react-icons/fa";
+// import {SiAdobe} from "react-icons/si";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -24,28 +26,30 @@ const Login = () => {
         setError('');
         setIsLoading(true);
 
-        try {
-            const response = await login(formData.username, formData.password);
+        navigate('/');
 
-            if (response.error) {
-                setError(response.error);
-            } else {
-                // Handle successful login - store token and redirect
-                console.log('Login successful:', response);
+        // try {
+        //     const response = await login(formData.username, formData.password);
 
-                // Store the token in localStorage if provided
-                if (response.token) {
-                    localStorage.setItem('token', response.token);
-                }
+        //     if (response.error) {
+        //         setError(response.error);
+        //     } else {
+        //         // Handle successful login - store token and redirect
+        //         console.log('Login successful:', response);
 
-                // Redirect to home page
-                navigate('/');
-            }
-        } catch {
-            setError('An error occurred during login');
-        } finally {
-            setIsLoading(false);
-        }
+        //         // Store the token in localStorage if provided
+        //         if (response.token) {
+        //             localStorage.setItem('token', response.token);
+        //         }
+
+        //         // Redirect to home page
+        //         navigate('/');
+        //     }
+        // } catch {
+        //     setError('An error occurred during login');
+        // } finally {
+        //     setIsLoading(false);
+        // }
     };
 
     return (
@@ -78,7 +82,6 @@ const Login = () => {
                             name="username"
                             value={formData.username}
                             onChange={handleChange}
-                            required
                             placeholder="Username"
                             className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
                             style={{
@@ -96,7 +99,6 @@ const Login = () => {
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
-                            required
                             placeholder="Password"
                             className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
                             style={{
@@ -114,6 +116,58 @@ const Login = () => {
                     >
                         {isLoading ? 'Logging in...' : 'Login'}
                     </button>
+
+                    <div className="mt-8">
+                        {/* Divider */}
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="flex-1 h-px bg-[#4e1f08]/40" />
+                            <span className="text-sm text-[#4e1f08]/70">or continue with</span>
+                            <div className="flex-1 h-px bg-[#4e1f08]/40" />
+                        </div>
+
+                        {/* Social Buttons */}
+                        <div className="grid grid-cols-1 gap-3">
+                            {/* Google */}
+                            <button
+                                type="button"
+                                onClick={() => console.log("Sign in with Google")}
+                                className="flex items-center justify-center gap-3 w-full py-3 px-6 rounded-md font-medium text-[#4e1f08] border-2 border-[#4e1f08] bg-white hover:bg-[#f5f5f5] transition-all duration-200"
+                            >
+                                <FaGoogle className="text-red-500" />
+                                <span>Sign in with Google</span>
+                            </button>
+
+                            {/* Apple */}
+                            <button
+                                type="button"
+                                onClick={() => console.log("Sign in with Apple")}
+                                className="flex items-center justify-center gap-3 w-full py-3 px-6 rounded-md font-medium text-white bg-black hover:bg-gray-900 transition-all duration-200"
+                            >
+                                <FaApple className="text-white text-lg" />
+                                <span>Sign in with Apple</span>
+                            </button>
+
+                            {/* Discord */}
+                            <button
+                                type="button"
+                                onClick={() => console.log("Sign in with Discord")}
+                                className="flex items-center justify-center gap-3 w-full py-3 px-6 rounded-md font-medium text-white bg-[#5865F2] hover:bg-[#4752c4] transition-all duration-200"
+                            >
+                                <FaDiscord className="text-white text-lg" />
+                                <span>Sign in with Discord</span>
+                            </button>
+
+                            {/* Adobe */}
+                            {/* <button
+                                type="button"
+                                onClick={() => console.log("Sign in with Adobe")}
+                                className="flex items-center justify-center gap-3 w-full py-3 px-6 rounded-md font-medium text-white bg-[#FF0000] hover:bg-[#cc0000] transition-all duration-200"
+                            >
+                                <SiAdobe className="text-white text-lg" />
+                                <span>Sign in with Adobe</span>
+                            </button> */}
+                        </div>
+                    </div>
 
                     <div className="text-center text-sm mt-4 text-[#4e1f08]">
                         Don't have an account? {' '}
