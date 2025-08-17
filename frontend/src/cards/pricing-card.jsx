@@ -4,7 +4,7 @@ import PricingBlock from '../components/pricing.jsx';
 const PricingCard = ({ zIndex }) => {
     return (
         <div
-            className='h-screen w-full relative card-section bg-[#1E1E1E]'
+            className='h-screen w-full relative card-section bg-[#d1d6d7]'
             style={{ zIndex }}
         >
             <div className='p-8 h-full flex flex-col justify-center'>
@@ -63,7 +63,10 @@ const PricingCard = ({ zIndex }) => {
             </div>
 
             {/* Scroll Down Chevron */}
-            <ChevronDown />
+            <ChevronDown
+                backgroundColor='var(--fog)'
+                textColor='var(--background)'
+            />
         </div>
     );
 };
