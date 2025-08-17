@@ -2,13 +2,10 @@ import React, {useState} from 'react';
 import {FaChevronDown, FaChevronUp} from 'react-icons/fa';
 
 const WipDetails = () => {
-    const [expandedItems, setExpandedItems] = useState({});
+    const [expandedIndex, setExpandedIndex] = useState(null);
 
     const toggleItem = (index) => {
-        setExpandedItems(prev => ({
-            ...prev,
-            [index]: !prev[index]
-        }));
+        setExpandedIndex(prev => (prev === index ? null : index));
     };
 
     const features = [
@@ -35,7 +32,7 @@ const WipDetails = () => {
     ];
 
     return (
-        <div className='w-full relative card-section bg-[#d1d6d7]'>
+        <div className='w-full relative bg-[#d1d6d7]'>
             <div className='p-8 flex flex-col justify-center'>
                 {/* Product Image and App Heading Section */}
                 <div className='flex items-center justify-between mb-16 max-w-6xl mx-auto w-full'>
@@ -62,7 +59,7 @@ const WipDetails = () => {
                         Key Features
                     </h2>
 
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                    <div className='flex flex-col gap-4'>
                         {features.map((feature, index) => (
                             <div
                                 key={index}
@@ -76,7 +73,7 @@ const WipDetails = () => {
                                         {index + 1}. {feature.title}
                                     </h3>
                                     <div style={{color: 'var(--background)'}}>
-                                        {expandedItems[index] ? (
+                                        {expandedIndex === index ? (
                                             <FaChevronUp className='text-sm' />
                                         ) : (
                                             <FaChevronDown className='text-sm' />
@@ -84,12 +81,11 @@ const WipDetails = () => {
                                     </div>
                                 </button>
 
-                                {expandedItems[index] && (
+                                {expandedIndex === index && (
                                     <div className='px-4 pb-4 border-t border-white/20'>
                                         <p
                                             className='text-sm leading-relaxed pt-3'
-                                            style={{color: 'var(--background)'}}
-                                        >
+                                            style={{color: 'var(--background)'}}>
                                             {feature.description}
                                         </p>
                                     </div>

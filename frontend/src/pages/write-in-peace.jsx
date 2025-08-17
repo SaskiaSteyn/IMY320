@@ -13,7 +13,6 @@ function WriteInPeace() {
     return (
         <div className='relative'>
             <Header />
-            <Catalogue />
             <WipDetails />
 
             {/* Testimonials Section - Normal Component */}
@@ -45,7 +44,9 @@ function WriteInPeace() {
                 </div>
             </div>
 
-            <PricingCard zIndex={2} />
+            <PricingCard />
+
+            <Catalogue />
         </div>
     );
 }

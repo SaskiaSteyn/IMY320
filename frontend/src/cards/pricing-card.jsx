@@ -1,14 +1,14 @@
 import ChevronDown from '../components/chevron-down.jsx';
 import PricingBlock from '../components/pricing.jsx';
 
-const PricingCard = ({ zIndex }) => {
+const PricingCard = ({zIndex}) => {
     return (
         <div
-            className='h-screen w-full relative card-section bg-[#d1d6d7]'
-            style={{ zIndex }}
+            className='h-screen w-full relative bg-[#d1d6d7]'
+            style={{zIndex}}
         >
             <div className='p-8 h-full flex flex-col justify-center'>
-                <h2 className='text-4xl font-bold text-center mb-12'>
+                <h2 className='text-4xl font-bold text-center mb-12 text-[var(--background)]'>
                     Pricing
                 </h2>
                 <div className='flex gap-8 px-8 justify-center w-full mx-auto items-stretch'>
@@ -61,12 +61,6 @@ const PricingCard = ({ zIndex }) => {
                     </div>
                 </div>
             </div>
-
-            {/* Scroll Down Chevron */}
-            <ChevronDown
-                backgroundColor='var(--fog)'
-                textColor='var(--background)'
-            />
         </div>
     );
 };
