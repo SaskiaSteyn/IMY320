@@ -79,7 +79,7 @@ const Login = () => {
     return (
         <div className="min-h-screen flex justify-center items-center bg-cover bg-center bg-no-repeat bg-[url('/images/Background-Cozy2.jpeg')] py-8">
             <div
-                className='bg-white/75 backdrop-blur-sm p-8 w-full max-w-4xl min-h-[80vh] flex items-center justify-center shadow-lg rounded-lg relative border'
+                className='bg-white/75 auth-container p-8 w-full max-w-4xl min-h-[80vh] flex items-center justify-center shadow-lg rounded-lg relative border'
                 style={{borderColor: 'var(--cafe)'}}
             >
                 {/* Animated Logo - starts centered and large, moves to top and shrinks */}
@@ -221,9 +221,7 @@ const Login = () => {
                                 {/* Google */}
                                 <button
                                     type='button'
-                                    onClick={() =>
-                                        console.log('Sign in with Google')
-                                    }
+                                    onClick={() => navigate('/')}
                                     className='flex items-center justify-center gap-3 w-full p-3 rounded-md font-medium text-[#4e1f08] border-2 border-[#4e1f08] bg-white hover:bg-[#f5f5f5] transition-all duration-200'
                                 >
                                     <FaGoogle className='text-red-500' />
@@ -233,9 +231,7 @@ const Login = () => {
                                 {/* Apple */}
                                 <button
                                     type='button'
-                                    onClick={() =>
-                                        console.log('Sign in with Apple')
-                                    }
+                                    onClick={() => navigate('/')}
                                     className='flex items-center justify-center gap-3 w-full p-3 rounded-md font-medium text-white bg-black hover:bg-gray-900 transition-all duration-200'
                                 >
                                     <FaApple className='text-white text-lg' />
@@ -245,9 +241,7 @@ const Login = () => {
                                 {/* Discord */}
                                 <button
                                     type='button'
-                                    onClick={() =>
-                                        console.log('Sign in with Discord')
-                                    }
+                                    onClick={() => navigate('/')}
                                     className='flex items-center justify-center gap-3 w-full p-3 rounded-md font-medium text-white bg-[#5865F2] hover:bg-[#4752c4] transition-all duration-200'
                                 >
                                     <FaDiscord className='text-white text-lg' />
