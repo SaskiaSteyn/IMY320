@@ -10,8 +10,12 @@ const Header = ({ navigationItems = [] }) => {
     // Default navigation items if none provided
     const defaultNavItems = [
         { text: 'Home', href: '/' },
-        { text: 'Write in Peace', href: '/write-in-peace' },
         { text: 'About', href: '/about' },
+        { text: 'Write in Peace', href: '/write-in-peace' },
+        { text: 'Community', href: '/community' },
+        { text: 'Guides', href: '/guides' },
+        { text: 'Prompts', href: '/generate' },
+        { text: 'Challenges', href: '/weekly-challenge' },
     ];
 
     const navItems =

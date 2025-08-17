@@ -1,15 +1,18 @@
 import Block from '../components/block.jsx';
 import Header from '../components/header.jsx';
+import StaticBlock from '../components/static-block.jsx';
 
 function About() {
     return (
-        <div className='bg-[#1E1E1E]'>
+        <div className='bg-[var(--fog)]'>
             <Header />
 
             {/* Main Content Container */}
             <div className='pt-20 px-8 pb-16'>
                 <div className='max-w-7xl mx-auto'>
-                    <h1 className='text-center pb-12 pt-5'>Get to know us!</h1>
+                    <h1 className='text-center pb-12 pt-5 text-[var(--background)]'>
+                        Get to know us!
+                    </h1>
                     {/* Team Members Section */}
                     <div className='flex gap-6 mb-12 h-150'>
                         <Block

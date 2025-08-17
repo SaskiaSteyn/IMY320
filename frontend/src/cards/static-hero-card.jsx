@@ -30,7 +30,7 @@ const StaticHeroCard = ({ showChevron, zIndex }) => {
                         <div className='flex-1'>
                             <StaticBlock
                                 size='large'
-                                backHeader='Write in Peace'
+                                backHeader='2. Write in Peace'
                                 content='Write in Peace is a focused writing app designed to silence all the noise and help you get into flow. With one tap you can block notifications, set structured writing sessions, and create a calm environment where your ideas can bloom.'
                                 textColor='white'
                                 color='var(--background)'
@@ -44,7 +44,7 @@ const StaticHeroCard = ({ showChevron, zIndex }) => {
                             <div className='flex-1'>
                                 <StaticBlock
                                     size='medium'
-                                    backHeader='Write your way!'
+                                    backHeader='1. Write your way!'
                                     content='Set custom session timers, track your daily streaks, and get insights into your productivity over time. With flexible features like theme switching, writing goals, and smart scheduling, Write in Peace adapts to your routine and preferences.'
                                     textColor='white'
                                     color='var(--background)'
@@ -64,7 +64,7 @@ const StaticHeroCard = ({ showChevron, zIndex }) => {
                             <div className='flex-1'>
                                 <StaticBlock
                                     size='medium'
-                                    backHeader='Calm your mind, write without interruption.'
+                                    backHeader='3. Calm your mind, write without interruption.'
                                     content="Create the calmest, coziest space for your crafting needs. Beautiful themes, ambient sounds, and smart scheduling help you find the perfect writing atmosphere whether you're drafting novels, blogging, or tackling essays."
                                     button={{
                                         text: 'Get started',
