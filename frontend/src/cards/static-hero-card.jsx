@@ -4,10 +4,10 @@ import StaticBlock from '../components/static-block.jsx';
 const StaticHeroCard = ({ showChevron, zIndex }) => {
     return (
         <div
-            className='h-screen w-full relative card-section bg-[#d1d6d7]'
+            className='h-screen w-full relative card-section bg-[#d1d6d7] overflow-hidden box-border'
             style={{ zIndex }}
         >
-            <div className='flex gap-4 p-8 h-full relative'>
+            <div className='flex gap-4 p-8 h-full relative overflow-hidden box-border'>
                 {/* Left Column - Large Hero Block */}
                 <div className='flex-[1]'>
                     <StaticBlock
@@ -41,16 +41,16 @@ const StaticHeroCard = ({ showChevron, zIndex }) => {
                         </div>
                     </div>
                     {/* Bottom Row - One left, two stacked right */}
-                    <div className='flex gap-4 flex-[2] h-full'>
+                    <div className='flex gap-4 flex-[2] h-full min-w-0 min-h-0'>
                         {/* Left Block */}
-                        <div className='flex-1 flex flex-col gap-4'>
-                            <div className='flex-1'>
+                        <div className='flex-1 flex flex-col gap-4 min-w-0 min-h-0'>
+                            <div className='flex-1 min-w-0 min-h-0'>
                                 <StaticBlock
                                     size='large'
                                     image='/images/Cove-logo-landing.png'
                                 />
                             </div>
-                            <div className='flex-1'>
+                            <div className='flex-1 min-w-0 min-h-0'>
                                 <StaticBlock
                                     size='small'
                                     frontHeader=''
@@ -60,8 +60,8 @@ const StaticHeroCard = ({ showChevron, zIndex }) => {
                         </div>
 
                         {/* Right Column - Two stacked blocks */}
-                        <div className='flex-1 flex flex-col gap-4'>
-                            <div className='flex-1'>
+                        <div className='flex-1 flex flex-col gap-4 min-w-0 min-h-0'>
+                            <div className='flex-1 min-w-0 min-h-0'>
                                 <StaticBlock
                                     size='medium'
                                     backHeader='Calm your mind, write without interruption.'

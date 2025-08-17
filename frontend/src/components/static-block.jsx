@@ -29,11 +29,11 @@ const StaticBlock = ({
         <div className={`bento-block ${flexSize} h-full`}>
             {/* If image is provided, render image block with header */}
             {image ? (
-                <div className='w-full h-full rounded-lg overflow-hidden relative'>
+                <div className='w-full h-full rounded-lg overflow-hidden relative box-border'>
                     <img
                         src={image}
                         alt={frontHeader}
-                        className='w-full h-full object-cover'
+                        className='w-full h-full max-w-full max-h-full object-cover'
                     />
                     {/* Gradient Overlay - Bottom to halfway up */}
                     {/* <div className='absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black to-transparent'></div> */}

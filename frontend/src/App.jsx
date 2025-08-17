@@ -1,28 +1,11 @@
 import { useEffect, useState } from 'react';
-import {
-    CallToActionCard,
-    PricingCard,
-    StaticHeroCard,
-    TestimonialsCard,
-    WriteInPeaceCard,
-} from './cards';
+import { CallToActionCard, StaticHeroCard, WriteInPeaceCard } from './cards';
+import FooterCard from './cards/footer.jsx';
 import Header from './components/header.jsx';
-import { testimonials } from './data/testimonials.js';
 import './global.css';
 
 function App() {
     const [showChevron, setShowChevron] = useState(false);
-    const [currentTestimonial, setCurrentTestimonial] = useState(0);
-
-    const nextTestimonial = () => {
-        setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    };
-
-    const prevTestimonial = () => {
-        setCurrentTestimonial(
-            (prev) => (prev - 1 + testimonials.length) % testimonials.length
-        );
-    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -38,15 +21,16 @@ function App() {
             <StaticHeroCard showChevron={showChevron} zIndex={1} />
             <WriteInPeaceCard zIndex={2} />
 
-            <TestimonialsCard
+            {/* <TestimonialsCard
                 currentTestimonial={currentTestimonial}
                 testimonials={testimonials}
                 nextTestimonial={nextTestimonial}
                 prevTestimonial={prevTestimonial}
                 setCurrentTestimonial={setCurrentTestimonial}
                 zIndex={4}
-            />
+            /> */}
             <CallToActionCard zIndex={5} />
+            <FooterCard zIndex={6} />
         </div>
     );
 }

@@ -5,8 +5,9 @@
 /* Font Face Declaration */
 @font-face {
     font-family: 'American Typewriter';
-    src: url('/fonts/American Typewriter Regular/American Typewriter Regular.ttf') format('truetype');
-    font-weight: 400;
+    src: url('/fonts/American Typewriter Regular/American Typewriter Regular.ttf')
+        format('truetype');
+    font-weight: 800;
     font-style: normal;
     font-display: swap;
 }
@@ -82,7 +83,7 @@ textarea,
 h1 {
     font-size: 2.25rem;
     line-height: 2.5rem;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.1em;
     /* font-family: 'Fredericka the Great', serif; */
     font-family: 'American Typewriter';
@@ -91,7 +92,7 @@ h1 {
 h2 {
     font-size: 3rem;
     line-height: 2.25rem;
-    font-weight: 600;
+    font-weight: 800;
     letter-spacing: 0.1em;
     /* font-family: 'Fredericka the Great', serif; */
     font-family: 'American Typewriter';
@@ -100,7 +101,7 @@ h2 {
 h3 {
     font-size: 1.8rem;
     line-height: 2rem;
-    font-weight: 1000;
+    font-weight: 800;
     letter-spacing: 0.1em;
     /* font-family: 'Fredericka the Great', serif; */
     font-family: 'American Typewriter';
