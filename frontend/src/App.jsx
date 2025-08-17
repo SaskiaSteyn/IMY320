@@ -37,6 +37,7 @@ function App() {
             <Header />
             <StaticHeroCard showChevron={showChevron} zIndex={1} />
             <WriteInPeaceCard zIndex={2} />
+
             <TestimonialsCard
                 currentTestimonial={currentTestimonial}
                 testimonials={testimonials}

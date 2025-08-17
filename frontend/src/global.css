@@ -85,7 +85,8 @@ h1 {
     line-height: 2.5rem;
     font-weight: 700;
     letter-spacing: 0.1em;
-    font-family: 'Fredericka the Great', serif;
+    /* font-family: 'Fredericka the Great', serif; */
+    font-family: 'American Typewriter';
 }
 
 h2 {
@@ -93,7 +94,8 @@ h2 {
     line-height: 2.25rem;
     font-weight: 600;
     letter-spacing: 0.1em;
-    font-family: 'Fredericka the Great', serif;
+    /* font-family: 'Fredericka the Great', serif; */
+    font-family: 'American Typewriter';
 }
 
 h3 {
@@ -101,7 +103,8 @@ h3 {
     line-height: 2rem;
     font-weight: 1000;
     letter-spacing: 0.1em;
-    font-family: 'Fredericka the Great', serif;
+    /* font-family: 'Fredericka the Great', serif; */
+    font-family: 'American Typewriter';
 }
 
 .header-logo {
@@ -109,7 +112,8 @@ h3 {
     line-height: 2rem;
     font-weight: 1000;
     letter-spacing: 0.1em;
-    font-family: 'Fredericka the Great', serif;
+    /* font-family: 'Fredericka the Great', serif; */
+    font-family: 'American Typewriter';
 }
 
 /* Bento Block Styles */

@@ -13,7 +13,7 @@ const CallToActionCard = ({ zIndex }) => {
                     <div className='col-span-2 row-span-2'>
                         <StaticBlock
                             size={2}
-                            frontHeader='1. Community'
+                            frontHeader='Community'
                             content='Connect with fellow writers from around the world. Share your progress, get feedback, and participate in writing discussions. Find writing partners, join critique groups, and celebrate milestones together.'
                             color='var(--background)'
                             textColor='var(--text)'
@@ -35,7 +35,7 @@ const CallToActionCard = ({ zIndex }) => {
                     <div className='col-span-1 row-span-1'>
                         <StaticBlock
                             size={1}
-                            frontHeader='5. Weekly Challenges'
+                            frontHeader='Weekly Challenges'
                             content='Push your creativity with weekly writing challenges and prompts.'
                             color='var(--candle-light)'
                             textColor='black'
@@ -49,7 +49,7 @@ const CallToActionCard = ({ zIndex }) => {
                     <div className='col-span-1 row-span-1'>
                         <StaticBlock
                             size={1}
-                            frontHeader='4. Writing Guides'
+                            frontHeader='Writing Guides'
                             content='Access comprehensive guides and techniques to improve your craft.'
                             color='var(--candle-light)'
                             textColor='black'
@@ -62,7 +62,7 @@ const CallToActionCard = ({ zIndex }) => {
                 <div className='grid grid-cols-2 gap-4 mx-auto h-50 w-full'>
                     <StaticBlock
                         size={1}
-                        frontHeader='2. AI Writing Prompts'
+                        frontHeader='AI Writing Prompts'
                         content='Generate unlimited writing prompts tailored to your interests. Never run out of ideas for your next story.'
                         color='var(--background)'
                         textColor='var(--text)'
@@ -70,7 +70,7 @@ const CallToActionCard = ({ zIndex }) => {
                     />
                     <StaticBlock
                         size={1}
-                        frontHeader='3. Start Writing Today'
+                        frontHeader='Start Writing Today'
                         content='Join Cove and experience distraction-free writing with session timers, streak tracking, and more.'
                         color='#4E1F08'
                         textColor='white'

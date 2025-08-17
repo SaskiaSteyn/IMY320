@@ -23,14 +23,17 @@ const StaticHeroCard = ({ showChevron, zIndex }) => {
                     <div className='flex gap-4 flex-[1]'>
                         <div className='flex-1'>
                             <StaticBlock
-                                size='large'
-                                image='/images/Cove-logo-landing.png'
+                                size='medium'
+                                backHeader='Write in Peace. An App for Writers, by Writers'
+                                content=''
+                                textColor='white'
+                                color='var(--cafe)'
                             />
                         </div>
                         <div className='flex-1'>
                             <StaticBlock
                                 size='large'
-                                backHeader='2. Write in Peace'
+                                backHeader='Write in Peace'
                                 content='Write in Peace is a focused writing app designed to silence all the noise and help you get into flow. With one tap you can block notifications, set structured writing sessions, and create a calm environment where your ideas can bloom.'
                                 textColor='white'
                                 color='var(--background)'
@@ -43,11 +46,8 @@ const StaticHeroCard = ({ showChevron, zIndex }) => {
                         <div className='flex-1 flex flex-col gap-4'>
                             <div className='flex-1'>
                                 <StaticBlock
-                                    size='medium'
-                                    backHeader='1. Write your way!'
-                                    content='Set custom session timers, track your daily streaks, and get insights into your productivity over time. With flexible features like theme switching, writing goals, and smart scheduling, Write in Peace adapts to your routine and preferences.'
-                                    textColor='white'
-                                    color='var(--background)'
+                                    size='large'
+                                    image='/images/Cove-logo-landing.png'
                                 />
                             </div>
                             <div className='flex-1'>
@@ -64,7 +64,7 @@ const StaticHeroCard = ({ showChevron, zIndex }) => {
                             <div className='flex-1'>
                                 <StaticBlock
                                     size='medium'
-                                    backHeader='3. Calm your mind, write without interruption.'
+                                    backHeader='Calm your mind, write without interruption.'
                                     content="Create the calmest, coziest space for your crafting needs. Beautiful themes, ambient sounds, and smart scheduling help you find the perfect writing atmosphere whether you're drafting novels, blogging, or tackling essays."
                                     button={{
                                         text: 'Get started',
