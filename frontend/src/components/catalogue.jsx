@@ -168,12 +168,17 @@ const Catalogue = () => {
                 <div className='max-w-6xl mx-auto space-y-4'>
                     {filteredItems.map((item, index) => (
                         <div key={index} className='bg-white/20 backdrop-blur-sm rounded-lg shadow-lg border border-white/30'>
-                            {/* Collapsed List Item */}
                             <div className='flex items-center justify-between p-4'>
                                 <button
                                     onClick={() => toggleItem(index)}
                                     className='flex-1 flex items-center gap-4 text-left hover:bg-white/10 transition-all duration-200 rounded-lg p-2'
                                 >
+                                    {/* Item Image */}
+                                    <img
+                                        src={item.image}
+                                        alt={item.name}
+                                        className='w-20 h-20 object-contain rounded-lg mr-4 border border-white/30 bg-white/60'
+                                    />
                                     <div className='flex-1'>
                                         <div className='flex items-center gap-3 mb-1'>
                                             <h3 className='text-lg font-semibold' style={{color: 'var(--background)'}}>
