@@ -2,10 +2,12 @@ import React from 'react';
 import {testimonials} from '../data/testimonials.js';
 import {PricingCard, TestimonialsCard} from '../cards';
 import Header from '../components/header.jsx';
-import WipDetails from '../components/wip-details.jsx';
+import StaticBlock from '../components/static-block.jsx';
 import Catalogue from '../components/catalogue.jsx';
 import TestimonialBlock from '../components/testimonial-block.jsx';
 import ChevronDown from '../components/chevron-down.jsx';
+import FooterCard from '../cards/footer.jsx';
+import {WriteInPeaceCard} from '../cards';
 
 function WriteInPeace() {
 
@@ -13,7 +15,7 @@ function WriteInPeace() {
     return (
         <div className='relative'>
             <Header />
-            <WipDetails />
+            <WriteInPeaceCard />
 
             {/* Testimonials Section - Normal Component */}
             <div className='py-16 bg-gradient-to-b from-[#d1d6d7] to-[#b8c1c3]'>
@@ -47,6 +49,7 @@ function WriteInPeace() {
             <PricingCard />
 
             <Catalogue />
+            <FooterCard />
         </div>
     );
 }

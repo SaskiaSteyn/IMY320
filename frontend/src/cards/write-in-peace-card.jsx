@@ -1,11 +1,11 @@
 import ChevronDown from '../components/chevron-down.jsx';
 import StaticBlock from '../components/static-block.jsx';
 
-const WriteInPeaceCard = ({ zIndex }) => {
+const WriteInPeaceCard = ({zIndex}) => {
     return (
         <div
-            className='h-screen w-full relative card-section bg-[var(--text)]'
-            style={{ zIndex }}
+            className='h-screen w-full relative bg-[var(--text)]'
+            style={{zIndex}}
         >
             <div className='p-8 h-full flex items-center justify-center overflow-hidden box-border'>
                 {/* Bento Flexbox Layout */}
@@ -49,7 +49,7 @@ const WriteInPeaceCard = ({ zIndex }) => {
                     {/* Bottom Row */}
                     <div
                         className='flex flex-row gap-4 min-w-0 min-h-0'
-                        style={{ height: '33%' }}
+                        style={{height: '33%'}}
                     >
                         <div className='min-w-0 min-h-0 flex-[2]'>
                             <StaticBlock
@@ -79,9 +79,6 @@ const WriteInPeaceCard = ({ zIndex }) => {
                     </div>
                 </div>
             </div>
-
-            {/* Scroll Down Chevron */}
-            <ChevronDown backgroundColor='var(--background)' />
         </div>
     );
 };

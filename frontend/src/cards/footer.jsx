@@ -1,4 +1,4 @@
-import {FiShoppingCart} from 'react-icons/fi';
+import {FaShoppingCart} from 'react-icons/fa';
 import {FiArrowUp} from 'react-icons/fi';
 import {Link} from 'react-router-dom';
 
@@ -66,7 +66,7 @@ const FooterCard = ({zIndex}) => {
                     </Link>
                     <Link to='/cart' className='cta-button w-30 mx-auto text-center'>
                         <span className='flex flex-row items-center gap-2'>
-                            <FiShoppingCart className='w-5 h-5' />
+                            <FaShoppingCart className='w-5 h-5' />
                             Cart
                         </span>
                     </Link>
