@@ -1,11 +1,12 @@
-import { FiShoppingCart } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import {FiShoppingCart} from 'react-icons/fi';
+import {FiArrowUp} from 'react-icons/fi';
+import {Link} from 'react-router-dom';
 
-const FooterCard = ({ zIndex }) => {
+const FooterCard = ({zIndex}) => {
     return (
         <div
             className='h-screen w-full relative card-section bg-[var(--background)] flex items-center justify-center'
-            style={{ zIndex }}
+            style={{zIndex}}
         >
             <div className='w-full max-w-5xl mx-auto flex flex-col items-center gap-8 p-8'>
                 {/* Logo */}
@@ -59,11 +60,11 @@ const FooterCard = ({ zIndex }) => {
                     </Link>
                 </nav>
                 {/* Action Buttons */}
-                <div className='flex gap-4 mt-4'>
-                    <Link to='/login' className='cta-button'>
+                <div className='flex gap-8 mt-16'>
+                    <Link to='/login' className='cta-button w-30 mx-auto text-center'>
                         Login
                     </Link>
-                    <Link to='/cart' className='cta-button'>
+                    <Link to='/cart' className='cta-button w-30 mx-auto text-center'>
                         <span className='flex flex-row items-center gap-2'>
                             <FiShoppingCart className='w-5 h-5' />
                             Cart
@@ -73,6 +74,16 @@ const FooterCard = ({ zIndex }) => {
                 <div className='text-xs text-[var(--text)] opacity-60 mt-8'>
                     &copy; {new Date().getFullYear()} Cove. All rights reserved.
                 </div>
+            </div>
+            {/* Back to Top Button - only inside footer */}
+            <div className='absolute bottom-8 right-8'>
+                <button
+                    onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}
+                    className='flex items-center gap-2 px-4 py-2 bg-[var(--primary)] text-white rounded-full shadow-lg hover:bg-[var(--accent)] transition-all font-bold'
+                >
+                    <FiArrowUp className='w-5 h-5' />
+                    Back to Top
+                </button>
             </div>
         </div>
     );
