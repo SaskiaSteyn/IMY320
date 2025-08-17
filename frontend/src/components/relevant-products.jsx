@@ -2,6 +2,21 @@ import { Link } from 'react-router-dom';
 
 const USD_TO_ZAR = 18.5;
 
+const getTagColor = (tag) => {
+    switch (tag) {
+        case 'mugs':
+            return 'var(--candle-light)';
+        case 'hoodies':
+            return 'var(--olive)';
+        case 'totes':
+            return 'var(--forest)';
+        case 'stickers':
+            return '#bfae8a';
+        default:
+            return 'var(--cafe)';
+    }
+};
+
 const RelevantProducts = ({ currentProduct, allProducts }) => {
     if (!currentProduct || !allProducts) return null;
     // Find products with at least one matching tag, but not the current product
@@ -48,7 +63,7 @@ const RelevantProducts = ({ currentProduct, allProducts }) => {
                                     key={idx}
                                     className='px-2 py-1 text-xs font-medium rounded'
                                     style={{
-                                        backgroundColor: 'var(--cafe)',
+                                        backgroundColor: getTagColor(tag),
                                         color: '#fff',
                                     }}
                                 >

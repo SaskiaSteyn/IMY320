@@ -1,10 +1,10 @@
 import ChevronDown from '../components/chevron-down.jsx';
 import StaticBlock from '../components/static-block.jsx';
 
-const WriteInPeaceCard = ({ zIndex }) => {
+const StaticWriteInPeaceCard = ({ zIndex }) => {
     return (
         <div
-            className='h-screen w-full relative bg-[var(--text)] card-section'
+            className='h-screen w-full relative bg-[var(--text)]'
             style={{ zIndex }}
         >
             <div className='p-8 h-full flex items-center justify-center overflow-hidden box-border'>
@@ -79,9 +79,8 @@ const WriteInPeaceCard = ({ zIndex }) => {
                     </div>
                 </div>
             </div>
-            <ChevronDown backgroundColor='var(--background)' />
         </div>
     );
 };
 
-export default WriteInPeaceCard;
+export default StaticWriteInPeaceCard;

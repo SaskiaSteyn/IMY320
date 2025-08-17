@@ -61,6 +61,8 @@ const ProductDetails = ({ product }) => {
         // Here you would add to cart logic
         setShowPopup(true);
     };
+    const unitPriceZAR = product.price * USD_TO_ZAR;
+    const totalPriceZAR = unitPriceZAR * quantity;
     return (
         <>
             <AddedToCartPopup
@@ -85,8 +87,11 @@ const ProductDetails = ({ product }) => {
                     <h2 className='text-3xl font-bold mb-2 tracking-wide'>
                         {product.name}
                     </h2>
+                    <p className='text-lg mb-1'>
+                        Unit price: R{unitPriceZAR.toFixed(2)}
+                    </p>
                     <p className='text-2xl font-bold mb-2'>
-                        R{(product.price * USD_TO_ZAR).toFixed(2)}
+                        Total: R{totalPriceZAR.toFixed(2)}
                     </p>
                     <p className='mb-4'>{product.description}</p>
                     {/* Tags */}

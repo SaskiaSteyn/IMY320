@@ -7,15 +7,20 @@ import {
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import catalogueData from '../data/catalogue.json';
+import AddedToCartPopup from './added-to-cart-popup';
 
 const Catalogue = () => {
     const [selectedTag, setSelectedTag] = useState('all');
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupItem, setPopupItem] = useState(null);
+
     const handleAddToCart = (item) => {
-        console.log('Added to cart:', item);
         // Add your cart logic here
+        setPopupItem(item);
+        setShowPopup(true);
     };
 
     // USD to ZAR conversion (as of Aug 2025, approx 1 USD = 18.5 ZAR)
@@ -71,6 +76,13 @@ const Catalogue = () => {
 
     return (
         <div className='w-full relative bg-[#d1d6d7]'>
+            <AddedToCartPopup
+                show={showPopup}
+                onClose={() => setShowPopup(false)}
+                productName={popupItem ? popupItem.name : ''}
+                quantity={1}
+                size={popupItem && popupItem.size ? popupItem.size : undefined}
+            />
             <div className='p-8'>
                 <h2
                     className='text-4xl font-bold text-center mb-12'

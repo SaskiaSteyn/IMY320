@@ -33,7 +33,7 @@
         "price": 52.99,
         "image": "/images/merch/White Hoodie mens.png",
         "description": "Premium cotton-blend hoodie in clean white. Features the Cove logo with minimalist design. Perfect for writers who prefer understated style and maximum comfort.",
-        "sizes": ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
+        "sizes": ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
     },
     {
         "id": 5,
@@ -42,7 +42,7 @@
         "price": 49.99,
         "image": "/images/merch/Hoodie White Womens.png",
         "description": "Soft, fitted hoodie designed specifically for women writers. Flattering cut with cozy fleece lining and thoughtful details like thumb holes for extra warmth.",
-        "sizes": ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
+        "sizes": ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
     },
     {
         "id": 6,
