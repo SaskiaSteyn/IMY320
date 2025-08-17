@@ -5,10 +5,7 @@ const Breadcrumbs = ({ product }) => {
         <nav className='mb-6' aria-label='Breadcrumb'>
             <ol className='flex items-center space-x-2 text-sm text-[var(--background)]'>
                 <li>
-                    <Link
-                        to='/write-in-peace'
-                        className='hover:underline font-medium'
-                    >
+                    <Link to='/' className='hover:underline font-medium'>
                         Home
                     </Link>
                 </li>
