@@ -21,12 +21,35 @@ const Signup = () => {
             ...prev,
             [name]: value
         }));
+        // Clear error when user starts typing
+        if (error) {
+            setError('');
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
+
+        // Client-side validation
+        if (!formData.username.trim()) {
+            setError('Please enter your username');
+            setIsLoading(false);
+            return;
+        }
+
+        if (!formData.email.trim()) {
+            setError('Please enter your email');
+            setIsLoading(false);
+            return;
+        }
+
+        if (!formData.password.trim()) {
+            setError('Please enter your password');
+            setIsLoading(false);
+            return;
+        }
 
         try {
             const response = await register(formData);
@@ -103,7 +126,6 @@ const Signup = () => {
                                     name="username"
                                     value={formData.username}
                                     onChange={handleChange}
-                                    required
                                     placeholder="Username"
                                     className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08]/60 focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
                                     style={{
@@ -121,7 +143,6 @@ const Signup = () => {
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}
-                                    required
                                     placeholder="Email"
                                     className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08]/60 focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
                                     style={{
@@ -139,7 +160,6 @@ const Signup = () => {
                                     name="password"
                                     value={formData.password}
                                     onChange={handleChange}
-                                    required
                                     placeholder="Password"
                                     className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08]/60 focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
                                     style={{
@@ -157,6 +177,13 @@ const Signup = () => {
                             >
                                 {isLoading ? 'Creating Account...' : 'Sign Up'}
                             </button>
+
+                            {/* Signup Form Error Display */}
+                            {error && (
+                                <div className="bg-red-50 text-red-600 p-3 border border-red-200 text-sm text-center rounded-md">
+                                    {error}
+                                </div>
+                            )}
                         </div>
 
                         {/* Second Column - Social Signup */}
