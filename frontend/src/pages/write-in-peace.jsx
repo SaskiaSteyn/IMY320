@@ -1,43 +1,33 @@
-import React, {useState, useEffect} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {logout} from '../backend/api';
+import React, {useState} from 'react';
+import {testimonials} from '../data/testimonials.js';
+import {PricingCard, TestimonialsCard} from '../cards';
+import Header from '../components/header.jsx';
 
 function WriteInPeace() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const navigate = useNavigate();
+    const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsLoggedIn(!!token);
-    }, []);
+    const nextTestimonial = () => {
+        setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    };
 
-    const handleLogout = async () => {
-        try {
-            await logout();
-            setIsLoggedIn(false);
-            navigate('/login');
-        } catch (error) {
-            console.error('Logout failed:', error);
-        }
+    const prevTestimonial = () => {
+        setCurrentTestimonial(
+            (prev) => (prev - 1 + testimonials.length) % testimonials.length
+        );
     };
 
     return (
-        <div className='min-h-screen p-8 flex flex-col items-center justify-center'>
-            <h1>Coming Soon!</h1>
-            <p>Watch the space to learn more about writing in peace!</p>
-            <div className='flex gap-4 mt-6'>
-                <Link to='/' className='cta-button'>
-                    Back to Home
-                </Link>
-                {isLoggedIn && (
-                    <button
-                        onClick={handleLogout}
-                        className='cta-button bg-red-600 hover:bg-red-700'
-                    >
-                        Logout
-                    </button>
-                )}
-            </div>
+        <div className='relative'>
+            <Header />
+            <TestimonialsCard
+                currentTestimonial={currentTestimonial}
+                testimonials={testimonials}
+                nextTestimonial={nextTestimonial}
+                prevTestimonial={prevTestimonial}
+                setCurrentTestimonial={setCurrentTestimonial}
+                zIndex={1}
+            />
+            <PricingCard zIndex={2} />
         </div>
     );
 }

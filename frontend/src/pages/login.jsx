@@ -16,7 +16,7 @@ const Login = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setAnimationStarted(true);
-        }, 750);
+        }, 1000);
         return () => clearTimeout(timer);
     }, []);
 
@@ -77,33 +77,42 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex justify-center items-center bg-cover bg-center bg-no-repeat bg-[url('/images/Background-Cozy2.jpeg')]">
+        <div className="min-h-screen flex justify-center items-center bg-cover bg-center bg-no-repeat bg-[url('/images/Background-Cozy2.jpeg')] py-8">
             <div
-                className='bg-white/75 backdrop-blur-sm p-12 w-full max-w-4xl h-auto flex items-center justify-center shadow-lg rounded-lg relative border'
+                className='bg-white/75 backdrop-blur-sm p-8 w-full max-w-4xl min-h-[80vh] flex items-center justify-center shadow-lg rounded-lg relative border'
                 style={{borderColor: 'var(--cafe)'}}
             >
                 {/* Animated Logo - starts centered and large, moves to top and shrinks */}
                 <div
-                    className={`absolute transition-all duration-1500 ease-in-out ${animationStarted
-                        ? 'top-8 left-1/2 transform -translate-x-1/2'
+                    className={`absolute transition-all duration-2000 ease-out ${animationStarted
+                        ? 'top-4 left-1/2 transform -translate-x-1/2'
                         : 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
                         }`}
                 >
                     <div className="text-center">
                         <h1
-                            className={`header-logo transition-all duration-1500 ease-in-out ${animationStarted ? 'text-9xl' : 'text-[12rem]'
+                            className={`header-logo transition-all duration-2500 ease-out ${animationStarted ? 'text-9xl' : 'text-[12rem]'
                                 }`}
                             style={{
                                 color: 'var(--cafe)',
-                                fontSize: animationStarted ? '6rem' : '10rem'
+                                fontSize: animationStarted ? '6rem' : '10rem',
+                                lineHeight: animationStarted ? '1' : '1.1',
+                                marginBottom: animationStarted ? '0.5rem' : '1rem',
+                                transform: animationStarted ? 'scale(1)' : 'scale(1.2)',
+                                transformOrigin: 'center'
                             }}
                         >
                             COVE
                         </h1>
                         <p
-                            className={`transition-all duration-1500 ease-in-out italic ${animationStarted ? 'text-lg' : 'text-xl'
-                                } mt-2`}
-                            style={{color: 'var(--cafe)'}}
+                            className={`transition-all duration-2500 ease-out italic ${animationStarted ? 'text-2xl' : 'text-2xl'
+                                }`}
+                            style={{
+                                color: 'var(--cafe)',
+                                marginTop: animationStarted ? '0.25rem' : '1rem',
+                                transform: animationStarted ? 'scale(1)' : 'scale(1.1)',
+                                transformOrigin: 'center'
+                            }}
                         >
                             Helping you write in peace
                         </p>
@@ -112,28 +121,28 @@ const Login = () => {
 
                 {/* Login Form - fades in during logo animation */}
                 <div
-                    className={`w-full transition-opacity duration-1000 delay-500 ${animationStarted ? 'opacity-100' : 'opacity-0'
+                    className={`w-full transition-opacity duration-1500 ease-out delay-700 ${animationStarted ? 'opacity-100' : 'opacity-0'
                         }`}
                 >
-                    {/* Spacer for logo */}
-                    <div className='h-32 mb-8'></div>
-                    <div className='!text-xl !font-medium mb-6 text-center' style={{color: 'var(--cafe)'}}>
+                    {/* Spacer for logo - adjusted to better accommodate the larger logo */}
+                    <div className='h-28 mb-4'></div>
+                    <div className='!text-base !font-medium mb-8 text-center' style={{color: 'var(--cafe)'}}>
                         We're glad to see you back!
                     </div>
 
                     <form
                         onSubmit={handleSubmit}
-                        className='grid grid-cols-2 gap-8 items-start'
+                        className='grid grid-cols-2 gap-8 items-start mb-6'
                     >
                         {/* First Column - Main Login Form */}
-                        <div className='flex flex-col gap-4 bg-black/10 p-4 rounded-lg border border-[#4e1f08]'>
+                        <div className='flex flex-col gap-4 bg-black/10 p-4 rounded-lg border' style={{borderColor: 'var(--cafe)'}}>
                             {/* Sign In Label */}
                             <div className='flex items-center gap-4 mb-2'>
-                                <div className='flex-1 h-px bg-[#4e1f08]/40' />
-                                <span className='text-sm text-[#4e1f08]/70'>
+                                <div className='flex-1 h-px' style={{backgroundColor: 'var(--cafe)'}} />
+                                <span className='text-sm raleway' style={{color: 'var(--cafe)'}}>
                                     sign in
                                 </span>
-                                <div className='flex-1 h-px bg-[#4e1f08]/40' />
+                                <div className='flex-1 h-px' style={{backgroundColor: 'var(--cafe)'}} />
                             </div>
 
                             <div className='flex flex-col'>
@@ -144,14 +153,14 @@ const Login = () => {
                                     value={formData.username}
                                     onChange={handleChange}
                                     placeholder='Username'
-                                    className='p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08]/60 focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0'
+                                    className='p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 focus:outline-none transition-all duration-200 border-2 rounded-md raleway [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0'
                                     style={{
-                                        backgroundColor:
-                                            'transparent !important',
-                                        WebkitBoxShadow:
-                                            '0 0 0 1000px transparent inset !important',
-                                        WebkitTextFillColor:
-                                            '#4e1f08 !important',
+                                        backgroundColor: 'transparent !important',
+                                        WebkitBoxShadow: '0 0 0 1000px transparent inset !important',
+                                        WebkitTextFillColor: 'var(--cafe) !important',
+                                        borderColor: 'var(--cafe)',
+                                        color: 'var(--cafe)',
+                                        fontFamily: 'raleway, sans-serif'
                                     }}
                                 />
                             </div>
@@ -164,21 +173,25 @@ const Login = () => {
                                     value={formData.password}
                                     onChange={handleChange}
                                     placeholder='Password'
-                                    className='p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08]/60 focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0'
+                                    className='p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 focus:outline-none transition-all duration-200 border-2 rounded-md raleway [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0'
                                     style={{
-                                        backgroundColor:
-                                            'transparent !important',
-                                        WebkitBoxShadow:
-                                            '0 0 0 1000px transparent inset !important',
-                                        WebkitTextFillColor:
-                                            '#4e1f08 !important',
+                                        backgroundColor: 'transparent !important',
+                                        WebkitBoxShadow: '0 0 0 1000px transparent inset !important',
+                                        WebkitTextFillColor: 'var(--cafe) !important',
+                                        borderColor: 'var(--cafe)',
+                                        color: 'var(--cafe)',
+                                        fontFamily: 'raleway, sans-serif'
                                     }}
                                 />
                             </div>
 
                             <button
                                 type='submit'
-                                className='py-3 px-6 font-medium cursor-pointer transition-all duration-200 text-white hover:opacity-90 disabled:bg-gray-400 disabled:cursor-not-allowed bg-[#4e1f08] rounded-md'
+                                className='py-3 px-6 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-md raleway'
+                                style={{
+                                    backgroundColor: 'var(--cafe)',
+                                    color: 'white'
+                                }}
                                 disabled={isLoading}
                             >
                                 {isLoading ? 'Logging in...' : 'Login'}
@@ -186,7 +199,7 @@ const Login = () => {
 
                             {/* Login Form Error Display */}
                             {error && (
-                                <div className='bg-red-50 text-red-600 p-3 border border-red-200 text-sm text-center rounded-md'>
+                                <div className='bg-red-50 text-red-600 p-3 border border-red-200 text-sm text-center rounded-md raleway'>
                                     {error}
                                 </div>
                             )}
@@ -245,8 +258,8 @@ const Login = () => {
                     </form>
 
                     {/* Centered Sign Up Link */}
-                    <div className='flex items-center gap-4 mt-6'>
-                        <div className='flex-1 bg-[#4e1f08]/40' />
+                    <div className='flex items-center gap-4 mt-4'>
+                        <div className='flex-1 h-px bg-[#4e1f08]/40' />
                         <div className='text-center text-sm text-[#4e1f08]'>
                             Don't have an account?{' '}
                             <a
