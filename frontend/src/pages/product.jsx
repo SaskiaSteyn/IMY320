@@ -1,12 +1,13 @@
-import { Link, useParams } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
 import ProductDetails from '../components/product-details.jsx';
 import RelevantProducts from '../components/relevant-products.jsx';
 import catalogueData from '../data/catalogue.json';
+import FooterCard from '../cards/footer.jsx';
 
 const ProductPage = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const product = catalogueData.find((item) => String(item.id) === id);
 
     if (!product) {
@@ -38,6 +39,7 @@ const ProductPage = () => {
                     allProducts={catalogueData}
                 />
             </div>
+            <FooterCard />
         </>
     );
 };

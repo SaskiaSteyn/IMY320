@@ -1,3 +1,4 @@
+import FooterCard from '../cards/footer.jsx';
 import Block from '../components/block.jsx';
 import Header from '../components/header.jsx';
 import StaticBlock from '../components/static-block.jsx';
@@ -210,6 +211,8 @@ Drawn to coding and design, she is pursuing a BIS Multimedia degree. While still
                     </div>
                 </div>
             </div>
+
+            <FooterCard />
         </div>
     );
 }
