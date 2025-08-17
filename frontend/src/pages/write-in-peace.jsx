@@ -48,7 +48,7 @@ function WriteInPeace() {
 
             <PricingCard />
 
-            <Catalogue />
+            <Catalogue id='shop' />
             <FooterCard />
         </div>
     );
