@@ -2,23 +2,7 @@ import React, {useState} from 'react';
 import {FaChevronDown, FaChevronUp, FaShoppingCart, FaTimes} from 'react-icons/fa';
 
 const Catalogue = () => {
-    const [expandedItems, setExpandedItems] = useState({});
-    const [flippedCards, setFlippedCards] = useState({});
     const [selectedTag, setSelectedTag] = useState('all');
-
-    const toggleItem = (index) => {
-        setExpandedItems(prev => ({
-            ...prev,
-            [index]: !prev[index]
-        }));
-    };
-
-    const toggleCard = (index) => {
-        setFlippedCards(prev => ({
-            ...prev,
-            [index]: !prev[index]
-        }));
-    };
 
     const handleAddToCart = (item) => {
         console.log('Added to cart:', item);
@@ -169,8 +153,8 @@ const Catalogue = () => {
                     {filteredItems.map((item, index) => (
                         <div key={index} className='bg-white/20 backdrop-blur-sm rounded-lg shadow-lg border border-white/30'>
                             <div className='flex items-center justify-between p-4'>
-                                <button
-                                    onClick={() => toggleItem(index)}
+                                <div
+
                                     className='flex-1 flex items-center gap-4 text-left hover:bg-white/10 transition-all duration-200 rounded-lg p-2'
                                 >
                                     {/* Item Image */}
@@ -200,7 +184,7 @@ const Catalogue = () => {
                                             ${item.price}
                                         </p>
                                     </div>
-                                </button>
+                                </div>
 
                                 <div className='flex items-center gap-3'>
                                     <button
@@ -211,76 +195,8 @@ const Catalogue = () => {
                                         <FaShoppingCart className='text-sm' />
                                         Add to Cart
                                     </button>
-
-                                    <button
-                                        onClick={() => toggleItem(index)}
-                                        className='p-2 rounded-lg hover:bg-white/10 transition-all duration-200'
-                                        style={{color: 'var(--background)'}}
-                                    >
-                                        {expandedItems[index] ? (
-                                            <FaChevronUp className='text-lg' />
-                                        ) : (
-                                            <FaChevronDown className='text-lg' />
-                                        )}
-                                    </button>
                                 </div>
                             </div>
-
-                            {/* Expanded Card View */}
-                            {expandedItems[index] && (
-                                <div className='px-4 pb-4 border-t border-white/20'>
-                                    <div className='mt-4 perspective-1000'>
-                                        <div
-                                            className={`bento-flip-card transition-transform duration-500 ${flippedCards[index] ? 'rotate-y-180' : ''
-                                                }`}
-                                            style={{
-                                                transformStyle: 'preserve-3d',
-                                                height: '300px'
-                                            }}
-                                        >
-                                            {/* Front of Card - Image */}
-                                            <div
-                                                className='bento-front absolute w-full h-full rounded-lg cursor-pointer'
-                                                onClick={() => toggleCard(index)}
-                                                style={{
-                                                    backgroundImage: `url(${item.image})`,
-                                                    backgroundSize: 'cover',
-                                                    backgroundPosition: 'center',
-                                                    backfaceVisibility: 'hidden'
-                                                }}
-                                            >
-                                                <div className='absolute inset-0 bg-black/30 rounded-lg flex items-end p-4'>
-                                                    <p className='text-white text-sm font-medium'>
-                                                        Click to view description
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            {/* Back of Card - Description */}
-                                            <div
-                                                className='bento-back absolute w-full h-full bg-white/90 backdrop-blur-sm rounded-lg p-6 cursor-pointer flex items-center justify-center'
-                                                onClick={() => toggleCard(index)}
-                                                style={{
-                                                    transform: 'rotateY(180deg)',
-                                                    backfaceVisibility: 'hidden'
-                                                }}
-                                            >
-                                                <div className='text-center'>
-                                                    <h4 className='text-xl font-bold mb-4' style={{color: 'var(--background)'}}>
-                                                        {item.name}
-                                                    </h4>
-                                                    <p className='text-sm leading-relaxed' style={{color: 'var(--background)'}}>
-                                                        {item.description}
-                                                    </p>
-                                                    <p className='text-xs mt-4 opacity-70' style={{color: 'var(--background)'}}>
-                                                        Click to view image
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
                         </div>
                     ))}
                 </div>
