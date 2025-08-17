@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 // import {login} from '../backend/api';
-import { FaApple, FaDiscord, FaGoogle } from 'react-icons/fa';
+import {FaApple, FaDiscord, FaGoogle} from 'react-icons/fa';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ const Login = () => {
     }, []);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: value,
@@ -78,33 +78,46 @@ const Login = () => {
 
     return (
         <div className="min-h-screen flex justify-center items-center bg-cover bg-center bg-no-repeat bg-[url('/images/Background-Cozy2.jpeg')]">
-            <div className='bg-white/75 backdrop-blur-sm p-12 w-full max-w-4xl h-auto flex items-center justify-center shadow-lg rounded-lg relative border border-[#4e1f08]/40'>
+            <div
+                className='bg-white/75 backdrop-blur-sm p-12 w-full max-w-4xl h-auto flex items-center justify-center shadow-lg rounded-lg relative border'
+                style={{borderColor: 'var(--cafe)'}}
+            >
                 {/* Animated Logo - starts centered and large, moves to top and shrinks */}
                 <div
-                    className={`absolute transition-all duration-1500 ease-in-out ${
-                        animationStarted
-                            ? 'top-8 left-1/2 transform -translate-x-1/2'
-                            : 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
-                    }`}
-                >
-                    <img
-                        src='/images/CoveLogo.svg'
-                        alt='Cove Logo'
-                        className={`h-auto transition-all duration-1500 ease-in-out ${
-                            animationStarted ? 'w-72' : 'w-80'
+                    className={`absolute transition-all duration-1500 ease-in-out ${animationStarted
+                        ? 'top-8 left-1/2 transform -translate-x-1/2'
+                        : 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
                         }`}
-                    />
+                >
+                    <div className="text-center">
+                        <h1
+                            className={`header-logo transition-all duration-1500 ease-in-out ${animationStarted ? 'text-9xl' : 'text-[12rem]'
+                                }`}
+                            style={{
+                                color: 'var(--cafe)',
+                                fontSize: animationStarted ? '6rem' : '10rem'
+                            }}
+                        >
+                            COVE
+                        </h1>
+                        <p
+                            className={`transition-all duration-1500 ease-in-out italic ${animationStarted ? 'text-lg' : 'text-xl'
+                                } mt-2`}
+                            style={{color: 'var(--cafe)'}}
+                        >
+                            Helping you write in peace
+                        </p>
+                    </div>
                 </div>
 
                 {/* Login Form - fades in during logo animation */}
                 <div
-                    className={`w-full transition-opacity duration-1000 delay-500 ${
-                        animationStarted ? 'opacity-100' : 'opacity-0'
-                    }`}
+                    className={`w-full transition-opacity duration-1000 delay-500 ${animationStarted ? 'opacity-100' : 'opacity-0'
+                        }`}
                 >
                     {/* Spacer for logo */}
-                    <div className='h-20 mb-8'></div>
-                    <div className='!text-xl !font-medium mb-6 text-[#4e1f08] text-center'>
+                    <div className='h-32 mb-8'></div>
+                    <div className='!text-xl !font-medium mb-6 text-center' style={{color: 'var(--cafe)'}}>
                         We're glad to see you back!
                     </div>
 
