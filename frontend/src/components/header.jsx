@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const Header = ({navigationItems = []}) => {
+const Header = ({ navigationItems = [] }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [hideTimer, setHideTimer] = useState(null);
@@ -9,9 +9,9 @@ const Header = ({navigationItems = []}) => {
 
     // Default navigation items if none provided
     const defaultNavItems = [
-        {text: 'Home', href: '/'},
-        {text: 'Write in Peace', href: '/write-in-peace'},
-        {text: 'About', href: '/about'},
+        { text: 'Home', href: '/' },
+        { text: 'Write in Peace', href: '/write-in-peace' },
+        { text: 'About', href: '/about' },
     ];
 
     const navItems =
@@ -96,36 +96,61 @@ const Header = ({navigationItems = []}) => {
     };
 
     return (
-        <header
-            className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 p-4 transition-all duration-300 ${isVisible
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 -translate-y-full'
+        <>
+            {/* Hover zone at the very top of the page to reveal navbar */}
+            <div
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: 32,
+                    zIndex: 60,
+                }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            />
+            <header
+                className={`fixed top-0 transform w-full z-50 transition-all duration-300 ${
+                    isVisible
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 -translate-y-full'
                 }`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-        >
-            <nav className='header-nav flex items-center gap-3'>
-                {/* Navigation Items */}
-                {navItems.map((item, index) => (
-                    <Link
-                        key={index}
-                        to={item.href}
-                        className='header-nav-item cta-button text-white text-sm px-4 py-2'
-                    >
-                        {item.text}
-                    </Link>
-                ))}
-
-                {/* Dynamic Login/Account Button */}
-                <Link
-                    to={isLoggedIn ? '/account' : '/login'}
-                    className='header-nav-item cta-button text-white text-sm px-4 py-2'
-                    style={{backgroundColor: 'var(--forest)'}}
-                >
-                    {isLoggedIn ? 'Account' : 'Login'}
-                </Link>
-            </nav>
-        </header>
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            >
+                <nav className='header-nav flex items-center justify-between w-full px-8 py-2'>
+                    {/* Left: Cove logo/text */}
+                    <div className='flex-1 flex items-center'>
+                        <span className='text-2xl font-bold header-logo text-black'>
+                            Cove.
+                        </span>
+                    </div>
+                    {/* Center: Navigation Items */}
+                    <div className='flex-1 flex items-center justify-center gap-3'>
+                        {navItems.map((item, index) => (
+                            <Link
+                                key={index}
+                                to={item.href}
+                                className='header-nav-item header-button text-[#19191a] text-sm px-4 py-2'
+                            >
+                                {item.text}
+                            </Link>
+                        ))}
+                    </div>
+                    {/* Right: Login/Account Button */}
+                    <div className='flex-1 flex items-center justify-end'>
+                        <Link
+                            to={isLoggedIn ? '/account' : '/login'}
+                            className='header-nav-item header-button text-white text-sm px-4 py-2'
+                            style={{ backgroundColor: 'var(--forest)' }}
+                        >
+                            {isLoggedIn ? 'Account' : 'Login'}
+                        </Link>
+                    </div>
+                </nav>
+            </header>
+        </>
     );
 };
 

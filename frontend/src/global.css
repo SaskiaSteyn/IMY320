@@ -5,37 +5,37 @@
 /* Font Face Declaration */
 @font-face {
     font-family: 'American Typewriter';
-    src: url('/fonts/American Typewriter Regular/American Typewriter Regular.ttf') format('truetype');
+    src: url('/fonts/American Typewriter Regular/American Typewriter Regular.ttf')
+        format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
 
 .raleway {
-    font-family: "raleway", sans-serif;
+    font-family: 'raleway', sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
 }
 
 .fredericka-the-great-regular {
-    font-family: "Fredericka the Great", serif;
+    font-family: 'Fredericka the Great', serif;
     font-weight: 400;
     font-style: normal;
 }
 
 :root {
-
     font-family: 'raleway', sans-serif;
 
-
     --background: #19191a;
+    --background-70: rgba(25, 25, 26, 0.7);
     --text: #f0f0f0;
-    --cafe: #4e1f08;
+    --cafe: #3a1401;
     --candle-light: #e79210;
     --olive: #7d7f49;
     --hazelwood: #d2c198;
-    --fog: #bac7cb;
+    --fog: #d1d6d7;
     --forest: #222600;
 
     /* Custom cursor variable */
@@ -59,7 +59,6 @@ body {
     color: var(--text);
     /* margin: 50px; */
     cursor: var(--custom-cursor);
-
 }
 
 * {
@@ -86,23 +85,31 @@ h1 {
     line-height: 2.5rem;
     font-weight: 700;
     letter-spacing: 0.1em;
-    font-family: "Fredericka the Great", serif;
+    font-family: 'Fredericka the Great', serif;
 }
 
 h2 {
-    font-size: 1.875rem;
+    font-size: 3rem;
     line-height: 2.25rem;
     font-weight: 600;
     letter-spacing: 0.1em;
-    font-family: "Fredericka the Great", serif;
+    font-family: 'Fredericka the Great', serif;
 }
 
 h3 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     line-height: 2rem;
-    font-weight: 600;
+    font-weight: 1000;
     letter-spacing: 0.1em;
-    font-family: "Fredericka the Great", serif;
+    font-family: 'Fredericka the Great', serif;
+}
+
+.header-logo {
+    font-size: 1.8rem;
+    line-height: 2rem;
+    font-weight: 1000;
+    letter-spacing: 0.1em;
+    font-family: 'Fredericka the Great', serif;
 }
 
 /* Bento Block Styles */
@@ -184,11 +191,36 @@ h3 {
     transform: translateY(0);
 }
 
+.header-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    border-radius: 7px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    /* color: white; */
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.header-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.header-button:active {
+    transform: translateY(0);
+}
+
 /* Header Styles */
 .header-nav {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(209, 214, 215, 0.3);
     backdrop-filter: blur(12px);
-    border-radius: 10px;
+    /* border-radius: 10px; */
     padding: 0.75rem 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -237,7 +269,7 @@ html {
 
 /* Testimonial Component Styles */
 .testimonial-card {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--background);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease-in-out;
@@ -281,3 +313,9 @@ html {
         scroll-snap-stop: always;
     }
 }
+
+/* .chev-bg {
+    background-color: var(--background);
+    border: var(--background) 1px solid;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+} */

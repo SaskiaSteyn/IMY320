@@ -3,7 +3,7 @@ import Button from '../components/button.jsx';
 const CallToActionCard = ({ zIndex }) => {
     return (
         <div
-            className='h-screen w-full relative card-section bg-[#1E1E1E]'
+            className='h-screen w-full relative card-section bg-[#d1d6d7]'
             style={{ zIndex }}
         >
             <div className=' flex flex-col justify-center h-full text-white'>

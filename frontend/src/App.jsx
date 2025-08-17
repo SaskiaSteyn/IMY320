@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import {
     CallToActionCard,
-    HeroCard,
     PricingCard,
+    StaticHeroCard,
     TestimonialsCard,
     WriteInPeaceCard,
 } from './cards';
@@ -27,7 +27,7 @@ function App() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowChevron(true);
-        }, 5000); // Show after 10 seconds
+        }, 0); // Show after 10 seconds
 
         return () => clearTimeout(timer);
     }, []);
@@ -35,9 +35,8 @@ function App() {
     return (
         <div className='relative'>
             <Header />
-            <HeroCard showChevron={showChevron} zIndex={1} />
+            <StaticHeroCard showChevron={showChevron} zIndex={1} />
             <WriteInPeaceCard zIndex={2} />
-            <PricingCard zIndex={3} />
             <TestimonialsCard
                 currentTestimonial={currentTestimonial}
                 testimonials={testimonials}
