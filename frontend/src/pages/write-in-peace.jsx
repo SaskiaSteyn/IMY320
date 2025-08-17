@@ -1,11 +1,40 @@
-import { PricingCard, StaticWriteInPeaceCard } from '../cards';
+import React, {useRef, useState} from 'react';
+import {PricingCard, StaticWriteInPeaceCard} from '../cards';
 import FooterCard from '../cards/footer.jsx';
 import Catalogue from '../components/catalogue.jsx';
 import Header from '../components/header.jsx';
 import TestimonialBlock from '../components/testimonial-block.jsx';
-import { testimonials } from '../data/testimonials.js';
+import {testimonials} from '../data/testimonials.js';
 
 function WriteInPeace() {
+    const loaded = useRef(false);
+    const [calledOnce, setCalledOnce] = useState(false);
+
+    const CallScroll = () => {
+        if (!loaded.current && !calledOnce) {
+            loaded.current = true;
+            setCalledOnce(true);
+        }
+    };
+
+    React.useEffect(() => {
+        if (!loaded.current && !calledOnce) {
+            loaded.current = true;
+            setCalledOnce(true);
+            const lastId = localStorage.getItem('lastViewedItemId');
+            if (lastId) {
+                const el = document.getElementById(`catalog-item-${lastId}`);
+                if (el) {
+                    el.scrollIntoView({behavior: 'smooth', block: 'center'});
+                }
+                localStorage.removeItem('lastViewedItemId');
+            } else {
+                window.scrollTo({top: 0, behavior: 'smooth'});
+                console.log("Weeee");
+            }
+        }
+
+    }, [calledOnce]);
     return (
         <div className='relative bg-[var(--text)]'>
             <Header />
@@ -16,13 +45,13 @@ function WriteInPeace() {
                 <div className='text-center mb-12'>
                     <h2
                         className='text-4xl font-bold mb-4'
-                        style={{ color: 'var(--background)' }}
+                        style={{color: 'var(--background)'}}
                     >
                         What Writers Say
                     </h2>
                     <p
                         className='text-lg'
-                        style={{ color: 'var(--background)' }}
+                        style={{color: 'var(--background)'}}
                     >
                         Real experiences from our writing community
                     </p>
@@ -48,7 +77,7 @@ function WriteInPeace() {
 
             <PricingCard />
 
-            <Catalogue id='shop' />
+            <Catalogue id='shop' CallScroll={CallScroll} />
             <FooterCard />
         </div>
     );

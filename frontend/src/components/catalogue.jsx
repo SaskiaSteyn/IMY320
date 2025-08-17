@@ -1,15 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
     FaChevronDown,
     FaChevronUp,
     FaShoppingCart,
     FaTimes,
 } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import catalogueData from '../data/catalogue.json';
 import AddedToCartPopup from './added-to-cart-popup';
 
-const Catalogue = () => {
+const Catalogue = ({CallScroll}) => {
     const [selectedTag, setSelectedTag] = useState('all');
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -54,6 +54,12 @@ const Catalogue = () => {
         }
     };
 
+    const handleItemClicked = (item) => {
+        // Handle item click logic here
+        localStorage.setItem('lastViewedItemId', item.id);
+        CallScroll();
+    };
+
     // Custom dropdown close on outside click
     React.useEffect(() => {
         function handleClickOutside(event) {
@@ -74,6 +80,9 @@ const Catalogue = () => {
         };
     }, [dropdownOpen]);
 
+    // Load at right position
+
+
     return (
         <div className='w-full relative bg-[#d1d6d7]'>
             <AddedToCartPopup
@@ -86,7 +95,7 @@ const Catalogue = () => {
             <div className='p-8'>
                 <h2
                     className='text-4xl font-bold text-center mb-12'
-                    style={{ color: 'var(--background)' }}
+                    style={{color: 'var(--background)'}}
                 >
                     Cove Merch
                 </h2>
@@ -96,14 +105,14 @@ const Catalogue = () => {
                     <div className='flex items-center gap-4 justify-center'>
                         <span
                             className='text-lg font-medium'
-                            style={{ color: 'var(--background)' }}
+                            style={{color: 'var(--background)'}}
                         >
                             Filter by category:
                         </span>
                         <div className='relative' ref={dropdownRef}>
                             <button
                                 className='px-4 py-2 rounded-lg border border-white/30 bg-white/20 backdrop-blur-sm text-white font-medium flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white/50 min-w-[140px]'
-                                style={{ color: 'var(--background)' }}
+                                style={{color: 'var(--background)'}}
                                 onClick={() => setDropdownOpen((open) => !open)}
                                 aria-haspopup='listbox'
                                 aria-expanded={dropdownOpen}
@@ -111,7 +120,7 @@ const Catalogue = () => {
                                 {selectedTag === 'all'
                                     ? 'All Items'
                                     : selectedTag.charAt(0).toUpperCase() +
-                                      selectedTag.slice(1)}
+                                    selectedTag.slice(1)}
                                 {dropdownOpen ? (
                                     <FaChevronUp />
                                 ) : (
@@ -121,20 +130,19 @@ const Catalogue = () => {
                             {dropdownOpen && (
                                 <ul
                                     className='absolute left-0 mt-2 w-full rounded-lg shadow-lg bg-white/20 backdrop-blur-sm border border-white/30 z-10'
-                                    style={{ minWidth: '140px' }}
+                                    style={{minWidth: '140px'}}
                                     role='listbox'
                                 >
                                     {availableTags.map((tag) => (
                                         <li
                                             key={tag}
-                                            className={`px-4 py-2 cursor-pointer font-medium transition-all duration-150 border-b border-white/30 ${
-                                                selectedTag === tag
-                                                    ? 'bg-white/20 text-[var(--background)]'
-                                                    : 'bg-white/20 text-[var(--background)] hover:underline'
-                                            }`}
+                                            className={`px-4 py-2 cursor-pointer font-medium transition-all duration-150 border-b border-white/30 ${selectedTag === tag
+                                                ? 'bg-white/20 text-[var(--background)]'
+                                                : 'bg-white/20 text-[var(--background)] hover:underline'
+                                                }`}
                                             style={
                                                 selectedTag === tag
-                                                    ? { fontWeight: 'bold' }
+                                                    ? {fontWeight: 'bold'}
                                                     : {}
                                             }
                                             onClick={() => {
@@ -147,7 +155,7 @@ const Catalogue = () => {
                                             {tag === 'all'
                                                 ? 'All Items'
                                                 : tag.charAt(0).toUpperCase() +
-                                                  tag.slice(1)}
+                                                tag.slice(1)}
                                         </li>
                                     ))}
                                 </ul>
@@ -179,6 +187,8 @@ const Catalogue = () => {
                                         textDecoration: 'none',
                                         color: 'inherit',
                                     }}
+                                    onClick={() => handleItemClicked(item)}
+                                    id={`catalog-item-${item.id}`}
                                 >
                                     {/* Item Image */}
                                     <img
