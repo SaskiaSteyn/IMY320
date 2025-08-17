@@ -27,12 +27,30 @@ const Login = () => {
             ...prev,
             [name]: value
         }));
+        // Clear error when user starts typing
+        if (error) {
+            setError('');
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
+
+        // Client-side validation
+        if (!formData.username.trim()) {
+            setError('Please enter your username');
+            setIsLoading(false);
+            return;
+        }
+
+        if (!formData.password.trim()) {
+            setError('Please enter your password');
+            setIsLoading(false);
+            return;
+        }
+
         navigate('/'); // Redirect to home page immediately
 
         // try {
@@ -86,12 +104,6 @@ const Login = () => {
                         We're glad to see you back!
                     </div>
 
-                    {error && (
-                        <div className="bg-red-50 text-red-600 p-3 border border-red-200 text-sm text-center mb-4">
-                            {error}
-                        </div>
-                    )}
-
                     <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-8 items-start">
                         {/* First Column - Main Login Form */}
                         <div className="flex flex-col gap-4 bg-black/10 p-4 rounded-lg border border-[#4e1f08]">
@@ -109,7 +121,6 @@ const Login = () => {
                                     name="username"
                                     value={formData.username}
                                     onChange={handleChange}
-                                    required
                                     placeholder="Username"
                                     className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08]/60 focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
                                     style={{
@@ -127,7 +138,6 @@ const Login = () => {
                                     name="password"
                                     value={formData.password}
                                     onChange={handleChange}
-                                    required
                                     placeholder="Password"
                                     className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08]/60 focus:border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
                                     style={{
@@ -145,6 +155,13 @@ const Login = () => {
                             >
                                 {isLoading ? 'Logging in...' : 'Login'}
                             </button>
+
+                            {/* Login Form Error Display */}
+                            {error && (
+                                <div className="bg-red-50 text-red-600 p-3 border border-red-200 text-sm text-center rounded-md">
+                                    {error}
+                                </div>
+                            )}
                         </div>
 
                         {/* Second Column - Social Login & Sign Up */}
