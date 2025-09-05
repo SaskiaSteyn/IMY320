@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { Button } from './ui/button-header';
 
 const Header = ({ navigationItems = [] }) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
-    const [hideTimer, setHideTimer] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [cartCount, setCartCount] = useState(0);
+
     // Update cart count (unique items, not quantity)
     useEffect(() => {
         const updateCartCount = () => {
@@ -50,146 +49,66 @@ const Header = ({ navigationItems = [] }) => {
         };
     }, []);
 
-    useEffect(() => {
-        let scrollTimeout;
-
-        const handleScroll = () => {
-            // Show navbar when scrolling
-            setIsVisible(true);
-
-            // Clear existing timeout
-            if (scrollTimeout) {
-                clearTimeout(scrollTimeout);
-            }
-
-            // Clear hide timer when scrolling
-            if (hideTimer) {
-                clearTimeout(hideTimer);
-                setHideTimer(null);
-            }
-
-            // Set timeout to start hide timer after scrolling stops
-            scrollTimeout = setTimeout(() => {
-                if (!isHovered) {
-                    const timer = setTimeout(() => {
-                        setIsVisible(false);
-                    }, 5000); // Hide after 5 seconds
-                    setHideTimer(timer);
-                }
-            }, 150); // Wait 150ms after scroll stops
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-            if (scrollTimeout) {
-                clearTimeout(scrollTimeout);
-            }
-            if (hideTimer) {
-                clearTimeout(hideTimer);
-            }
-        };
-    }, [isHovered, hideTimer]);
-
-    const handleMouseEnter = () => {
-        setIsHovered(true);
-        setIsVisible(true);
-        // Clear hide timer when hovering
-        if (hideTimer) {
-            clearTimeout(hideTimer);
-            setHideTimer(null);
-        }
-    };
-
-    const handleMouseLeave = () => {
-        setIsHovered(false);
-        // Start hide timer when not hovering
-        const timer = setTimeout(() => {
-            setIsVisible(false);
-        }, 5000);
-        setHideTimer(timer);
-    };
-
     return (
-        <>
-            {/* Hover zone at the very top of the page to reveal navbar */}
-            <div
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100vw',
-                    height: 32,
-                    zIndex: 60,
-                }}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            />
-            <header
-                className={`fixed top-0 transform w-full z-50 transition-all duration-300 ${
-                    isVisible
-                        ? 'opacity-100 translate-y-0'
-                        : 'opacity-0 -translate-y-full'
-                }`}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            >
-                <nav className='header-nav flex items-center justify-between w-full px-8 py-2'>
-                    {/* Left: Cove logo/text */}
-                    <div className='flex-1 flex items-center'>
-                        <span className='text-2xl font-bold header-logo text-black'>
-                            Cove.
-                        </span>
-                    </div>
-                    {/* Center: Navigation Items */}
-                    <div className='flex-1 flex items-center justify-center gap-3'>
-                        {navItems.map((item, index) => (
-                            <Link
-                                key={index}
-                                to={item.href}
-                                className='header-nav-item header-button text-[#19191a] text-sm px-4 py-2'
-                            >
-                                {item.text}
-                            </Link>
-                        ))}
-                    </div>
+        <header className='fixed top-0 w-full z-50 transition-all duration-300 bg-black hover:bg-white group'>
+            <nav className='flex items-center justify-between w-full px-8 py-4'>
+                {/* Left: Cove logo/text */}
+                <div className='flex-1 flex items-center'>
+                    <Link
+                        to='/'
+                        className='text-2xl font-bold text-white group-hover:text-black transition-colors'
+                    >
+                        Cove.
+                    </Link>
+                </div>
 
-                    {/* Right: Login/Account Button And Cart*/}
-                    <div className='flex-1 flex items-center justify-end'>
-                        <div className='flex gap-3'>
+                {/* Center: Navigation Items */}
+                <div className='flex-1 flex items-center justify-center gap-2'>
+                    {navItems.map((item, index) => (
+                        <Button
+                            key={index}
+                            variant='ghost'
+                            asChild
+                            className='!text-white group-hover:!text-black !bg-transparent hover:!bg-white/20 group-hover:hover:!bg-black/10'
+                        >
+                            <Link to={item.href}>{item.text}</Link>
+                        </Button>
+                    ))}
+                </div>
+
+                {/* Right: Login/Account Button And Cart*/}
+                <div className='flex-1 flex items-center justify-end'>
+                    <div className='flex gap-2'>
+                        <Button
+                            variant='outline'
+                            asChild
+                            className='relative !text-white !border-white !bg-transparent group-hover:!text-black group-hover:!border-black hover:!bg-white/20 group-hover:hover:!bg-black/10'
+                        >
                             <Link
                                 to='/cart'
-                                className='cta-button flex items-center justify-center w-32 px-4 h-10 text-white font-medium rounded-lg shadow transition-all duration-200 relative'
-                                style={{ backgroundColor: 'var(--cafe)' }}
+                                className='flex items-center gap-2'
                             >
-                                {/* Cart badge absolutely positioned relative to the button */}
                                 {cartCount > 0 && (
-                                    <span className='absolute top-1 right-5 bg-white text-[var(--cafe)] text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-[var(--cafe)] shadow z-10'>
+                                    <span className='absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center'>
                                         {cartCount}
                                     </span>
                                 )}
-                                <span className='flex items-center justify-center w-full h-full'>
-                                    <FaShoppingCart className='w-5 h-5 mr-2' />
-                                    <span className='flex items-center justify-center w-full h-full text-center'>
-                                        Cart
-                                    </span>
-                                </span>
+                                <FaShoppingCart className='w-4 h-4' />
+                                Cart
                             </Link>
-                            <Link
-                                to={isLoggedIn ? '/account' : '/login'}
-                                className='cta-button flex items-center justify-center w-32 px-4 h-10 text-white font-medium rounded-lg shadow transition-all duration-200'
-                                style={{ backgroundColor: 'var(--forest)' }}
-                            >
-                                <span className='flex items-center justify-center w-full h-full text-center'>
-                                    {isLoggedIn ? 'Account' : 'Login'}
-                                </span>
+                        </Button>
+                        <Button
+                            asChild
+                            className='!bg-white !text-black hover:!bg-gray-100 group-hover:!bg-black group-hover:!text-white group-hover:hover:!bg-gray-800'
+                        >
+                            <Link to={isLoggedIn ? '/account' : '/login'}>
+                                {isLoggedIn ? 'Account' : 'Login'}
                             </Link>
-                        </div>
+                        </Button>
                     </div>
-                </nav>
-            </header>
-        </>
+                </div>
+            </nav>
+        </header>
     );
 };
 

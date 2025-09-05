@@ -1,0 +1,85 @@
+/* Banner component styles for enhanced parallax effect */
+.banner-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.banner-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+.banner-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Smooth transitions for parallax layers */
+.banner-layer-background {
+    z-index: 1;
+}
+
+.banner-layer-middle {
+    z-index: 2;
+}
+
+.banner-layer-foreground {
+    z-index: 3;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Floating text animation */
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateY(-10px) rotate(1deg);
+        opacity: 0.5;
+    }
+}
+
+.floating-text {
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-text:nth-child(2) {
+    animation-delay: 1s;
+}
+
+.floating-text:nth-child(3) {
+    animation-delay: 2s;
+}
+
+.floating-text:nth-child(4) {
+    animation-delay: 3s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .banner-layer {
+        transform: none !important;
+    }
+
+    .floating-text {
+        display: none;
+    }
+}

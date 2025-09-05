@@ -1,36 +1,22 @@
-import { useEffect, useState } from 'react';
-import { CallToActionCard, StaticHeroCard, WriteInPeaceCard } from './cards';
-import FooterCard from './cards/footer.jsx';
+import AboutCove from './components/bentos/about-cove.jsx';
 import Header from './components/header.jsx';
+import Banner from './components/ui/banner.jsx';
+import HeroImage from './components/ui/hero-image.jsx';
 import './global.css';
 
 function App() {
-    const [showChevron, setShowChevron] = useState(false);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setShowChevron(true);
-        }, 0); // Show after 10 seconds
-
-        return () => clearTimeout(timer);
-    }, []);
-
     return (
         <div className='relative'>
             <Header />
-            <StaticHeroCard showChevron={showChevron} zIndex={1} />
-            <WriteInPeaceCard zIndex={2} />
-
-            {/* <TestimonialsCard
-                currentTestimonial={currentTestimonial}
-                testimonials={testimonials}
-                nextTestimonial={nextTestimonial}
-                prevTestimonial={prevTestimonial}
-                setCurrentTestimonial={setCurrentTestimonial}
-                zIndex={4}
-            /> */}
-            <CallToActionCard zIndex={5} />
-            <FooterCard zIndex={6} />
+            <HeroImage />
+            <AboutCove />
+            <Banner
+                height='60vh'
+                backgroundImage='/images/new/Background.png'
+                middleImage='/images/new/Typing.png'
+                foregroundImage='/images/new/computer.png'
+            />
+            <AboutCove />
         </div>
     );
 }
