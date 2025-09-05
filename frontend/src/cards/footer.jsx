@@ -40,7 +40,7 @@ const FooterCard = ({ zIndex }) => {
                         <img
                             src='/images/cove-logo-footer.png'
                             alt='Cove Logo'
-                            className='h-20 w-20 object-contain'
+                            className='h-20 object-contain'
                         />
                     </div>
 
