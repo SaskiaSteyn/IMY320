@@ -1,37 +1,114 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './banner.css';
 
 const Banner = ({
-    height = '70vh',
+    height = '60vh',
     className = '',
     children,
-    backgroundImage = '/images/Background-Cozy1.jpeg',
-    middleImage = '/images/typewriter.jpeg',
-    foregroundImage = null,
+    backgroundImage = '/images/new/Background.png',
+    foregroundImage = '/images/new/computer.png',
 }) => {
     const [scrollY, setScrollY] = useState(0);
     const bannerRef = useRef(null);
-    const [isInView, setIsInView] = useState(false);
+    const [bannerTop, setBannerTop] = useState(0);
+    const rafRef = useRef();
 
     useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY;
-            setScrollY(currentScrollY);
-
-            // Check if banner is in viewport for performance
+        // Get banner position once on mount and resize
+        const updateBannerPosition = () => {
             if (bannerRef.current) {
                 const rect = bannerRef.current.getBoundingClientRect();
-                setIsInView(rect.bottom > 0 && rect.top < window.innerHeight);
+                setBannerTop(rect.top + window.scrollY);
             }
         };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        updateBannerPosition();
+        window.addEventListener('resize', updateBannerPosition);
+
+        return () => {
+            window.removeEventListener('resize', updateBannerPosition);
+            if (rafRef.current) {
+                cancelAnimationFrame(rafRef.current);
+            }
+        };
     }, []);
 
-    // Calculate parallax offsets with very subtle speeds for 3D effect
-    const middleOffset = isInView ? scrollY * 0.01 : 0;
-    const foregroundOffset = isInView ? scrollY * 0.02 : 0;
+    const handleScroll = useCallback(() => {
+        if (rafRef.current) {
+            cancelAnimationFrame(rafRef.current);
+        }
+
+        rafRef.current = requestAnimationFrame(() => {
+            setScrollY(window.scrollY);
+        });
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            if (rafRef.current) {
+                cancelAnimationFrame(rafRef.current);
+            }
+        };
+    }, [handleScroll]);
+
+    // Calculate relative scroll position to the banner
+    const relativeScroll = scrollY - bannerTop;
+    const isInView =
+        bannerRef.current &&
+        scrollY + window.innerHeight > bannerTop &&
+        scrollY < bannerTop + bannerRef.current.offsetHeight;
+
+    // Calculate parallax offsets - background stays static, only lines and foreground move
+    const foregroundOffset = isInView ? relativeScroll * 0.02 : 0;
+
+    // Array of line data - each line will move at different parallax speeds
+    const typingLines = [
+        {
+            src: '/images/new/lines/typing-1.svg',
+            speed: 0.08, // Much more noticeable speeds
+            zIndex: 21,
+        },
+        {
+            src: '/images/new/lines/typing-2.svg',
+            speed: 0.12,
+            zIndex: 22,
+        },
+        {
+            src: '/images/new/lines/typing-3.svg',
+            speed: 0.16,
+            zIndex: 23,
+        },
+        {
+            src: '/images/new/lines/typing-4.svg',
+            speed: 0.2,
+            zIndex: 24,
+        },
+        {
+            src: '/images/new/lines/typing-5.svg',
+            speed: 0.24,
+            zIndex: 25,
+        },
+        {
+            src: '/images/new/lines/typing-6.svg',
+            speed: 0.28,
+            zIndex: 26,
+        },
+        {
+            src: '/images/new/lines/typing-7.svg',
+            speed: 0.32,
+            zIndex: 27,
+        },
+        {
+            src: '/images/new/lines/typing-8.svg',
+            speed: 0.36, // Fastest
+            zIndex: 28,
+        },
+    ];
+
+    // Debug mode - set to true to see what's happening
+    const debug = false;
 
     return (
         <div
@@ -39,52 +116,88 @@ const Banner = ({
             className={`banner-container ${className}`}
             style={{ height }}
         >
-            {/* Background layer - static (no parallax movement) */}
-            <div className='banner-layer banner-layer-background'>
+            {/* Debug info */}
+            {debug && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: '10px',
+                        left: '10px',
+                        background: 'rgba(0,0,0,0.8)',
+                        color: 'white',
+                        padding: '10px',
+                        zIndex: 1000,
+                        fontSize: '12px',
+                    }}
+                >
+                    <div>ScrollY: {scrollY}</div>
+                    <div>BannerTop: {bannerTop}</div>
+                    <div>RelativeScroll: {relativeScroll}</div>
+                    <div>IsInView: {isInView ? 'Yes' : 'No'}</div>
+                    <div>Background: Static (no movement)</div>
+                    <div>
+                        Line 1 Offset:{' '}
+                        {isInView ? (relativeScroll * 0.08).toFixed(2) : 0}
+                    </div>
+                    <div>
+                        Line 8 Offset:{' '}
+                        {isInView ? (relativeScroll * 0.36).toFixed(2) : 0}
+                    </div>
+                </div>
+            )}
+            {/* Background layer - static, no parallax movement */}
+            <div
+                className='banner-layer banner-layer-background'
+                style={{
+                    transform: 'translate3d(0, 0, 0)',
+                }}
+            >
                 <img
                     src={backgroundImage}
                     alt='Background scene'
                     className='w-full h-full object-cover'
-                    onLoad={() =>
-                        console.log('Background image loaded:', backgroundImage)
-                    }
-                    onError={(e) =>
-                        console.error(
-                            'Background image failed to load:',
-                            backgroundImage,
-                            e
-                        )
-                    }
                 />
             </div>
 
-            {/* Middle layer - medium parallax (main subject) */}
-            <div
-                className='banner-layer banner-layer-middle'
-                style={{
-                    transform: `translate3d(0, ${middleOffset}px, 0)`,
-                }}
-            >
-                <div className='absolute inset-0'>
-                    <img
-                        src={middleImage}
-                        alt='Featured typing device'
-                        className='w-full h-full object-cover drop-shadow-2xl'
-                        onLoad={() =>
-                            console.log('Middle image loaded:', middleImage)
-                        }
-                        onError={(e) =>
-                            console.error(
-                                'Middle image failed to load:',
-                                middleImage,
-                                e
-                            )
-                        }
-                    />
-                </div>
-            </div>
+            {/* Individual typing line layers - each with different parallax speed */}
+            {typingLines.map((line, index) => {
+                const lineOffset = isInView ? relativeScroll * line.speed : 0;
+                return (
+                    <div
+                        key={index}
+                        className={`banner-layer banner-layer-typing-line typing-line-${
+                            index + 1
+                        }`}
+                        style={{
+                            transform: `translate3d(0, ${lineOffset}px, 0)`,
+                            zIndex: line.zIndex,
+                        }}
+                    >
+                        <img
+                            src={line.src}
+                            alt={`Typing line ${index + 1}`}
+                            className='w-full h-full object-contain typing-line-svg'
+                            onLoad={() =>
+                                console.log(
+                                    `Typing line ${index + 1} loaded: ${
+                                        line.src
+                                    }`
+                                )
+                            }
+                            onError={(e) =>
+                                console.error(
+                                    `Failed to load typing line ${index + 1}: ${
+                                        line.src
+                                    }`,
+                                    e
+                                )
+                            }
+                        />
+                    </div>
+                );
+            })}
 
-            {/* Foreground layer - fastest parallax (text overlay) */}
+            {/* Foreground layer - fastest parallax (computer overlay) */}
             {foregroundImage && (
                 <div
                     className='banner-layer banner-layer-foreground'
@@ -96,20 +209,7 @@ const Banner = ({
                         <img
                             src={foregroundImage}
                             alt='Computer overlay'
-                            className='w-full h-full object-cover'
-                            onLoad={() =>
-                                console.log(
-                                    'Foreground image loaded:',
-                                    foregroundImage
-                                )
-                            }
-                            onError={(e) =>
-                                console.error(
-                                    'Foreground image failed to load:',
-                                    foregroundImage,
-                                    e
-                                )
-                            }
+                            className='w-full h-full object-contain'
                         />
                     </div>
                 </div>

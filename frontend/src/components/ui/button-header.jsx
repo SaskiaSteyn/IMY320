@@ -16,7 +16,7 @@ const Button = React.forwardRef(
 
         const variants = {
             default:
-                'bg-white text-black hover:bg-gray-100 border border-transparent hover:border-gray-400 transition-all',
+                'bg-white text-black hover:bg-[#e79210] border border-transparent transition-all',
             destructive:
                 'bg-destructive text-destructive-foreground hover:bg-destructive/90 border border-transparent hover:border-red-600',
             outline:

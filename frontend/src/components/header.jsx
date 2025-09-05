@@ -51,6 +51,38 @@ const Header = ({ navigationItems = [] }) => {
 
     return (
         <header className='fixed top-0 w-full z-50 transition-all duration-300 bg-black hover:bg-white group'>
+            <style jsx>{`
+                .animated-link {
+                    position: relative;
+                    display: inline-block;
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+                    padding: 8px 12px;
+                }
+                .animated-link::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0px;
+                    left: 12px;
+                    right: 12px;
+                    width: 0;
+                    height: 2px;
+                    background-color: #e79210;
+                    transition: width 0.3s ease;
+                }
+                .animated-link:hover::after {
+                    width: calc(100% - 24px);
+                }
+                .animated-link:hover {
+                    color: #e79210;
+                }
+                .group:hover .animated-link {
+                    color: black;
+                }
+                .group:hover .animated-link:hover {
+                    color: #e79210;
+                }
+            `}</style>
             <nav className='flex items-center justify-between w-full px-8 py-4'>
                 {/* Left: Cove logo/text */}
                 <div className='flex-1 flex items-center'>
@@ -65,14 +97,13 @@ const Header = ({ navigationItems = [] }) => {
                 {/* Center: Navigation Items */}
                 <div className='flex-1 flex items-center justify-center gap-2'>
                     {navItems.map((item, index) => (
-                        <Button
+                        <Link
                             key={index}
-                            variant='ghost'
-                            asChild
-                            className='!text-white group-hover:!text-black !bg-transparent hover:!bg-white/20 group-hover:hover:!bg-black/10'
+                            to={item.href}
+                            className='animated-link text-white'
                         >
-                            <Link to={item.href}>{item.text}</Link>
-                        </Button>
+                            {item.text}
+                        </Link>
                     ))}
                 </div>
 
@@ -99,7 +130,7 @@ const Header = ({ navigationItems = [] }) => {
                         </Button>
                         <Button
                             asChild
-                            className='!bg-white !text-black hover:!bg-gray-100 group-hover:!bg-black group-hover:!text-white group-hover:hover:!bg-gray-800'
+                            className='!bg-white !text-black hover:!bg-[#e79210] hover:!text-white group-hover:!bg-black group-hover:!text-white group-hover:hover:!bg-[#e79210]'
                         >
                             <Link to={isLoggedIn ? '/account' : '/login'}>
                                 {isLoggedIn ? 'Account' : 'Login'}

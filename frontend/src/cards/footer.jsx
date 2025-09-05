@@ -1,14 +1,38 @@
 import { FaShoppingCart } from 'react-icons/fa';
 import { FiArrowUp } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { Button } from '../components/ui/button.jsx';
+import { Button } from '../components/ui/button-header.jsx';
 
 const FooterCard = ({ zIndex }) => {
     return (
         <div
-            className='min-h-screen w-full relative bg-slate-900 flex items-center justify-center text-white'
+            className=' w-full relative bg-black border-t border-[#525252] flex items-center justify-center text-white'
             style={{ zIndex }}
         >
+            <style jsx>{`
+                .animated-link {
+                    position: relative;
+                    display: inline-block;
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+                }
+                .animated-link::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -4px;
+                    left: 0;
+                    width: 0;
+                    height: 2px;
+                    background-color: #e79210;
+                    transition: width 0.3s ease;
+                }
+                .animated-link:hover::after {
+                    width: 100%;
+                }
+                .animated-link:hover {
+                    color: #e79210;
+                }
+            `}</style>
             <div className='container mx-auto px-8 py-16'>
                 <div className='flex flex-col items-center gap-12'>
                     {/* Logo */}
@@ -21,56 +45,38 @@ const FooterCard = ({ zIndex }) => {
                     </div>
 
                     {/* Navigation Links */}
-                    <nav className='grid grid-cols-2 md:grid-cols-4 gap-4 text-center'>
-                        <Link
-                            to='/'
-                            className='hover:text-primary transition-colors'
-                        >
+                    <nav className='flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-center'>
+                        <Link to='/' className='animated-link'>
                             Home
                         </Link>
-                        <Link
-                            to='/about'
-                            className='hover:text-primary transition-colors'
-                        >
+                        <span className='text-gray-500'>|</span>
+                        <Link to='/about' className='animated-link'>
                             About
                         </Link>
-                        <Link
-                            to='/community'
-                            className='hover:text-primary transition-colors'
-                        >
+                        <span className='text-gray-500'>|</span>
+                        <Link to='/community' className='animated-link'>
                             Community
                         </Link>
-                        <Link
-                            to='/generate'
-                            className='hover:text-primary transition-colors'
-                        >
+                        <span className='text-gray-500'>|</span>
+                        <Link to='/generate' className='animated-link'>
                             Prompts
                         </Link>
-                        <Link
-                            to='/guides'
-                            className='hover:text-primary transition-colors'
-                        >
+                        <span className='text-gray-500'>|</span>
+                        <Link to='/guides' className='animated-link'>
                             Guides
                         </Link>
-                        <Link
-                            to='/weekly-challenge'
-                            className='hover:text-primary transition-colors'
-                        >
+                        <span className='text-gray-500'>|</span>
+                        <Link to='/weekly-challenge' className='animated-link'>
                             Weekly Challenge
                         </Link>
-                        <Link
-                            to='/write-in-peace'
-                            className='hover:text-primary transition-colors'
-                        >
+                        <span className='text-gray-500'>|</span>
+                        <Link to='/write-in-peace' className='animated-link'>
                             Write in Peace
                         </Link>
                     </nav>
 
                     {/* Action Buttons */}
                     <div className='flex gap-4'>
-                        <Button asChild>
-                            <Link to='/login'>Login</Link>
-                        </Button>
                         <Button variant='outline' asChild>
                             <Link
                                 to='/cart'
@@ -79,6 +85,9 @@ const FooterCard = ({ zIndex }) => {
                                 <FaShoppingCart className='w-4 h-4' />
                                 Cart
                             </Link>
+                        </Button>
+                        <Button asChild>
+                            <Link to='/login'>Login</Link>
                         </Button>
                     </div>
 

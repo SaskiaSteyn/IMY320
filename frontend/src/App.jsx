@@ -1,4 +1,6 @@
+import FooterCard from './cards/footer.jsx';
 import AboutCove from './components/bentos/about-cove.jsx';
+import Products from './components/bentos/products.jsx';
 import Header from './components/header.jsx';
 import Banner from './components/ui/banner.jsx';
 import HeroImage from './components/ui/hero-image.jsx';
@@ -10,13 +12,9 @@ function App() {
             <Header />
             <HeroImage />
             <AboutCove />
-            <Banner
-                height='60vh'
-                backgroundImage='/images/new/Background.png'
-                middleImage='/images/new/Typing.png'
-                foregroundImage='/images/new/computer.png'
-            />
-            <AboutCove />
+            <Banner />
+            <Products />
+            <FooterCard />
         </div>
     );
 }
