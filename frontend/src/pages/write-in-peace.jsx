@@ -1,10 +1,12 @@
-import React, {useRef, useState} from 'react';
-import {PricingCard, StaticWriteInPeaceCard} from '../cards';
+import React, { useRef, useState } from 'react';
+import { PricingCard } from '../cards';
 import FooterCard from '../cards/footer.jsx';
+import SoftwareBento from '../components/bentos/software-bento.jsx';
 import Catalogue from '../components/catalogue.jsx';
 import Header from '../components/header.jsx';
 import TestimonialBlock from '../components/testimonial-block.jsx';
-import {testimonials} from '../data/testimonials.js';
+import HeroImagePP from '../components/ui/hero-image-product-page.jsx';
+import { testimonials } from '../data/testimonials.js';
 
 function WriteInPeace() {
     const loaded = useRef(false);
@@ -25,33 +27,32 @@ function WriteInPeace() {
             if (lastId) {
                 const el = document.getElementById(`catalog-item-${lastId}`);
                 if (el) {
-                    el.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
                 localStorage.removeItem('lastViewedItemId');
             } else {
-                window.scrollTo({top: 0, behavior: 'smooth'});
-                console.log("Weeee");
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                console.log('Weeee');
             }
         }
-
     }, [calledOnce]);
     return (
         <div className='relative bg-[var(--text)]'>
             <Header />
-            <StaticWriteInPeaceCard />
-
+            <HeroImagePP />
+            <SoftwareBento />
             {/* Testimonials Section - Normal Component */}
             <div className='py-16 bg-[var(--text)]'>
                 <div className='text-center mb-12'>
                     <h2
                         className='text-4xl font-bold mb-4'
-                        style={{color: 'var(--background)'}}
+                        style={{ color: 'var(--background)' }}
                     >
                         What Writers Say
                     </h2>
                     <p
                         className='text-lg'
-                        style={{color: 'var(--background)'}}
+                        style={{ color: 'var(--background)' }}
                     >
                         Real experiences from our writing community
                     </p>
