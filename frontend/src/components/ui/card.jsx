@@ -26,7 +26,17 @@ const Card = React.forwardRef(
                         {title}
                     </h3>
                 )}
-                {text && <p className='text-sm text-gray-200'>{text}</p>}
+                {text && (
+                    <div className='text-sm text-gray-200 space-y-3'>
+                        {Array.isArray(text) ? (
+                            text.map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                            ))
+                        ) : (
+                            <p>{text}</p>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     )
@@ -77,6 +87,56 @@ const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
 ));
 CardFooter.displayName = 'CardFooter';
 
+const ImageCard = React.forwardRef(
+    ({ className, image, imageAlt, title, text, ...props }, ref) => (
+        <div
+            ref={ref}
+            className={cn(
+                'shadow-sm relative overflow-hidden flex flex-col h-full',
+                className
+            )}
+            style={{
+                backgroundColor: '#19191a',
+                border: '1px solid #525252',
+                borderRadius: '5px',
+            }}
+            {...props}
+        >
+            {/* Image Section - 50% */}
+            {image && (
+                <div className='w-full flex-1'>
+                    <img
+                        src={image}
+                        alt={imageAlt || title || 'Card image'}
+                        className='w-full h-full object-cover'
+                    />
+                </div>
+            )}
+
+            {/* Text Content Section - 50% */}
+            <div className='p-6 flex-1 flex flex-col justify-start'>
+                {title && (
+                    <h3 className='text-2xl font-semibold leading-none tracking-tight text-white mb-4'>
+                        {title}
+                    </h3>
+                )}
+                {text && (
+                    <div className='text-sm text-gray-200 space-y-3'>
+                        {Array.isArray(text) ? (
+                            text.map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                            ))
+                        ) : (
+                            <p>{text}</p>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    )
+);
+ImageCard.displayName = 'ImageCard';
+
 export {
     Card,
     CardContent,
@@ -84,4 +144,5 @@ export {
     CardFooter,
     CardHeader,
     CardTitle,
+    ImageCard,
 };
