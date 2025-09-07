@@ -1,11 +1,11 @@
 import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
+import {getAllProducts} from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import AddedToCartPopup from '../components/added-to-cart-popup.jsx';
 import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
 import {Button} from '../components/ui/button.jsx';
-import catalogue from '../data/catalogue.json';
 
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
@@ -27,9 +27,28 @@ const AllProducts = () => {
     ];
 
     useEffect(() => {
-        setProducts(catalogue);
-        setFilteredProducts(catalogue);
-        setLoading(false);
+        const fetchProducts = async () => {
+            setLoading(true);
+            try {
+                const response = await getAllProducts();
+                if (response.error) {
+                    console.error('Error fetching products:', response.error);
+                    setProducts([]);
+                    setFilteredProducts([]);
+                } else {
+                    setProducts(response);
+                    setFilteredProducts(response);
+                }
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                setProducts([]);
+                setFilteredProducts([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
     }, []);
 
     useEffect(() => {
@@ -48,6 +67,12 @@ const AllProducts = () => {
     };
 
     const handleAddToCart = (product) => {
+        // Get default size for the product
+        const defaultSize =
+            product.sizes && product.sizes.length > 0
+                ? product.sizes[0]
+                : 'One size';
+
         // Create cart item
         const cartItem = {
             id: product.id,
@@ -55,6 +80,7 @@ const AllProducts = () => {
             price: product.price,
             quantity: 1,
             image: product.image,
+            size: defaultSize,
             type: 'merchandise',
         };
 
@@ -62,9 +88,9 @@ const AllProducts = () => {
         try {
             const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
 
-            // Check if item already exists in cart
+            // Check if item with same id and size already exists in cart
             const existingItemIndex = existingCart.findIndex(
-                (item) => item.id === cartItem.id
+                (item) => item.id === cartItem.id && item.size === cartItem.size
             );
 
             if (existingItemIndex > -1) {
@@ -127,8 +153,8 @@ const AllProducts = () => {
                             key={category.key}
                             onClick={() => handleCategoryFilter(category.key)}
                             className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${selectedCategory === category.key
-                                    ? 'bg-[#e79210] text-black shadow-lg'
-                                    : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
+                                ? 'bg-[#e79210] text-black shadow-lg'
+                                : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
                                 }`}
                         >
                             {category.label}
