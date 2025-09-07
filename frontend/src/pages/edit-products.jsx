@@ -205,7 +205,31 @@ const EditProducts = () => {
                                                             ? 'bg-yellow-100 text-yellow-800'
                                                             : 'bg-red-100 text-red-800'
                                                         }`}>
+                                                        <button
+                                                            onClick={() => handleStockDecrease(product.id)}
+                                                            disabled={adjustingStock === `${product.id}-decrease` || product.stock <= 0}
+                                                            className={`px-2 py-1 rounded transition-colors duration-200 ${adjustingStock === `${product.id}-decrease`
+                                                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                                                : product.stock <= 0
+                                                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                                    : 'text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100'
+                                                                }`}
+                                                            title={product.stock <= 0 ? 'Stock cannot go below 0' : 'Decrease Stock'}
+                                                        >
+                                                            {adjustingStock === `${product.id}-decrease` ? '...' : '-'}
+                                                        </button>
                                                         {product.stock}
+                                                        <button
+                                                            onClick={() => handleStockIncrease(product.id)}
+                                                            disabled={adjustingStock === `${product.id}-increase`}
+                                                            className={`px-2 py-1 rounded transition-colors duration-200 ${adjustingStock === `${product.id}-increase`
+                                                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                                                : 'text-green-600 hover:text-green-800 bg-green-50 hover:bg-green-100'
+                                                                }`}
+                                                            title='Increase Stock'
+                                                        >
+                                                            {adjustingStock === `${product.id}-increase` ? '...' : '+'}
+                                                        </button>
                                                     </span>
                                                 </div>
                                             </td>
@@ -219,30 +243,6 @@ const EditProducts = () => {
                                             </td>
                                             <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
                                                 <div className='flex space-x-2'>
-                                                    <button
-                                                        onClick={() => handleStockDecrease(product.id)}
-                                                        disabled={adjustingStock === `${product.id}-decrease` || product.stock <= 0}
-                                                        className={`px-2 py-1 rounded transition-colors duration-200 ${adjustingStock === `${product.id}-decrease`
-                                                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                                            : product.stock <= 0
-                                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                                                : 'text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100'
-                                                            }`}
-                                                        title={product.stock <= 0 ? 'Stock cannot go below 0' : 'Decrease Stock'}
-                                                    >
-                                                        {adjustingStock === `${product.id}-decrease` ? '...' : '-'}
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleStockIncrease(product.id)}
-                                                        disabled={adjustingStock === `${product.id}-increase`}
-                                                        className={`px-2 py-1 rounded transition-colors duration-200 ${adjustingStock === `${product.id}-increase`
-                                                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                                            : 'text-green-600 hover:text-green-800 bg-green-50 hover:bg-green-100'
-                                                            }`}
-                                                        title='Increase Stock'
-                                                    >
-                                                        {adjustingStock === `${product.id}-increase` ? '...' : '+'}
-                                                    </button>
                                                     <Link
                                                         to={`/product/${product.id}`}
                                                         className='text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors duration-200'
