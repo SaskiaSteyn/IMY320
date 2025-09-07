@@ -15,6 +15,52 @@ async function handleResponse(response, operation) {
     return data;
 }
 
+
+//
+// PRODUCTS FUNCTIONS
+//
+
+export async function getAllProducts() {
+    try {
+        // console.log('Fetching all products from:', `${API_URL}/products`);
+        const response = await fetch(`${API_URL}/products`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        return await handleResponse(response, 'Get all products');
+    } catch (error) {
+        console.error('Get all products network error:', error);
+        return {error: 'Network error during fetching all products'};
+    }
+}
+
+export async function getProductsByTags(tags) {
+    try {
+        // console.log('Fetching products by tags:', tags);
+        const response = await fetch(`${API_URL}/products/tags`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({tagsArray: tags}),
+        });
+
+        return await handleResponse(response, 'Get products by tags');
+    } catch (error) {
+        console.error('Get products by tags network error:', error);
+        return {error: 'Network error during fetching products by tags'};
+    }
+}
+
+
+//
+// LOGIN FUNCTIONS
+//
+
+
 export async function register(userData) {
     try {
         // console.log('Attempting registration with:', {...userData, password: '[HIDDEN]'});

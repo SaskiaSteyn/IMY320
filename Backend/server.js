@@ -33,6 +33,19 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', UserSchema);
 
+// Product Schema
+const ProductSchema = new mongoose.Schema({
+    id: Number,
+    name: String,
+    tags: [String],
+    price: Number,
+    image: String,
+    description: String,
+    sizes: [String]
+});
+
+const Product = mongoose.model('Product', ProductSchema);
+
 //
 // REGISTRATION ROUTE
 //
@@ -89,11 +102,46 @@ app.post('/login', async (req, res) => {
     }
 });
 
+
+
 //
 // LOGOUT ROUTE
 //
 app.post('/logout', (req, res) => {
     res.json({message: 'Logged out successfully'});
+});
+
+
+
+//
+// GET all products
+//
+app.get('/products', async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.json(products);
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        res.status(500).json({error: 'Failed to fetch products'});
+    }
+});
+
+// POST products by tags (any tag must match for filtering)
+app.post('/products/tags', async (req, res) => {
+    const tags = req.body.tagsArray;
+    if (!tags) {
+        return res.status(400).json({error: 'Tags parameter is required'});
+    }
+    // tags can be an array or a comma-separated string
+    const tagsArray = Array.isArray(tags) ? tags : tags.split(',');
+    try {
+        // Find products that have ANY of the specified tags (using $in for OR logic)
+        const products = await Product.find({tags: {$in: tagsArray}});
+        res.json(products);
+    } catch (err) {
+        console.error('Error fetching products by tags:', err);
+        res.status(500).json({error: 'Failed to fetch products by tags'});
+    }
 });
 
 app.listen(3000, () => {

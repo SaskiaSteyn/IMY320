@@ -5,7 +5,9 @@ import App from './App.jsx';
 import './global.css';
 import About from './pages/about.jsx';
 import Account from './pages/account.jsx';
+import AllProducts from './pages/all-products.jsx';
 import Cart from './pages/cart.jsx';
+import Category from './pages/category.jsx';
 import Community from './pages/community.jsx';
 import Generate from './pages/generate.jsx';
 import Guides from './pages/guides.jsx';
@@ -32,6 +34,8 @@ createRoot(document.getElementById('root')).render(
                 <Route path='/signup' element={<Signup />} />
                 <Route path='/account' element={<Account />} />
                 <Route path='/product/:id' element={<ProductPage />} />
+                <Route path='/category/:categoryName' element={<Category />} />
+                <Route path='/products' element={<AllProducts />} />
                 <Route path='/cart' element={<Cart />} />
             </Routes>
         </Router>

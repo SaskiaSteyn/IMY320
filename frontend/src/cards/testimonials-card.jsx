@@ -4,7 +4,7 @@ import TestimonialBlock from '../components/testimonial-block.jsx';
 const TestimonialsCard = ({ testimonials, zIndex }) => {
     return (
         <div
-            className='h-screen w-full relative card-section bg-[#d1d6d7]'
+            className='h-screen w-full relative card-section bg-[#19191a]'
             style={{ zIndex }}
         >
             <div className='h-full flex flex-col justify-center mb-12'>

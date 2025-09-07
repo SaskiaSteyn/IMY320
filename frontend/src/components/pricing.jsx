@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { FaShoppingCart } from 'react-icons/fa';
 import AddedToCartPopup from './added-to-cart-popup';
+import { Button } from './ui/button';
 
 const PricingBlock = ({
     tierName,
@@ -19,37 +19,43 @@ const PricingBlock = ({
 
     return (
         <div
-            className={`rounded-lg overflow-hidden shadow-lg w-full h-full flex flex-col ${className}`}
+            className={`rounded-lg overflow-hidden shadow-lg w-full h-full flex flex-col transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:-translate-y-2 cursor-pointer ${className}`}
         >
             {/* Header section with tier name and price */}
             <div
-                className='text-center py-6 px-8'
+                className='text-center py-6 px-8 transition-all duration-300 hover:brightness-110'
                 style={{ backgroundColor: headerColor, color: textColor }}
             >
                 <h3
-                    className='text-2xl font-bold mb-3'
+                    className='text-2xl font-bold mb-3 transition-all duration-300'
                     style={{ color: textColor }}
                 >
                     {tierName}
                 </h3>
                 <div
-                    className='text-5xl font-bold mb-1'
+                    className='text-5xl font-bold mb-1 transition-all duration-300 hover:scale-110'
                     style={{ color: textColor }}
                 >
                     R{price}
                 </div>
-                <p className='text-lg' style={{ color: textColor }}>
+                <p
+                    className='text-lg transition-all duration-300'
+                    style={{ color: textColor }}
+                >
                     per month
                 </p>
             </div>
 
             {/* Features section */}
-            <div className='bg-gray-200 px-8 py-6 flex-1 flex flex-col'>
+            <div className='bg-white px-8 py-6 flex-1 flex flex-col transition-all duration-300'>
                 <ul className='space-y-3 flex-1'>
                     {features.map((feature, index) => (
-                        <li key={index} className='flex items-start'>
+                        <li
+                            key={index}
+                            className='flex items-start group transition-all duration-200 hover:transform hover:translate-x-2'
+                        >
                             <svg
-                                className='w-5 h-5 text-[#7D7F49] mr-3 mt-0.5 flex-shrink-0'
+                                className='w-5 h-5 text-[#7D7F49] mr-3 mt-0.5 flex-shrink-0 transition-all duration-200 group-hover:scale-110 group-hover:text-[#9ca3af]'
                                 fill='currentColor'
                                 viewBox='0 0 20 20'
                             >
@@ -59,21 +65,21 @@ const PricingBlock = ({
                                     clipRule='evenodd'
                                 />
                             </svg>
-                            <span className='text-gray-800 font-medium'>
+                            <span className='text-gray-800 font-medium transition-all duration-200 group-hover:text-gray-900 group-hover:font-semibold'>
                                 {feature}
                             </span>
                         </li>
                     ))}
                 </ul>
                 {/* Add to Cart Button */}
-                <button
+                <Button
                     onClick={handleAddToCart}
-                    className='mt-6 px-4 py-2 rounded-lg font-medium text-white transition-all duration-200 hover:opacity-90 flex items-center gap-2 self-center'
-                    style={{ backgroundColor: 'var(--cafe)' }}
+                    variant='cart'
+                    size='lg'
+                    className='mt-6 self-center'
                 >
-                    <FaShoppingCart className='text-sm' />
                     Add to Cart
-                </button>
+                </Button>
                 <AddedToCartPopup
                     show={showPopup}
                     onClose={() => setShowPopup(false)}

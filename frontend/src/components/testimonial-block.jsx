@@ -1,6 +1,6 @@
 const TestimonialBlock = ({ testimonial }) => {
     return (
-        <div className='flex-1 rounded-lg p-4 bg-[#19191a]/100 hover:bg-[#19191a]/90 transition-colors shadow-lg relative pt-12'>
+        <div className='flex-1 rounded-lg p-4 bg-[#d2d1d6]/100 hover:bg-[#d2d1d6]/90 transition-colors shadow-lg relative pt-12'>
             <img
                 src={testimonial?.picture}
                 alt={`${testimonial?.username} profile`}
@@ -14,10 +14,10 @@ const TestimonialBlock = ({ testimonial }) => {
                         </span>
                     ))}
                 </div>
-                <blockquote className='text-[#f0f0f0] text-sm leading-relaxed mb-3 line-clamp-3'>
+                <blockquote className='text-black text-sm leading-relaxed mb-3 line-clamp-3'>
                     "{testimonial?.text}"
                 </blockquote>
-                <cite className='text-[#f0f0f0]/80 text-xs font-medium not-italic'>
+                <cite className='text-gray-700 text-xs font-medium not-italic'>
                     — {testimonial?.username}
                 </cite>
             </div>
