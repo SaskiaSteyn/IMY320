@@ -2,21 +2,18 @@ import PricingBlock from '../components/pricing.jsx';
 
 const PricingCard = ({ zIndex }) => {
     return (
-        <div
-            className='h-screen w-full relative bg-[#d1d6d7]'
-            style={{ zIndex }}
-        >
-            <div className='p-8 h-full flex flex-col justify-center'>
-                <h2 className='text-4xl font-bold text-center mb-12 text-[var(--background)]'>
-                    Pricing
+        <div className='h-screen relative bg-[#19191a]' style={{ zIndex }}>
+            <div className='p-8 px-21 h-full flex flex-col justify-center'>
+                <h2 className='text-4xl font-bold text-center mb-12 text-white'>
+                    Choose the option that fits your writing journey
                 </h2>
                 <div className='flex gap-8 px-8 justify-center w-full mx-auto items-stretch'>
                     <div className='flex-1'>
                         <PricingBlock
                             tierName='Free'
                             price='0'
-                            headerColor='var(--hazelwood)'
-                            textColor='var(--text-hazelwood, #000000)'
+                            headerColor='#d2d1d6'
+                            textColor='#000000'
                             features={[
                                 'Distraction blocker',
                                 'Pomodoro session timer',
@@ -30,8 +27,8 @@ const PricingCard = ({ zIndex }) => {
                         <PricingBlock
                             tierName='Standard'
                             price='35'
-                            headerColor='var(--forest)'
-                            textColor='var(--text-forest, #ffffff)'
+                            headerColor='#e79210'
+                            textColor='#000000'
                             features={[
                                 'Distraction blocker',
                                 'Custom session timer',
@@ -47,8 +44,8 @@ const PricingCard = ({ zIndex }) => {
                         <PricingBlock
                             tierName='Plus'
                             price='55'
-                            headerColor='var(--candle-light)'
-                            textColor='var(--text-candle-light, #000000)'
+                            headerColor='#d2d1d6'
+                            textColor='#000000'
                             features={[
                                 'Distraction blocker',
                                 'Custom session timer',

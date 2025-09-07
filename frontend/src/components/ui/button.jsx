@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FaShoppingCart } from 'react-icons/fa';
 import { IoArrowForward } from 'react-icons/io5';
 import { cn } from '../../lib/utils';
 
@@ -24,6 +25,7 @@ const Button = React.forwardRef(
             secondary: 'bg-secondary border hover:text-black hover:bg-gray-100',
             ghost: 'hover:bg-accent hover:text-accent-foreground',
             link: 'text-primary underline-offset-4 hover:underline',
+            cart: 'bg-[#e79210] text-black hover:opacity-90 hover:scale-105 active:scale-95 hover:-translate-y-1',
         };
 
         const sizes = {
@@ -36,7 +38,7 @@ const Button = React.forwardRef(
         return (
             <Comp
                 className={cn(
-                    'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group',
+                    'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group transform',
                     variants[variant],
                     sizes[size],
                     className
@@ -45,8 +47,13 @@ const Button = React.forwardRef(
                 {...props}
             >
                 <span className='flex items-center'>
+                    {variant === 'cart' && (
+                        <FaShoppingCart className='mr-2 text-sm transition-all duration-300 group-hover:rotate-12' />
+                    )}
                     {props.children}
-                    <IoArrowForward className='ml-2 hidden group-hover:block transition-all duration-200 ease-in-out text-lg' />
+                    {variant !== 'cart' && (
+                        <IoArrowForward className='ml-2 hidden group-hover:block transition-all duration-200 ease-in-out text-lg' />
+                    )}
                 </span>
             </Comp>
         );
