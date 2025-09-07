@@ -2,6 +2,9 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 require('dotenv').config({ path: '../.env' })
+const multer = require('multer')
+const path = require('path')
+const fs = require('fs')
 
 const app = express()
 
@@ -14,6 +17,39 @@ app.use(cors({
 }))
 
 app.use(express.json())
+app.use(express.json())
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadPath = path.join(__dirname, '../frontend/public/images/merch')
+        // Ensure the directory exists
+        if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true })
+        }
+        cb(null, uploadPath)
+    },
+    filename: function (req, file, cb) {
+        // Generate unique filename while preserving extension
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname))
+    }
+})
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB limit
+    },
+    fileFilter: function (req, file, cb) {
+        // Check file type
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true)
+        } else {
+            cb(new Error('Not an image! Please upload only images.'), false)
+        }
+    }
+})
 
 // connection string
 let username = process.env.DB_USERNAME
@@ -37,11 +73,15 @@ const User = mongoose.model('User', UserSchema)
 const ProductSchema = new mongoose.Schema({
     id: String,
     name: String,
-    tags: [String],
-    price: Number,
-    stock: Number,
+    descriptor: String,
+    link: String,
     image: String,
-    description: String,
+    availability: String,
+    availabilityDate: String,
+    price: Number,
+    brand: String,
+    tags: [String],
+    stock: Number,
     sizes: [String]
 })
 
@@ -67,7 +107,14 @@ app.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'User with this username or email already exists' })
         }
 
-        const user = await User.create({ userIDNumber, username, email, password: hashedPassword, role })
+        const user = await User.create({
+            userIDNumber: nextUserIDNumber,
+            username,
+            email,
+            password: hashedPassword,
+            role: role || 'user' // Default to 'user' role if not specified
+        })
+
         // Don't send password in response
         const { password: _, ...userResponse } = user.toObject()
         res.json(userResponse)
@@ -95,8 +142,16 @@ app.post('/login', async (req, res) => {
         const valid = require('bcryptjs').compareSync(password, user.password)
         if (!valid) return res.status(401).json({ error: 'Incorrect password' })
 
-        const token = require('jsonwebtoken').sign({ id: user._id }, 'secret123')
-        res.json({ token })
+        const token = require('jsonwebtoken').sign({ id: user._id, role: user.role }, 'secret123')
+        res.json({
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role
+            }
+        })
     } catch (err) {
         console.error('Login error:', err)
         res.status(500).json({ error: 'Login failed' })
@@ -153,6 +208,98 @@ app.post('/products/add', async (req, res) => {
     } catch (err) {
         console.error('Error adding product:', err)
         res.status(500).json({ error: 'Failed to add product' })
+    }
+})
+
+// PUT to update a product by ID
+app.put('/products/:id', async (req, res) => {
+    const productId = req.params.id
+    const updateData = req.body
+
+    try {
+        const product = await Product.findOneAndUpdate(
+            { id: productId },
+            updateData,
+            { new: true, runValidators: true }
+        )
+
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' })
+        }
+
+        res.json(product)
+    } catch (err) {
+        console.error('Error updating product:', err)
+        res.status(500).json({ error: 'Failed to update product' })
+    }
+})
+
+// POST to adjust product stock by ID
+app.post('/products/:id/adjust-stock', async (req, res) => {
+    const productId = req.params.id
+    const { adjustment } = req.body
+
+    // Validate adjustment parameter
+    if (typeof adjustment !== 'number') {
+        return res.status(400).json({ error: 'Adjustment must be a number' })
+    }
+
+    try {
+        const product = await Product.findOne({ id: productId })
+
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' })
+        }
+
+        // Calculate new stock level
+        const newStock = product.stock + adjustment
+
+        // Prevent negative stock
+        if (newStock < 0) {
+            return res.status(400).json({
+                error: 'Cannot adjust stock below zero',
+                currentStock: product.stock,
+                requestedAdjustment: adjustment
+            })
+        }
+
+        // Update the product stock
+        product.stock = newStock
+        await product.save()
+
+        res.json({
+            success: true,
+            productId: productId,
+            previousStock: product.stock - adjustment,
+            newStock: product.stock,
+            adjustment: adjustment
+        })
+    } catch (err) {
+        console.error('Error adjusting stock:', err)
+        res.status(500).json({ error: 'Failed to adjust stock' })
+    }
+})
+
+// POST endpoint for image upload
+app.post('/upload-image', upload.single('image'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No image file uploaded' })
+        }
+
+        // Return the filename that can be used in the product creation
+        const filename = req.file.filename
+        const imageUrl = `/images/merch/${filename}`
+
+        res.json({
+            success: true,
+            filename: filename,
+            imageUrl: imageUrl,
+            message: 'Image uploaded successfully'
+        })
+    } catch (error) {
+        console.error('Error uploading image:', error)
+        res.status(500).json({ error: 'Failed to upload image' })
     }
 })
 
