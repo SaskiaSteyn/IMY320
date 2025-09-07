@@ -154,7 +154,9 @@ const CreateProduct = () => {
                 ...formData,
                 price: parseFloat(formData.price),
                 stock: parseInt(formData.stock),
-                image: `images/merch/${formData.id}`
+                image: formData.image.startsWith('/images/merch/')
+                    ? formData.image
+                    : `/images/merch/${formData.image}`
             };
 
             const result = await addProduct(productData);
@@ -201,20 +203,20 @@ const CreateProduct = () => {
 
             {/* Product Form */}
             <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16'>
-                <form onSubmit={handleSubmit} className='bg-white rounded-lg shadow-lg p-8'>
+                <form onSubmit={handleSubmit} noValidate className='bg-white rounded-lg shadow-lg p-8'>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 
                         {/* Category Selection - affects ID and availability date */}
                         <div className='md:col-span-2'>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Product Category *
                             </label>
+                            <p className='text-xs text-gray-500 mb-2'>Please select a product category to continue</p>
                             <select
                                 name='category'
                                 value={selectedCategory || ''}
                                 onChange={handleCategoryChange}
                                 className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500'
-                                required
                             >
                                 <option value=''>Select a category...</option>
                                 {categories.map(category => (
@@ -227,9 +229,10 @@ const CreateProduct = () => {
 
                         {/* Product ID - auto-generated based on category */}
                         <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Product ID *
                             </label>
+                            <p className='text-xs text-gray-500 mb-2'>Unique identifier for the product (auto-generated)</p>
                             <input
                                 type='text'
                                 name='id'
@@ -237,15 +240,15 @@ const CreateProduct = () => {
                                 onChange={handleInputChange}
                                 placeholder='Auto-generated (e.g., M001)'
                                 className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500'
-                                required
                             />
                         </div>
 
                         {/* Product Name */}
                         <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Product Name *
                             </label>
+                            <p className='text-xs text-gray-500 mb-2'>Enter a descriptive name for your product</p>
                             <input
                                 type='text'
                                 name='name'
@@ -253,15 +256,15 @@ const CreateProduct = () => {
                                 onChange={handleInputChange}
                                 placeholder='e.g., Classic White Mug'
                                 className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500'
-                                required
                             />
                         </div>
 
                         {/* Description */}
                         <div className='md:col-span-2'>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Product Description *
                             </label>
+                            <p className='text-xs text-gray-500 mb-2'>Provide a detailed description of the product features and benefits</p>
                             <textarea
                                 name='descriptor'
                                 value={formData.descriptor}
@@ -269,15 +272,15 @@ const CreateProduct = () => {
                                 placeholder='Detailed description of the product...'
                                 rows={4}
                                 className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500'
-                                required
                             />
                         </div>
 
                         {/* Image Upload */}
                         <div className='md:col-span-2'>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Product Image *
                             </label>
+                            <p className='text-xs text-gray-500 mb-2'>Upload a high-quality image or provide an image URL</p>
 
                             {/* File Upload Input */}
                             <div className='flex flex-col gap-4'>
@@ -327,9 +330,10 @@ const CreateProduct = () => {
 
                         {/* Price */}
                         <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Price (R) *
                             </label>
+                            <p className='text-xs text-gray-500 mb-2'>Enter the product price in South African Rand</p>
                             <input
                                 type='number'
                                 step='0.01'
@@ -338,38 +342,37 @@ const CreateProduct = () => {
                                 onChange={handleInputChange}
                                 placeholder='299.99'
                                 className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500'
-                                required
                             />
                         </div>
 
                         {/* Stock */}
                         <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Initial Stock *
                             </label>
+                            <p className='text-xs text-gray-500 mb-2'>Set the initial inventory quantity for this product</p>
                             <input
                                 type='number'
                                 name='stock'
                                 value={formData.stock}
                                 onChange={handleInputChange}
                                 className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500'
-                                required
                                 min='0'
                             />
                         </div>
 
                         {/* Availability Date - auto-calculated */}
                         <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Availability Date *
                             </label>
+                            <p className='text-xs text-gray-500 mb-2'>When will this product be available for purchase?</p>
                             <input
                                 type='date'
                                 name='availabilityDate'
                                 value={formData.availabilityDate}
                                 onChange={handleInputChange}
                                 className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500'
-                                required
                             />
                             {selectedCategory && (
                                 <p className='text-sm text-gray-500 mt-1'>
@@ -407,9 +410,10 @@ const CreateProduct = () => {
 
                         {/* Brand */}
                         <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Brand *
                             </label>
+                            <p className='text-xs text-gray-500 mb-2'>Product brand (automatically set to Cove)</p>
                             <input
                                 type='text'
                                 name='brand'
@@ -423,9 +427,10 @@ const CreateProduct = () => {
 
                         {/* Availability Status */}
                         <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Availability Status *
                             </label>
+                            <p className='text-xs text-gray-500 mb-2'>Current availability status of the product</p>
                             <select
                                 name='availability'
                                 value={formData.availability}
