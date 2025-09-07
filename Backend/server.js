@@ -35,10 +35,11 @@ const User = mongoose.model('User', UserSchema);
 
 // Product Schema
 const ProductSchema = new mongoose.Schema({
-    id: Number,
+    id: String,
     name: String,
     tags: [String],
     price: Number,
+    stock: Number,
     image: String,
     description: String,
     sizes: [String]
@@ -126,7 +127,7 @@ app.get('/products', async (req, res) => {
     }
 });
 
-// POST products by tags (any tag must match for filtering)
+// POST filter products by tags
 app.post('/products/tags', async (req, res) => {
     const tags = req.body.tagsArray;
     if (!tags) {
@@ -141,6 +142,19 @@ app.post('/products/tags', async (req, res) => {
     } catch (err) {
         console.error('Error fetching products by tags:', err);
         res.status(500).json({error: 'Failed to fetch products by tags'});
+    }
+});
+
+// POST to add a new product
+app.post('/products/add', async (req, res) => {
+    const {...productData} = req.body;
+
+    try {
+        const product = await Product.create(productData);
+        res.status(201).json(product);
+    } catch (err) {
+        console.error('Error adding product:', err);
+        res.status(500).json({error: 'Failed to add product'});
     }
 });
 
