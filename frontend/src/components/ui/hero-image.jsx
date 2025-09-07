@@ -40,11 +40,13 @@ const HeroImage = ({ className }) => {
                     Write in Peace: An app for writers, by writers
                 </p>
                 <div className='flex justify-center p-12'>
-                    <Link to='/write-in-peace#pricing'>
-                        <Button className='mr-4'>Download the app</Button>
-                    </Link>
                     <Link to='/write-in-peace'>
-                        <Button variant='secondary'>Read more</Button>
+                        <Button variant='secondary' className='mr-4'>
+                            Read more
+                        </Button>
+                    </Link>
+                    <Link to='/write-in-peace#pricing'>
+                        <Button>Download the app</Button>
                     </Link>
                 </div>
             </div>

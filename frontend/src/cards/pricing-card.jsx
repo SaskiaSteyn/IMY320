@@ -10,12 +10,27 @@ const PricingCard = ({ zIndex }) => {
     });
 
     const handleAddToCart = (tierName) => {
+        // Get the specific image for each tier
+        const getImagePath = (tier) => {
+            switch (tier) {
+                case 'Free':
+                    return '/images/merch/Free.png';
+                case 'Standard':
+                    return '/images/merch/Standard.png';
+                case 'Plus':
+                    return '/images/merch/Plus.png';
+                default:
+                    return '/images/Write-in-peace-product-photo.png';
+            }
+        };
+
         // Create a cart item for the pricing tier
         const cartItem = {
             id: `pricing-${tierName.toLowerCase()}`,
             name: `${tierName} Plan`,
             price: tierName === 'Free' ? 0 : tierName === 'Standard' ? 35 : 55,
             quantity: 1,
+            image: getImagePath(tierName),
             type: 'subscription',
         };
 
