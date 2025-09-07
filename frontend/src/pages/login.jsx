@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-// import {login} from '../backend/api';
+import {login} from '../backend/api';
 import {FaApple, FaDiscord, FaGoogle} from 'react-icons/fa';
 
 const Login = () => {
@@ -50,30 +50,23 @@ const Login = () => {
             return;
         }
 
-        navigate('/'); // Redirect to home page immediately
+        try {
+            const response = await login(formData.username, formData.password);
 
-        // try {
-        //     const response = await login(formData.username, formData.password);
+            if (response.error) {
+                setError(response.error);
+            } else {
+                // Handle successful login - token and user data are already stored in localStorage by the login function
+                console.log('Login successful:', response);
 
-        //     if (response.error) {
-        //         setError(response.error);
-        //     } else {
-        //         // Handle successful login - store token and redirect
-        //         console.log('Login successful:', response);
-
-        //         // Store the token in localStorage if provided
-        //         if (response.token) {
-        //             localStorage.setItem('token', response.token);
-        //         }
-
-        //         // Redirect to home page
-        //         navigate('/');
-        //     }
-        // } catch {
-        //     setError('An error occurred during login');
-        // } finally {
-        //     setIsLoading(false);
-        // }
+                // Redirect to home page
+                navigate('/');
+            }
+        } catch {
+            setError('An error occurred during login');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (

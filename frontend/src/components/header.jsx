@@ -1,10 +1,30 @@
-import { useEffect, useState } from 'react';
-import { FaShoppingCart } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import { Button } from './ui/button-header';
+import {useEffect, useState} from 'react';
+import {FaShoppingCart} from 'react-icons/fa';
+import {Link} from 'react-router-dom';
+import {Button} from './ui/button-header';
 
-const Header = ({ navigationItems = [] }) => {
+// Utility function to check if user has admin role
+const isUserAdmin = () => {
+    try {
+        // Check if user data is stored in localStorage
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        return userData.role === 'admin';
+    } catch {
+        // Fallback for when userData is not properly stored
+        // In a real implementation, you'd decode the JWT token to check role
+
+        // For testing admin functionality, you can run this in browser console:
+        // localStorage.setItem('userData', JSON.stringify({role: 'admin', username: 'admin'}))
+        // localStorage.setItem('token', 'test-token')
+        // Then refresh the page to see "Edit Products" link
+
+        return false;
+    }
+};
+
+const Header = ({navigationItems = []}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [cartCount, setCartCount] = useState(0);
 
     // Update cart count (unique items, not quantity)
@@ -22,21 +42,12 @@ const Header = ({ navigationItems = [] }) => {
         return () => window.removeEventListener('storage', updateCartCount);
     }, []);
 
-    // Default navigation items if none provided
-    const defaultNavItems = [
-        { text: 'Home', href: '/' },
-        { text: 'About', href: '/about' },
-        { text: 'Write in Peace', href: '/write-in-peace' },
-    ];
-
-    const navItems =
-        navigationItems.length > 0 ? navigationItems : defaultNavItems;
-
-    // Check if user is logged in
+    // Check if user is logged in and if they're admin
     useEffect(() => {
         const checkAuthStatus = () => {
             const token = localStorage.getItem('token');
             setIsLoggedIn(!!token);
+            setIsAdmin(isUserAdmin());
         };
 
         checkAuthStatus();
@@ -48,6 +59,17 @@ const Header = ({ navigationItems = [] }) => {
             window.removeEventListener('storage', checkAuthStatus);
         };
     }, []);
+
+    // Default navigation items if none provided (computed after state updates)
+    const defaultNavItems = [
+        {text: 'Home', href: '/'},
+        {text: 'About', href: '/about'},
+        {text: 'Write in Peace', href: '/write-in-peace'},
+        // Add admin link if user is admin
+        ...(isAdmin ? [{text: 'Edit Products', href: '/add-product'}] : []),
+    ];
+
+    const navItems = navigationItems.length > 0 ? navigationItems : defaultNavItems;
 
     return (
         <header className='fixed top-0 w-full z-50 transition-all duration-300 bg-black hover:bg-white group'>
