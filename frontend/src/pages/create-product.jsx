@@ -110,10 +110,10 @@ const CreateProduct = () => {
             if (result.error) {
                 setMessage({type: 'error', text: `Error uploading image: ${result.error}`});
             } else {
-                // Update form data with the uploaded image URL
+                // Update form data with the uploaded image filename (including extension)
                 setFormData(prev => ({
                     ...prev,
-                    image: result.imageUrl
+                    image: result.filename // Use filename instead of imageUrl to get just the filename with extension
                 }));
                 setMessage({type: 'success', text: 'Image uploaded successfully!'});
             }
