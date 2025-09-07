@@ -12,6 +12,8 @@ const Header = ({ navigationItems = [] }) => {
         const updateCartCount = () => {
             try {
                 const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                console.log('Cart contents:', cart);
+                console.log('Cart length:', cart.length);
                 setCartCount(Array.isArray(cart) ? cart.length : 0);
             } catch {
                 setCartCount(0);

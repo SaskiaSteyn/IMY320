@@ -1,13 +1,13 @@
-import {Link, useParams} from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import FooterCard from '../cards/footer.jsx';
 import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
 import ProductDetails from '../components/product-details.jsx';
 import RelevantProducts from '../components/relevant-products.jsx';
 import catalogueData from '../data/catalogue.json';
-import FooterCard from '../cards/footer.jsx';
 
 const ProductPage = () => {
-    const {id} = useParams();
+    const { id } = useParams();
     const product = catalogueData.find((item) => String(item.id) === id);
 
     if (!product) {
@@ -32,7 +32,7 @@ const ProductPage = () => {
         <>
             <Header />
             <div className='min-h-screen py-8 px-30 bg-[var(--text)] pt-25'>
-                <Breadcrumbs product={product} />
+                <Breadcrumbs product={product} showShop={true} />
                 <ProductDetails product={product} />
                 <RelevantProducts
                     currentProduct={product}

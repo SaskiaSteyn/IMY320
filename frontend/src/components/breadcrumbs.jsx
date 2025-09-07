@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Breadcrumbs = ({ product, category }) => {
+const Breadcrumbs = ({ product, category, showShop = true }) => {
     const getCategoryTitle = (categoryName) => {
         const categoryMap = {
             mugs: 'Mugs',
@@ -22,15 +22,19 @@ const Breadcrumbs = ({ product, category }) => {
                         Home
                     </Link>
                 </li>
-                <li className='text-gray-500'>/</li>
-                <li>
-                    <Link
-                        to='/#products'
-                        className='hover:underline font-medium hover:text-white transition-colors'
-                    >
-                        Shop
-                    </Link>
-                </li>
+                {showShop && (
+                    <>
+                        <li className='text-gray-500'>/</li>
+                        <li>
+                            <Link
+                                to='/products'
+                                className='hover:underline font-medium hover:text-white transition-colors'
+                            >
+                                Shop
+                            </Link>
+                        </li>
+                    </>
+                )}
                 {category && (
                     <>
                         <li className='text-gray-500'>/</li>
@@ -42,18 +46,7 @@ const Breadcrumbs = ({ product, category }) => {
                         </li>
                     </>
                 )}
-                {product && category && (
-                    <>
-                        <li className='text-gray-500'>/</li>
-                        <li
-                            className='font-bold text-white'
-                            aria-current='page'
-                        >
-                            {product.name}
-                        </li>
-                    </>
-                )}
-                {product && !category && (
+                {product && (
                     <>
                         <li className='text-gray-500'>/</li>
                         <li
