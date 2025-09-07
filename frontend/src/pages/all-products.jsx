@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 import FooterCard from '../cards/footer.jsx';
 import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
-import { Button } from '../components/ui/button.jsx';
-import catalogue from '../data/catalogue.json';
+import {Button} from '../components/ui/button.jsx';
+// import catalogue from '../data/catalogue.json';
+
+import {getAllProducts, getProductsByTags} from '../backend/api.js';
 
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
@@ -13,27 +15,23 @@ const AllProducts = () => {
     const [loading, setLoading] = useState(true);
 
     const categories = [
-        { key: 'all', label: 'All Products' },
-        { key: 'mugs', label: 'Mugs' },
-        { key: 'hoodies', label: 'Hoodies' },
-        { key: 'totes', label: 'Tote Bags' },
-        { key: 'stickers', label: 'Stickers' },
+        {key: 'all', label: 'All Products'},
+        {key: 'mugs', label: 'Mugs'},
+        {key: 'hoodies', label: 'Hoodies'},
+        {key: 'totes', label: 'Tote Bags'},
+        {key: 'stickers', label: 'Stickers'},
     ];
 
     useEffect(() => {
-        setProducts(catalogue);
-        setFilteredProducts(catalogue);
-        setLoading(false);
+        GetAllProducts();
     }, []);
 
     useEffect(() => {
         if (selectedCategory === 'all') {
             setFilteredProducts(products);
-        } else {
-            const filtered = products.filter((product) =>
-                product.tags.includes(selectedCategory)
-            );
-            setFilteredProducts(filtered);
+        } else if (products.length > 0) {
+            // Use API to filter products by tags only if products are loaded
+            FilterProductsWithTags([selectedCategory]);
         }
     }, [selectedCategory, products]);
 
@@ -47,6 +45,44 @@ const AllProducts = () => {
                 <div className='text-white text-xl'>Loading...</div>
             </div>
         );
+    }
+
+    async function GetAllProducts() {
+        try {
+            const allProducts = await getAllProducts();
+            if (allProducts.error) {
+                console.error('API Error:', allProducts.error);
+                setProducts([]);
+                setFilteredProducts([]);
+            } else {
+                setProducts(allProducts);
+                setFilteredProducts(allProducts);
+            }
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            setProducts([]);
+            setFilteredProducts([]);
+            setLoading(false);
+        }
+    }
+
+    async function FilterProductsWithTags(tags) {
+        try {
+            setLoading(true);
+            const productsByTags = await getProductsByTags(tags);
+            if (productsByTags.error) {
+                console.error('API Error:', productsByTags.error);
+                setFilteredProducts([]);
+            } else {
+                setFilteredProducts(productsByTags);
+            }
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching products by tags:', error);
+            setFilteredProducts([]);
+            setLoading(false);
+        }
     }
 
     return (
@@ -78,11 +114,10 @@ const AllProducts = () => {
                         <button
                             key={category.key}
                             onClick={() => handleCategoryFilter(category.key)}
-                            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
-                                selectedCategory === category.key
-                                    ? 'bg-yellow-500 text-black shadow-lg'
-                                    : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
-                            }`}
+                            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${selectedCategory === category.key
+                                ? 'bg-yellow-500 text-black shadow-lg'
+                                : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
+                                }`}
                         >
                             {category.label}
                         </button>
@@ -171,7 +206,7 @@ const AllProducts = () => {
                                             {/* Available Sizes */}
                                             {product.sizes &&
                                                 product.sizes[0] !==
-                                                    'One size' && (
+                                                'One size' && (
                                                     <div className='mb-4'>
                                                         <span className='text-sm font-medium text-gray-700 mr-2'>
                                                             Available sizes:
