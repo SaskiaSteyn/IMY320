@@ -8,6 +8,7 @@ import Account from './pages/account.jsx';
 import AllProducts from './pages/all-products.jsx';
 import Cart from './pages/cart.jsx';
 import Category from './pages/category.jsx';
+import Checkout from './pages/checkout.jsx';
 import Community from './pages/community.jsx';
 import Generate from './pages/generate.jsx';
 import Guides from './pages/guides.jsx';
@@ -37,6 +38,7 @@ createRoot(document.getElementById('root')).render(
                 <Route path='/category/:categoryName' element={<Category />} />
                 <Route path='/products' element={<AllProducts />} />
                 <Route path='/cart' element={<Cart />} />
+                <Route path='/checkout' element={<Checkout />} />
             </Routes>
         </Router>
     </StrictMode>

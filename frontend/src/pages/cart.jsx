@@ -300,8 +300,8 @@ function Cart() {
 
                         {/* Cart Summary */}
                         <div className='rounded-lg shadow-lg p-6'>
-                            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
-                                <div className='text-left'>
+                            <div className='flex flex-col items-end gap-4'>
+                                <div className='text-end'>
                                     <p className='text-lg text-white mb-2'>
                                         Total ({cartItems.length} item
                                         {cartItems.length !== 1 ? 's' : ''}):
@@ -311,13 +311,15 @@ function Cart() {
                                     </p>
                                 </div>
 
-                                <div className='text-right'>
-                                    <Button
-                                        size='lg'
-                                        className='w-full sm:w-auto'
-                                    >
-                                        Proceed to Checkout
-                                    </Button>
+                                <div>
+                                    <Link to='/checkout'>
+                                        <Button
+                                            size='lg'
+                                            className='w-full sm:w-auto'
+                                        >
+                                            Proceed to Checkout
+                                        </Button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
