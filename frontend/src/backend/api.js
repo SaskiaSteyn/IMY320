@@ -73,6 +73,64 @@ export async function addProduct(productData) {
     }
 }
 
+export async function updateProduct(productId, updateData) {
+    try {
+        // console.log('Updating product with ID:', productId, 'Data:', updateData);
+        const response = await fetch(`${API_URL}/products/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateData),
+        })
+
+        return await handleResponse(response, 'Update product')
+    } catch (error) {
+        console.error('Update product network error:', error)
+        return { error: 'Network error during updating product' }
+    }
+}
+
+export async function adjustStock(productId, adjustment) {
+    try {
+        // console.log('Adjusting stock for product:', productId, 'Adjustment:', adjustment);
+        const response = await fetch(`${API_URL}/products/${productId}/adjust-stock`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ adjustment }),
+        })
+
+        return await handleResponse(response, 'Adjust stock')
+    } catch (error) {
+        console.error('Adjust stock network error:', error)
+        return { error: 'Network error during stock adjustment' }
+    }
+}
+
+//
+// IMAGE UPLOAD FUNCTIONS
+//
+
+export async function uploadImage(imageFile) {
+    try {
+        const formData = new FormData()
+        formData.append('image', imageFile)
+
+        // console.log('Uploading image:', imageFile.name);
+        const response = await fetch(`${API_URL}/upload-image`, {
+            method: 'POST',
+            body: formData, // Don't set Content-Type header for FormData
+        })
+
+        return await handleResponse(response, 'Upload image')
+    } catch (error) {
+        console.error('Upload image network error:', error)
+        return { error: 'Network error during image upload' }
+    }
+}
+
 //
 // LOGIN FUNCTIONS
 //
@@ -107,7 +165,15 @@ export async function login(username, password) {
             body: JSON.stringify({ username, password }),
         })
 
-        return await handleResponse(response, 'Login')
+        const result = await handleResponse(response, 'Login')
+
+        // If login is successful and we have user data, store it
+        if (result && !result.error && result.user) {
+            localStorage.setItem('token', result.token)
+            localStorage.setItem('userData', JSON.stringify(result.user))
+        }
+
+        return result
     } catch (error) {
         console.error('Login network error:', error)
         return { error: 'Network error during login' }
@@ -124,14 +190,20 @@ export async function logout() {
             },
         })
 
-        // Clear token from localStorage
+        // Clear token and user data from localStorage
         localStorage.removeItem('token')
+        localStorage.removeItem('userData')
 
         return await handleResponse(response, 'Logout')
     } catch (error) {
         console.error('Logout network error:', error)
         // Still clear token even if network request fails
         localStorage.removeItem('token')
+        return { error: 'Network error during logout' }
+        console.error('Logout network error:', error)
+        // Still clear token and user data even if network request fails
+        localStorage.removeItem('token')
+        localStorage.removeItem('userData')
         return { error: 'Network error during logout' }
     }
 }

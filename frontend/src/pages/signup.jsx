@@ -11,7 +11,7 @@ const Signup = () => {
         username: '',
         email: '',
         password: '',
-        role: 'user',
+        role: 'admin',
     });
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
