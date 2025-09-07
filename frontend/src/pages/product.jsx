@@ -31,7 +31,7 @@ const ProductPage = () => {
     return (
         <>
             <Header />
-            <div className='min-h-screen py-8 px-30 bg-[var(--text)] pt-25'>
+            <div className='min-h-screen py-8 px-30 bg-[#19191a] text-white pt-25'>
                 <Breadcrumbs product={product} showShop={true} />
                 <ProductDetails product={product} />
                 <RelevantProducts

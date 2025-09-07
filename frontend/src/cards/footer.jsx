@@ -74,10 +74,10 @@ const FooterCard = ({ zIndex }) => {
                             About
                         </Link>
                         <span className='text-gray-500'>|</span>
-                        <Link to='/community' className='animated-link'>
+                        {/* <Link to='/community' className='animated-link'>
                             Community
-                        </Link>
-                        <span className='text-gray-500'>|</span>
+                        </Link> */}
+                        {/* <span className='text-gray-500'>|</span>
                         <Link to='/generate' className='animated-link'>
                             Prompts
                         </Link>
@@ -89,9 +89,13 @@ const FooterCard = ({ zIndex }) => {
                         <Link to='/weekly-challenge' className='animated-link'>
                             Weekly Challenge
                         </Link>
-                        <span className='text-gray-500'>|</span>
+                        <span className='text-gray-500'>|</span> */}
                         <Link to='/write-in-peace' className='animated-link'>
                             Write in Peace
+                        </Link>
+                        <span className='text-gray-500'>|</span>
+                        <Link to='/products' className='animated-link'>
+                            Shop Merch
                         </Link>
                     </nav>
 

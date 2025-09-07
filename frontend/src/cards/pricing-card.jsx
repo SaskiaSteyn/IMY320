@@ -51,7 +51,11 @@ const PricingCard = ({ zIndex }) => {
     };
 
     return (
-        <div className='h-screen relative bg-[#19191a]' style={{ zIndex }}>
+        <div
+            id='pricing'
+            className='h-screen relative bg-[#19191a]'
+            style={{ zIndex }}
+        >
             <div className='p-8 px-21 h-full flex flex-col justify-center'>
                 <h2 className='text-4xl font-bold text-center mb-12 text-white'>
                     Choose the option that fits your writing journey

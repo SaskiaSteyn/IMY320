@@ -29,6 +29,7 @@ const Header = ({ navigationItems = [] }) => {
         { text: 'Home', href: '/' },
         { text: 'About', href: '/about' },
         { text: 'Write in Peace', href: '/write-in-peace' },
+        { text: 'Shop Merch', href: '/products' },
     ];
 
     const navItems =
