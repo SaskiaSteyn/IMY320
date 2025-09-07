@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import AddedToCartPopup from './added-to-cart-popup';
 import { Button } from './ui/button';
 
 const PricingBlock = ({
@@ -9,12 +7,12 @@ const PricingBlock = ({
     headerColor = '#9ca3af', // Default gray color
     textColor = '#000000', // Default text color
     className = '',
+    onAddToCart,
 }) => {
-    const [showPopup, setShowPopup] = useState(false);
-
     const handleAddToCart = () => {
-        // You can implement actual cart logic here
-        setShowPopup(true);
+        if (onAddToCart) {
+            onAddToCart(tierName);
+        }
     };
 
     return (
@@ -80,12 +78,6 @@ const PricingBlock = ({
                 >
                     Add to Cart
                 </Button>
-                <AddedToCartPopup
-                    show={showPopup}
-                    onClose={() => setShowPopup(false)}
-                    productName={tierName}
-                    quantity={1}
-                />
             </div>
         </div>
     );

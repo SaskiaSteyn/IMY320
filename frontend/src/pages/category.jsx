@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import FooterCard from '../cards/footer.jsx';
+import AddedToCartPopup from '../components/added-to-cart-popup.jsx';
 import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
 import { Button } from '../components/ui/button.jsx';
@@ -10,6 +11,11 @@ const Category = () => {
     const { categoryName } = useParams();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupData, setPopupData] = useState({
+        productName: '',
+        quantity: 1,
+    });
 
     useEffect(() => {
         // Filter products by category
@@ -43,6 +49,48 @@ const Category = () => {
             descriptions[category] ||
             'Discover our collection of writing-inspired merchandise.'
         );
+    };
+
+    const handleAddToCart = (product) => {
+        // Create cart item
+        const cartItem = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            quantity: 1,
+            image: product.image,
+            type: 'merchandise',
+        };
+
+        // Get existing cart from localStorage
+        try {
+            const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Check if item already exists in cart
+            const existingItemIndex = existingCart.findIndex(
+                (item) => item.id === cartItem.id
+            );
+
+            if (existingItemIndex > -1) {
+                // Update quantity if item exists
+                existingCart[existingItemIndex].quantity += 1;
+            } else {
+                // Add new item to cart
+                existingCart.push(cartItem);
+            }
+
+            // Save updated cart to localStorage
+            localStorage.setItem('cart', JSON.stringify(existingCart));
+
+            // Trigger storage event to update cart count in header
+            window.dispatchEvent(new Event('storage'));
+        } catch (error) {
+            console.error('Error updating cart:', error);
+        }
+
+        // Show popup
+        setPopupData({ productName: product.name, quantity: 1 });
+        setShowPopup(true);
     };
 
     if (loading) {
@@ -168,6 +216,9 @@ const Category = () => {
                                                 </Link>
                                                 <Button
                                                     variant='outline'
+                                                    onClick={() =>
+                                                        handleAddToCart(product)
+                                                    }
                                                     className='transform transition-all duration-300 hover:scale-110 hover:bg-yellow-500 hover:text-white hover:border-yellow-500'
                                                 >
                                                     Add to Cart
@@ -195,6 +246,14 @@ const Category = () => {
             </div>
 
             <FooterCard />
+
+            {/* Add to Cart Popup */}
+            <AddedToCartPopup
+                show={showPopup}
+                onClose={() => setShowPopup(false)}
+                productName={popupData.productName}
+                quantity={popupData.quantity}
+            />
         </div>
     );
 };
