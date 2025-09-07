@@ -1,5 +1,6 @@
 //create a static hero image component with hover effect
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import { Button } from './button';
 
@@ -39,8 +40,12 @@ const HeroImage = ({ className }) => {
                     Write in Peace: An app for writers, by writers
                 </p>
                 <div className='flex justify-center p-12'>
-                    <Button className='mr-4'>Download the app</Button>
-                    <Button variant='secondary'>Read more</Button>
+                    <Link to='/write-in-peace#pricing'>
+                        <Button className='mr-4'>Download the app</Button>
+                    </Link>
+                    <Link to='/write-in-peace'>
+                        <Button variant='secondary'>Read more</Button>
+                    </Link>
                 </div>
             </div>
         </div>

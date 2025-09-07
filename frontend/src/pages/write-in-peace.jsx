@@ -36,6 +36,18 @@ function WriteInPeace() {
             }
         }
     }, [calledOnce]);
+
+    // Handle URL hash for direct linking to pricing section
+    React.useEffect(() => {
+        if (window.location.hash === '#pricing') {
+            setTimeout(() => {
+                const pricingElement = document.getElementById('pricing');
+                if (pricingElement) {
+                    pricingElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100); // Small delay to ensure page is loaded
+        }
+    }, []);
     return (
         <div className='relative bg-[var(--text)]'>
             <Header />

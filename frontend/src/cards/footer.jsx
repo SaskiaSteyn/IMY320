@@ -1,9 +1,29 @@
+import { useEffect, useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { FiArrowUp } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button-header.jsx';
 
 const FooterCard = ({ zIndex }) => {
+    const [cartCount, setCartCount] = useState(0);
+
+    // Update cart count (unique items, not quantity)
+    useEffect(() => {
+        const updateCartCount = () => {
+            try {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                console.log('Footer - Cart contents:', cart);
+                console.log('Footer - Cart length:', cart.length);
+                setCartCount(Array.isArray(cart) ? cart.length : 0);
+            } catch {
+                setCartCount(0);
+            }
+        };
+        updateCartCount();
+        window.addEventListener('storage', updateCartCount);
+        return () => window.removeEventListener('storage', updateCartCount);
+    }, []);
+
     return (
         <div
             className=' w-full relative bg-black border-t border-[#525252] flex items-center justify-center text-white'
@@ -54,10 +74,10 @@ const FooterCard = ({ zIndex }) => {
                             About
                         </Link>
                         <span className='text-gray-500'>|</span>
-                        <Link to='/community' className='animated-link'>
+                        {/* <Link to='/community' className='animated-link'>
                             Community
-                        </Link>
-                        <span className='text-gray-500'>|</span>
+                        </Link> */}
+                        {/* <span className='text-gray-500'>|</span>
                         <Link to='/generate' className='animated-link'>
                             Prompts
                         </Link>
@@ -69,21 +89,25 @@ const FooterCard = ({ zIndex }) => {
                         <Link to='/weekly-challenge' className='animated-link'>
                             Weekly Challenge
                         </Link>
-                        <span className='text-gray-500'>|</span>
+                        <span className='text-gray-500'>|</span> */}
                         <Link to='/write-in-peace' className='animated-link'>
                             Write in Peace
+                        </Link>
+                        <span className='text-gray-500'>|</span>
+                        <Link to='/products' className='animated-link'>
+                            Shop Merch
                         </Link>
                     </nav>
 
                     {/* Action Buttons */}
                     <div className='flex gap-4'>
-                        <Button variant='outline' asChild>
+                        <Button variant='outline' asChild className='relative'>
                             <Link
                                 to='/cart'
                                 className='flex items-center gap-2'
                             >
                                 <FaShoppingCart className='w-4 h-4' />
-                                Cart
+                                Cart {cartCount > 0 && `(${cartCount})`}
                             </Link>
                         </Button>
                         <Button asChild>

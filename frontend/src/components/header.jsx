@@ -12,6 +12,8 @@ const Header = ({ navigationItems = [] }) => {
         const updateCartCount = () => {
             try {
                 const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                console.log('Cart contents:', cart);
+                console.log('Cart length:', cart.length);
                 setCartCount(Array.isArray(cart) ? cart.length : 0);
             } catch {
                 setCartCount(0);
@@ -27,6 +29,7 @@ const Header = ({ navigationItems = [] }) => {
         { text: 'Home', href: '/' },
         { text: 'About', href: '/about' },
         { text: 'Write in Peace', href: '/write-in-peace' },
+        { text: 'Shop Merch', href: '/products' },
     ];
 
     const navItems =
@@ -119,13 +122,8 @@ const Header = ({ navigationItems = [] }) => {
                                 to='/cart'
                                 className='flex items-center gap-2'
                             >
-                                {cartCount > 0 && (
-                                    <span className='absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center'>
-                                        {cartCount}
-                                    </span>
-                                )}
                                 <FaShoppingCart className='w-4 h-4' />
-                                Cart
+                                Cart {cartCount > 0 && `(${cartCount})`}
                             </Link>
                         </Button>
                         <Button

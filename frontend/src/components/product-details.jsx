@@ -1,29 +1,7 @@
-const USD_TO_ZAR = 18.5;
-
 import React, { useRef, useState } from 'react';
-import {
-    FaChevronDown,
-    FaChevronUp,
-    FaMinus,
-    FaPlus,
-    FaShoppingCart,
-} from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaMinus, FaPlus } from 'react-icons/fa';
 import AddedToCartPopup from './added-to-cart-popup';
-
-const getTagColor = (tag) => {
-    switch (tag) {
-        case 'mugs':
-            return 'var(--candle-light)';
-        case 'hoodies':
-            return 'var(--olive)';
-        case 'totes':
-            return 'var(--forest)';
-        case 'stickers':
-            return '#bfae8a';
-        default:
-            return 'var(--cafe)';
-    }
-};
+import { Button } from './ui/button';
 
 const ProductDetails = ({ product }) => {
     const [quantity, setQuantity] = useState(1);
@@ -61,8 +39,8 @@ const ProductDetails = ({ product }) => {
         // Here you would add to cart logic
         setShowPopup(true);
     };
-    const unitPriceZAR = product.price * USD_TO_ZAR;
-    const totalPriceZAR = unitPriceZAR * quantity;
+    const unitPrice = product.price;
+    const totalPrice = unitPrice * quantity;
     return (
         <>
             <AddedToCartPopup
@@ -88,10 +66,10 @@ const ProductDetails = ({ product }) => {
                         {product.name}
                     </h2>
                     <p className='text-lg mb-1'>
-                        Unit price: R{unitPriceZAR.toFixed(2)}
+                        Unit price: R{unitPrice.toFixed(2)}
                     </p>
                     <p className='text-2xl font-bold mb-2'>
-                        Total: R{totalPriceZAR.toFixed(2)}
+                        Total: R{totalPrice.toFixed(2)}
                     </p>
                     <p className='mb-4'>{product.description}</p>
                     {/* Tags */}
@@ -101,9 +79,9 @@ const ProductDetails = ({ product }) => {
                                 key={idx}
                                 className='px-2 py-1 text-xs font-medium'
                                 style={{
-                                    backgroundColor: getTagColor(tag),
+                                    backgroundColor: '#d2d1d6',
                                     borderRadius: '5px',
-                                    color: '#fff',
+                                    color: '#000',
                                 }}
                             >
                                 {tag}
@@ -141,7 +119,7 @@ const ProductDetails = ({ product }) => {
                             </button>
                             {sizeDropdownOpen && (
                                 <ul
-                                    className='absolute left-0 mt-2 w-full rounded-lg shadow-lg bg-white/90 backdrop-blur-sm border border-white/30 z-10'
+                                    className='absolute left-0 mt-2 w-full rounded-lg backdrop-blur-sm border border-white/30 z-10'
                                     style={{ minWidth: '140px' }}
                                     role='listbox'
                                 >
@@ -214,14 +192,14 @@ const ProductDetails = ({ product }) => {
                     </div>
                     {/* Buttons */}
                     <div className='flex flex-col gap-3 w-full mt-2 justify-center'>
-                        <button
-                            className='w-full px-6 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:opacity-90 flex items-center gap-2 justify-center'
-                            style={{ backgroundColor: 'var(--cafe)' }}
+                        <Button
                             onClick={handleAddToCart}
+                            variant='cart'
+                            size='lg'
+                            className='w-full'
                         >
-                            <FaShoppingCart className='text-sm' />
                             Add to Cart
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>

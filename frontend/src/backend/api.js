@@ -1,18 +1,18 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = 'http://localhost:3000'
 
 // Helper function to log and handle API responses
 async function handleResponse(response, operation) {
     // console.log(`${operation} response status:`, response.status);
 
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({error: 'Failed to parse error response'}));
-        console.error(`${operation} failed:`, errorData);
-        return {error: errorData.error || `${operation} failed`};
+        const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }))
+        console.error(`${operation} failed:`, errorData)
+        return { error: errorData.error || `${operation} failed` }
     }
 
-    const data = await response.json().catch(() => ({error: 'Failed to parse response'}));
+    const data = await response.json().catch(() => ({ error: 'Failed to parse response' }))
     // console.log(`${operation} successful:`, data);
-    return data;
+    return data
 }
 
 
@@ -28,12 +28,12 @@ export async function getAllProducts() {
             headers: {
                 'Content-Type': 'application/json',
             },
-        });
+        })
 
-        return await handleResponse(response, 'Get all products');
+        return await handleResponse(response, 'Get all products')
     } catch (error) {
-        console.error('Get all products network error:', error);
-        return {error: 'Network error during fetching all products'};
+        console.error('Get all products network error:', error)
+        return { error: 'Network error during fetching all products' }
     }
 }
 
@@ -45,13 +45,13 @@ export async function getProductsByTags(tags) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({tagsArray: tags}),
-        });
+            body: JSON.stringify({ tagsArray: tags }),
+        })
 
-        return await handleResponse(response, 'Get products by tags');
+        return await handleResponse(response, 'Get products by tags')
     } catch (error) {
-        console.error('Get products by tags network error:', error);
-        return {error: 'Network error during fetching products by tags'};
+        console.error('Get products by tags network error:', error)
+        return { error: 'Network error during fetching products by tags' }
     }
 }
 
@@ -64,12 +64,12 @@ export async function addProduct(productData) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(productData),
-        });
+        })
 
-        return await handleResponse(response, 'Add product');
+        return await handleResponse(response, 'Add product')
     } catch (error) {
-        console.error('Add product network error:', error);
-        return {error: 'Network error during adding product'};
+        console.error('Add product network error:', error)
+        return { error: 'Network error during adding product' }
     }
 }
 
@@ -87,12 +87,12 @@ export async function register(userData) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(userData),
-        });
+        })
 
-        return await handleResponse(response, 'Registration');
+        return await handleResponse(response, 'Registration')
     } catch (error) {
-        console.error('Registration network error:', error);
-        return {error: 'Network error during registration'};
+        console.error('Registration network error:', error)
+        return { error: 'Network error during registration' }
     }
 }
 
@@ -104,13 +104,13 @@ export async function login(username, password) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({username, password}),
-        });
+            body: JSON.stringify({ username, password }),
+        })
 
-        return await handleResponse(response, 'Login');
+        return await handleResponse(response, 'Login')
     } catch (error) {
-        console.error('Login network error:', error);
-        return {error: 'Network error during login'};
+        console.error('Login network error:', error)
+        return { error: 'Network error during login' }
     }
 }
 
@@ -122,17 +122,17 @@ export async function logout() {
             headers: {
                 'Content-Type': 'application/json',
             },
-        });
+        })
 
         // Clear token from localStorage
-        localStorage.removeItem('token');
+        localStorage.removeItem('token')
 
-        return await handleResponse(response, 'Logout');
+        return await handleResponse(response, 'Logout')
     } catch (error) {
-        console.error('Logout network error:', error);
+        console.error('Logout network error:', error)
         // Still clear token even if network request fails
-        localStorage.removeItem('token');
-        return {error: 'Network error during logout'};
+        localStorage.removeItem('token')
+        return { error: 'Network error during logout' }
     }
 }
 
@@ -145,12 +145,12 @@ export async function testConnection() {
             headers: {
                 'Content-Type': 'application/json',
             },
-        });
+        })
 
         // console.log('Connection test response status:', response.status);
-        return {success: true, status: response.status};
+        return { success: true, status: response.status }
     } catch (error) {
-        console.error('Connection test failed:', error);
-        return {success: false, error: error.message};
+        console.error('Connection test failed:', error)
+        return { success: false, error: error.message }
     }
 }

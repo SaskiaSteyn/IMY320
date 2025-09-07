@@ -1,4 +1,5 @@
 //a component that uses a grid to layout the cards in a 1-2-1 layout with images and text
+import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 
@@ -62,7 +63,9 @@ const OurStory = () => {
                 </div>
             </div>
             <div className='flex justify-center pb-12'>
-                <Button>Download the app</Button>
+                <Link to='/write-in-peace#pricing'>
+                    <Button className='mr-4'>Download the app</Button>
+                </Link>
             </div>
         </div>
     );
