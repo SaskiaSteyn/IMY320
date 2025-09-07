@@ -138,12 +138,13 @@ const AllProducts = () => {
                         <div className='text-gray-400 text-xl mb-4'>
                             No products found in this category.
                         </div>
-                        <button
+                        <Button
+                            variant='outline'
                             onClick={() => handleCategoryFilter('all')}
                             className='mr-4'
                         >
-                            <Button variant='outline'>Show All Products</Button>
-                        </button>
+                            Show All Products
+                        </Button>
                         <Link to='/'>
                             <Button>Back to Home</Button>
                         </Link>

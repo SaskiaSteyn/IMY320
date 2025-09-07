@@ -39,6 +39,7 @@ const ProductSchema = new mongoose.Schema({
     name: String,
     tags: [String],
     price: Number,
+    stock: Number,
     image: String,
     description: String,
     sizes: [String]
