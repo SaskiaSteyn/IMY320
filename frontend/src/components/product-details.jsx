@@ -35,10 +35,51 @@ const ProductDetails = ({ product }) => {
     }, [sizeDropdownOpen]);
 
     if (!product) return null;
+
     const handleAddToCart = () => {
-        // Here you would add to cart logic
-        setShowPopup(true);
+        // Create cart item with all necessary information
+        const cartItem = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            quantity: quantity,
+            image: product.image,
+            size: selectedSize,
+            type: 'merchandise',
+        };
+
+        // Get existing cart from localStorage
+        try {
+            const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Check if item with same id and size already exists in cart
+            const existingItemIndex = existingCart.findIndex(
+                (item) => item.id === cartItem.id && item.size === cartItem.size
+            );
+
+            if (existingItemIndex > -1) {
+                // Update quantity if item exists
+                existingCart[existingItemIndex].quantity += quantity;
+            } else {
+                // Add new item to cart
+                existingCart.push(cartItem);
+            }
+
+            // Save updated cart to localStorage
+            localStorage.setItem('cart', JSON.stringify(existingCart));
+
+            // Trigger storage event to update cart count in header
+            window.dispatchEvent(new Event('storage'));
+
+            // Show popup
+            setShowPopup(true);
+        } catch (error) {
+            console.error('Error updating cart:', error);
+            // Still show popup even if there's an error
+            setShowPopup(true);
+        }
     };
+
     const unitPrice = product.price;
     const totalPrice = unitPrice * quantity;
     return (

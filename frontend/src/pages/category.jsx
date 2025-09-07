@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { getProductsByTags } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import AddedToCartPopup from '../components/added-to-cart-popup.jsx';
 import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
 import { Button } from '../components/ui/button.jsx';
-import catalogue from '../data/catalogue.json';
 
 const Category = () => {
     const { categoryName } = useParams();
@@ -18,12 +18,25 @@ const Category = () => {
     });
 
     useEffect(() => {
-        // Filter products by category
-        const filteredProducts = catalogue.filter((product) =>
-            product.tags.includes(categoryName)
-        );
-        setProducts(filteredProducts);
-        setLoading(false);
+        const fetchProducts = async () => {
+            setLoading(true);
+            try {
+                const response = await getProductsByTags([categoryName]);
+                if (response.error) {
+                    console.error('Error fetching products:', response.error);
+                    setProducts([]);
+                } else {
+                    setProducts(response);
+                }
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                setProducts([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
     }, [categoryName]);
 
     const getCategoryTitle = (category) => {
@@ -52,6 +65,12 @@ const Category = () => {
     };
 
     const handleAddToCart = (product) => {
+        // Get default size for the product
+        const defaultSize =
+            product.sizes && product.sizes.length > 0
+                ? product.sizes[0]
+                : 'One size';
+
         // Create cart item
         const cartItem = {
             id: product.id,
@@ -59,6 +78,7 @@ const Category = () => {
             price: product.price,
             quantity: 1,
             image: product.image,
+            size: defaultSize,
             type: 'merchandise',
         };
 
@@ -66,9 +86,9 @@ const Category = () => {
         try {
             const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
 
-            // Check if item already exists in cart
+            // Check if item with same id and size already exists in cart
             const existingItemIndex = existingCart.findIndex(
-                (item) => item.id === cartItem.id
+                (item) => item.id === cartItem.id && item.size === cartItem.size
             );
 
             if (existingItemIndex > -1) {
