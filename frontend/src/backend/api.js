@@ -55,6 +55,23 @@ export async function getProductsByTags(tags) {
     }
 }
 
+export async function addProduct(productData) {
+    try {
+        // console.log('Adding new product with data:', productData);
+        const response = await fetch(`${API_URL}/products/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(productData),
+        });
+
+        return await handleResponse(response, 'Add product');
+    } catch (error) {
+        console.error('Add product network error:', error);
+        return {error: 'Network error during adding product'};
+    }
+}
 
 //
 // LOGIN FUNCTIONS
