@@ -60,9 +60,7 @@ const StaticHeroCard = ({ showChevron, zIndex }) => {
                 </div>
 
                 {/* Scroll Down Chevron */}
-                {showChevron && (
-                    <ChevronDown backgroundColor='hsl(var(--background))' />
-                )}
+                {showChevron && <ChevronDown backgroundColor='white' />}
             </div>
         </div>
     );

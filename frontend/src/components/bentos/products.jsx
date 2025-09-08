@@ -54,9 +54,7 @@ const Products = () => {
             </div>
             <div className='flex justify-center pb-12'>
                 <Link to='/products'>
-                    <Button className='transform transition-all duration-300 hover:scale-110 hover:shadow-lg hover:-translate-y-1'>
-                        Shop merch
-                    </Button>
+                    <Button className=''>Shop merch</Button>
                 </Link>
             </div>
         </div>

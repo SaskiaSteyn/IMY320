@@ -6,7 +6,7 @@ import Banner from '../components/ui/banner.jsx';
 
 function About() {
     return (
-        <div className='bg-[var(--fog)]'>
+        <div className='bg-[#19191a]'>
             <Header />
             <Team />
             <Banner />

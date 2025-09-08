@@ -98,7 +98,7 @@ const WriteInPeaceCard = ({ zIndex }) => {
                     </Card>
                 </div>
             </div>
-            <ChevronDown backgroundColor='hsl(var(--background))' />
+            <ChevronDown backgroundColor='white' />
         </div>
     );
 };

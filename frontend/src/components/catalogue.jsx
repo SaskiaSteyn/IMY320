@@ -60,15 +60,15 @@ const Catalogue = ({ CallScroll }) => {
     const getTagColor = (tag) => {
         switch (tag) {
             case 'mugs':
-                return 'var(--candle-light)';
+                return '#FFF8DC';
             case 'hoodies':
-                return 'var(--olive)';
+                return '#808000';
             case 'totes':
-                return 'var(--forest)';
+                return '#228B22';
             case 'stickers':
-                return '#bfae8a'; // Slightly darker than var(--hazelwood)
+                return '#bfae8a'; // Slightly darker than hazelwood
             default:
-                return 'var(--cafe)';
+                return '#8B4513';
         }
     };
 
@@ -106,14 +106,11 @@ const Catalogue = ({ CallScroll }) => {
                 <div className='p-8 text-center'>
                     <h2
                         className='text-4xl font-bold text-center mb-12'
-                        style={{ color: 'var(--background)' }}
+                        style={{ color: 'white' }}
                     >
                         Cove Merch
                     </h2>
-                    <div
-                        className='text-xl'
-                        style={{ color: 'var(--background)' }}
-                    >
+                    <div className='text-xl' style={{ color: 'white' }}>
                         Loading products...
                     </div>
                 </div>
@@ -133,7 +130,7 @@ const Catalogue = ({ CallScroll }) => {
                     <div className='p-8'>
                         <h2
                             className='text-4xl font-bold text-center mb-12'
-                            style={{ color: 'var(--background)' }}
+                            style={{ color: 'white' }}
                         >
                             Cove Merch
                         </h2>
@@ -143,14 +140,14 @@ const Catalogue = ({ CallScroll }) => {
                             <div className='flex items-center gap-4 justify-center'>
                                 <span
                                     className='text-lg font-medium'
-                                    style={{ color: 'var(--background)' }}
+                                    style={{ color: 'white' }}
                                 >
                                     Filter by category:
                                 </span>
                                 <div className='relative' ref={dropdownRef}>
                                     <button
                                         className='px-4 py-2 rounded-lg border border-white/30 bg-white/20 backdrop-blur-sm text-white font-medium flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white/50 min-w-[140px]'
-                                        style={{ color: 'var(--background)' }}
+                                        style={{ color: 'white' }}
                                         onClick={() =>
                                             setDropdownOpen((open) => !open)
                                         }
@@ -180,8 +177,8 @@ const Catalogue = ({ CallScroll }) => {
                                                     key={tag}
                                                     className={`px-4 py-2 cursor-pointer font-medium transition-all duration-150 border-b border-white/30 ${
                                                         selectedTag === tag
-                                                            ? 'bg-white/20 text-[var(--background)]'
-                                                            : 'bg-white/20 text-[var(--background)] hover:underline'
+                                                            ? 'bg-white/20 text-[white]'
+                                                            : 'bg-white/20 text-[white] hover:underline'
                                                     }`}
                                                     style={
                                                         selectedTag === tag
@@ -253,7 +250,7 @@ const Catalogue = ({ CallScroll }) => {
                                                     <h3
                                                         className='text-lg font-semibold'
                                                         style={{
-                                                            color: 'var(--background)',
+                                                            color: 'white',
                                                         }}
                                                     >
                                                         {item.name}
@@ -284,7 +281,7 @@ const Catalogue = ({ CallScroll }) => {
                                                 <p
                                                     className='text-xl font-bold'
                                                     style={{
-                                                        color: 'var(--background)',
+                                                        color: 'white',
                                                     }}
                                                 >
                                                     R{item.price.toFixed(2)}
@@ -298,8 +295,7 @@ const Catalogue = ({ CallScroll }) => {
                                                 }
                                                 className='px-4 py-2 rounded-lg font-medium text-white transition-all duration-200 hover:opacity-90 flex items-center gap-2'
                                                 style={{
-                                                    backgroundColor:
-                                                        'var(--cafe)',
+                                                    backgroundColor: '#8B4513',
                                                 }}
                                             >
                                                 <FaShoppingCart className='text-sm' />

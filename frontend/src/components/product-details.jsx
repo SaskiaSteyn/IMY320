@@ -91,7 +91,7 @@ const ProductDetails = ({ product }) => {
                 quantity={quantity}
                 size={selectedSize}
             />
-            <div className='flex flex-col md:flex-row items-start gap-4 text-[var(--background)]'>
+            <div className='flex flex-col md:flex-row items-start gap-4 text-[white]'>
                 {/* Left: Main image and thumbnails */}
                 <div className='flex flex-col items-center gap-4 md:w-1/2 w-full'>
                     <img
@@ -143,7 +143,7 @@ const ProductDetails = ({ product }) => {
                         >
                             <button
                                 type='button'
-                                className='w-full px-4 py-2 rounded-lg border border-white/30 bg-white/20 backdrop-blur-sm text-[var(--background)] font-medium flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-150 justify-between'
+                                className='w-full px-4 py-2 rounded-lg border border-white/30 bg-white/20 backdrop-blur-sm text-[white] font-medium flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-150 justify-between'
                                 style={{ minWidth: '140px' }}
                                 onClick={() =>
                                     setSizeDropdownOpen((open) => !open)
@@ -172,8 +172,8 @@ const ProductDetails = ({ product }) => {
                                             key={size}
                                             className={`px-4 py-2 cursor-pointer font-medium transition-all duration-150 border-b border-white/30 last:border-b-0 ${
                                                 selectedSize === size
-                                                    ? 'bg-white/60 text-[var(--background)]'
-                                                    : 'bg-white/20 text-[var(--background)] hover:underline'
+                                                    ? 'bg-white/60 text-[white]'
+                                                    : 'bg-white/20 text-[white] hover:underline'
                                             }`}
                                             style={
                                                 selectedSize === size

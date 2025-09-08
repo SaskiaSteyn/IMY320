@@ -37,10 +37,10 @@ const WipDetails = () => {
                 {/* Product Image and App Heading Section */}
                 <div className='flex items-center justify-between mb-16 max-w-6xl mx-auto w-full'>
                     <div className='flex-1 pr-8'>
-                        <h1 className='text-5xl font-bold mb-6' style={{color: 'var(--background)'}}>
+                        <h1 className='text-5xl font-bold mb-6' style={{color: 'white'}}>
                             Write in Peace App
                         </h1>
-                        <p className='text-xl leading-relaxed' style={{color: 'var(--background)'}}>
+                        <p className='text-xl leading-relaxed' style={{color: 'white'}}>
                             Transform your writing experience with our distraction-free environment designed specifically for writers, bloggers, and content creators.
                         </p>
                     </div>
@@ -55,7 +55,7 @@ const WipDetails = () => {
 
                 {/* Features Section */}
                 <div className='max-w-4xl mx-auto w-full'>
-                    <h2 className='text-3xl font-bold text-center mb-8' style={{color: 'var(--background)'}}>
+                    <h2 className='text-3xl font-bold text-center mb-8' style={{color: 'white'}}>
                         Key Features
                     </h2>
 
@@ -69,10 +69,10 @@ const WipDetails = () => {
                                     onClick={() => toggleItem(index)}
                                     className='w-full p-4 text-left flex items-center justify-between hover:bg-white/10 transition-all duration-200 rounded-lg'
                                 >
-                                    <h3 className='text-lg font-semibold' style={{color: 'var(--background)'}}>
+                                    <h3 className='text-lg font-semibold' style={{color: 'white'}}>
                                         {index + 1}. {feature.title}
                                     </h3>
-                                    <div style={{color: 'var(--background)'}}>
+                                    <div style={{color: 'white'}}>
                                         {expandedIndex === index ? (
                                             <FaChevronUp className='text-sm' />
                                         ) : (
@@ -85,7 +85,7 @@ const WipDetails = () => {
                                     <div className='px-4 pb-4 border-t border-white/20'>
                                         <p
                                             className='text-sm leading-relaxed pt-3'
-                                            style={{color: 'var(--background)'}}>
+                                            style={{color: 'white'}}>
                                             {feature.description}
                                         </p>
                                     </div>
