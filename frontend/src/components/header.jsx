@@ -71,7 +71,7 @@ const Header = ({ navigationItems = [] }) => {
         { text: 'Write in Peace', href: '/write-in-peace' },
         { text: 'Shop Merch', href: '/products' },
         // Add admin link if user is admin
-        ...(isAdmin ? [{ text: 'Edit Products', href: '/add-product' }] : []),
+        ...(isAdmin ? [{ text: 'Manage Products', href: '/add-product' }] : []),
     ];
 
     const navItems =

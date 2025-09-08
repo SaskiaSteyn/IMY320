@@ -1,10 +1,11 @@
-import {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { FaMinus, FaPlus } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { adjustStock, getAllProducts } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
-import {Button} from '../components/ui/button.jsx';
-import {getAllProducts, adjustStock} from '../backend/api.js';
+import { Button } from '../components/ui/button.jsx';
 
 const EditProducts = () => {
     const [products, setProducts] = useState([]);
@@ -39,7 +40,9 @@ const EditProducts = () => {
             if (result.error) {
                 alert(`Error increasing stock: ${result.error}`);
             } else {
-                console.log(`Stock increased for ${productId}: ${result.previousStock} → ${result.newStock}`);
+                console.log(
+                    `Stock increased for ${productId}: ${result.previousStock} → ${result.newStock}`
+                );
                 // Refresh the products list to show updated stock
                 GetAllProducts();
             }
@@ -58,7 +61,9 @@ const EditProducts = () => {
             if (result.error) {
                 alert(`Error decreasing stock: ${result.error}`);
             } else {
-                console.log(`Stock decreased for ${productId}: ${result.previousStock} → ${result.newStock}`);
+                console.log(
+                    `Stock decreased for ${productId}: ${result.previousStock} → ${result.newStock}`
+                );
                 // Refresh the products list to show updated stock
                 GetAllProducts();
             }
@@ -85,15 +90,15 @@ const EditProducts = () => {
             {/* Hero Section */}
             <div className='pt-24 pb-16 px-4 sm:px-6 lg:px-8'>
                 <div className='max-w-7xl mx-auto'>
-                    <Breadcrumbs />
                     <div className='text-center'>
                         <h1 className='text-4xl md:text-6xl font-bold text-white mb-6'>
                             Product Management
                         </h1>
                         <p className='text-xl text-gray-300 mb-8 max-w-2xl mx-auto'>
-                            Manage inventory and monitor stock levels for all Cove merchandise.
+                            Manage inventory and monitor stock levels for all
+                            Cove merchandise.
                         </p>
-                        <div className='w-24 h-1 bg-yellow-500 mx-auto'></div>
+                        <div className='w-24 h-1 bg-[#e79210] mx-auto'></div>
                     </div>
                 </div>
             </div>
@@ -102,17 +107,10 @@ const EditProducts = () => {
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8'>
                 <div className='flex flex-wrap justify-center gap-4'>
                     <Link to='/create-product'>
-                        <Button className='bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-3'>
+                        <Button className='bg-[#e79210] text-black px-6 py-3'>
                             Create New Product
                         </Button>
                     </Link>
-                    <Button
-                        variant='outline'
-                        className='border-gray-600 text-white hover:bg-gray-800'
-                        onClick={GetAllProducts}
-                    >
-                        Refresh Products
-                    </Button>
                 </div>
                 <div className='text-center mt-4'>
                     <span className='text-gray-400'>
@@ -121,7 +119,7 @@ const EditProducts = () => {
                 </div>
             </div>
 
-            {/* Products Table */}
+            {/* Products Management */}
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16'>
                 {products.length === 0 ? (
                     <div className='text-center py-16'>
@@ -129,145 +127,161 @@ const EditProducts = () => {
                             No products found.
                         </div>
                         <Link to='/create-product'>
-                            <Button>Create First Product</Button>
+                            <Button className='bg-[#e79210] hover:bg-[#d68a0f] text-black font-semibold'>
+                                Create First Product
+                            </Button>
                         </Link>
                     </div>
                 ) : (
-                    <div className='bg-white rounded-lg shadow-lg overflow-hidden'>
-                        <div className='overflow-x-auto'>
-                            <table className='w-full'>
-                                <thead className='bg-gray-50 border-b border-gray-200'>
-                                    <tr>
-                                        <th className='px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                            Product
-                                        </th>
-                                        <th className='px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                            ID
-                                        </th>
-                                        <th className='px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                            Category
-                                        </th>
-                                        <th className='px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                            Price
-                                        </th>
-                                        <th className='px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                            Stock
-                                        </th>
-                                        <th className='px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                            Availability
-                                        </th>
-                                        <th className='px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className='bg-white divide-y divide-gray-200'>
-                                    {products.map((product) => (
-                                        <tr key={product.id} className='hover:bg-gray-50 transition-colors duration-200'>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
-                                                <div className='flex items-center'>
-                                                    <div className='h-12 w-12 flex-shrink-0'>
-                                                        <img
-                                                            className='h-12 w-12 rounded-lg object-cover'
-                                                            src={product.image}
-                                                            alt={product.name}
-                                                            onError={(e) => {
-                                                                e.target.src = '/images/placeholder.png';
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div className='ml-4'>
-                                                        <div className='text-sm font-medium text-gray-900'>
-                                                            {product.name}
-                                                        </div>
-                                                        <div className='text-sm text-gray-500 truncate max-w-xs'>
-                                                            {product.descriptor || product.description}
-                                                        </div>
+                    <div className='space-y-6'>
+                        {products.map((product) => (
+                            <div
+                                key={product.id}
+                                className='bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:scale-[1.01]'
+                            >
+                                <div className='flex flex-col lg:flex-row'>
+                                    {/* Product Image */}
+                                    <div className='lg:w-1/4 h-48 lg:h-auto overflow-hidden'>
+                                        <img
+                                            className='w-full h-full object-cover transition-transform duration-300 hover:scale-110'
+                                            src={product.image}
+                                            alt={product.name}
+                                            onError={(e) => {
+                                                e.target.src =
+                                                    '/images/placeholder.png';
+                                            }}
+                                        />
+                                    </div>
+
+                                    {/* Product Details */}
+                                    <div className='lg:w-3/4 p-6 flex flex-col justify-between'>
+                                        <div>
+                                            <div className='flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4'>
+                                                <div className='flex-1'>
+                                                    <h3 className='text-2xl font-bold text-gray-900 mb-2'>
+                                                        {product.name}
+                                                    </h3>
+                                                    <p className='text-gray-600 mb-3 leading-relaxed'>
+                                                        {product.descriptor ||
+                                                            product.description}
+                                                    </p>
+                                                    <div className='flex flex-wrap gap-3 mb-3'>
+                                                        <span className='inline-flex items-center px-3 py-1 text-sm font-medium bg-gray-100 text-gray-800 rounded-full'>
+                                                            ID: {product.id}
+                                                        </span>
+                                                        <span className='inline-flex items-center px-3 py-1 text-sm font-medium bg-gray-200 text-gray-800 rounded-full'>
+                                                            {product
+                                                                .tags?.[0] ||
+                                                                'Uncategorized'}
+                                                        </span>
+                                                        <span
+                                                            className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
+                                                                product.availability ===
+                                                                'In Stock'
+                                                                    ? 'bg-gray-200 text-gray-800'
+                                                                    : product.availability ===
+                                                                      'Pre-order'
+                                                                    ? 'bg-gray-300 text-gray-700'
+                                                                    : 'bg-gray-400 text-gray-900'
+                                                            }`}
+                                                        >
+                                                            {product.availability ||
+                                                                'Unknown'}
+                                                        </span>
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td className='px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900'>
-                                                {product.id}
-                                            </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
-                                                <span className='px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800'>
-                                                    {product.tags?.[0] || 'Uncategorized'}
-                                                </span>
-                                            </td>
-                                            <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                                                R{product.price}
-                                            </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
-                                                <div className='flex items-center space-x-2'>
-                                                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${product.stock > 20
-                                                        ? 'bg-green-100 text-green-800'
-                                                        : product.stock > 5
-                                                            ? 'bg-yellow-100 text-yellow-800'
-                                                            : 'bg-red-100 text-red-800'
-                                                        }`}>
-                                                        <button
-                                                            onClick={() => handleStockDecrease(product.id)}
-                                                            disabled={adjustingStock === `${product.id}-decrease` || product.stock <= 0}
-                                                            className={`px-2 py-1 rounded transition-colors duration-200 ${adjustingStock === `${product.id}-decrease`
-                                                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                                                : product.stock <= 0
-                                                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                                                    : 'text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100'
-                                                                }`}
-                                                            title={product.stock <= 0 ? 'Stock cannot go below 0' : 'Decrease Stock'}
-                                                        >
-                                                            {adjustingStock === `${product.id}-decrease` ? '...' : '-'}
-                                                        </button>
-                                                        {product.stock}
-                                                        <button
-                                                            onClick={() => handleStockIncrease(product.id)}
-                                                            disabled={adjustingStock === `${product.id}-increase`}
-                                                            className={`px-2 py-1 rounded transition-colors duration-200 ${adjustingStock === `${product.id}-increase`
-                                                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                                                : 'text-green-600 hover:text-green-800 bg-green-50 hover:bg-green-100'
-                                                                }`}
-                                                            title='Increase Stock'
-                                                        >
-                                                            {adjustingStock === `${product.id}-increase` ? '...' : '+'}
-                                                        </button>
+
+                                                {/* Price */}
+                                                <div className='text-right sm:ml-6'>
+                                                    <p className='text-sm text-gray-500 mb-1'>
+                                                        Price
+                                                    </p>
+                                                    <p className='text-3xl font-bold text-gray-900'>
+                                                        R{product.price}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Stock Management and Actions */}
+                                        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-gray-200'>
+                                            {/* Stock Management */}
+                                            <div className='flex items-center gap-4'>
+                                                <div className='flex items-center gap-2'>
+                                                    <span className='text-sm font-medium text-gray-700 mr-3'>
+                                                        Stock:
                                                     </span>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleStockDecrease(
+                                                                product.id
+                                                            )
+                                                        }
+                                                        disabled={
+                                                            adjustingStock ===
+                                                                `${product.id}-decrease` ||
+                                                            product.stock <= 0
+                                                        }
+                                                        className={`p-2 border border-gray-300 rounded-lg flex items-center justify-center h-10 w-10 text-base font-bold transition-colors ${
+                                                            adjustingStock ===
+                                                            `${product.id}-decrease`
+                                                                ? 'bg-gray-200 text-gray-400'
+                                                                : product.stock <=
+                                                                  0
+                                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                                : 'hover:bg-gray-50 cursor-pointer'
+                                                        }`}
+                                                        title={
+                                                            product.stock <= 0
+                                                                ? 'Stock cannot go below 0'
+                                                                : 'Decrease Stock'
+                                                        }
+                                                    >
+                                                        <FaMinus />
+                                                    </button>
+                                                    <div className='w-16 h-10 flex items-center justify-center border border-gray-300 rounded-lg text-center text-lg font-medium bg-gray-50'>
+                                                        {product.stock}
+                                                    </div>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleStockIncrease(
+                                                                product.id
+                                                            )
+                                                        }
+                                                        disabled={
+                                                            adjustingStock ===
+                                                            `${product.id}-increase`
+                                                        }
+                                                        className={`p-2 border border-gray-300 rounded-lg flex items-center justify-center h-10 w-10 text-base font-bold transition-colors ${
+                                                            adjustingStock ===
+                                                            `${product.id}-increase`
+                                                                ? 'bg-gray-200 text-gray-400'
+                                                                : 'hover:bg-gray-50 cursor-pointer'
+                                                        }`}
+                                                        title='Increase Stock'
+                                                    >
+                                                        <FaPlus />
+                                                    </button>
                                                 </div>
-                                            </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
-                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${product.availability === 'In Stock'
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : 'bg-red-100 text-red-800'
-                                                    }`}>
-                                                    {product.availability || 'Unknown'}
-                                                </span>
-                                            </td>
-                                            <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
-                                                <div className='flex space-x-2'>
+                                            </div>
+
+                                            {/* Action Buttons */}
+                                            <div className='flex gap-3'>
+                                                <Button asChild>
                                                     <Link
                                                         to={`/product/${product.id}`}
-                                                        className='text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors duration-200'
-                                                        title='View Details'
                                                     >
-                                                        View
+                                                        View Details
                                                     </Link>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
-
-                {/* Navigation */}
-                <div className='text-center mt-16'>
-                    <Link to='/'>
-                        <Button variant='outline' className='mr-4 border-gray-600 text-white hover:bg-gray-800'>
-                            Back to Home
-                        </Button>
-                    </Link>
-                </div>
             </div>
 
             <FooterCard />

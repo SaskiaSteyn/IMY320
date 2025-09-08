@@ -1,11 +1,10 @@
-import {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
-import {getAllProducts} from '../backend/api.js';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getAllProducts } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import AddedToCartPopup from '../components/added-to-cart-popup.jsx';
-import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
-import {Button} from '../components/ui/button.jsx';
+import { Button } from '../components/ui/button.jsx';
 
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
@@ -19,11 +18,11 @@ const AllProducts = () => {
     });
 
     const categories = [
-        {key: 'all', label: 'All Products'},
-        {key: 'mugs', label: 'Mugs'},
-        {key: 'hoodies', label: 'Hoodies'},
-        {key: 'totes', label: 'Tote Bags'},
-        {key: 'stickers', label: 'Stickers'},
+        { key: 'all', label: 'All Products' },
+        { key: 'mugs', label: 'Mugs' },
+        { key: 'hoodies', label: 'Hoodies' },
+        { key: 'totes', label: 'Tote Bags' },
+        { key: 'stickers', label: 'Stickers' },
     ];
 
     useEffect(() => {
@@ -111,7 +110,7 @@ const AllProducts = () => {
         }
 
         // Show popup
-        setPopupData({productName: product.name, quantity: 1});
+        setPopupData({ productName: product.name, quantity: 1 });
         setShowPopup(true);
     };
 
@@ -130,7 +129,6 @@ const AllProducts = () => {
             {/* Hero Section */}
             <div className='pt-24 pb-16 px-4 sm:px-6 lg:px-8'>
                 <div className='max-w-7xl mx-auto'>
-                    <Breadcrumbs showShop={false} />
                     <div className='text-center'>
                         <h1 className='text-4xl md:text-6xl font-bold text-white mb-6'>
                             Shop Merch
@@ -152,10 +150,11 @@ const AllProducts = () => {
                         <button
                             key={category.key}
                             onClick={() => handleCategoryFilter(category.key)}
-                            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${selectedCategory === category.key
-                                ? 'bg-[#e79210] text-black shadow-lg'
-                                : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
-                                }`}
+                            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
+                                selectedCategory === category.key
+                                    ? 'bg-[#e79210] text-black shadow-lg'
+                                    : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
+                            }`}
                         >
                             {category.label}
                         </button>
@@ -205,7 +204,8 @@ const AllProducts = () => {
                                                 className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-110'
                                                 onError={(e) => {
                                                     // Replace image with "No image found" text
-                                                    const parent = e.target.parentNode;
+                                                    const parent =
+                                                        e.target.parentNode;
                                                     parent.innerHTML = `
                                                         <div class="w-full h-full bg-gray-200 flex items-center justify-center">
                                                             <div class="text-center">
@@ -254,7 +254,7 @@ const AllProducts = () => {
                                                 {/* Available Sizes */}
                                                 {product.sizes &&
                                                     product.sizes[0] !==
-                                                    'One size' && (
+                                                        'One size' && (
                                                         <div className='mb-4'>
                                                             <span className='text-sm font-medium text-gray-700 mr-2'>
                                                                 Available sizes:
