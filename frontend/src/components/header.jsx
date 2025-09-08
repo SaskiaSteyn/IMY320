@@ -151,14 +151,32 @@ const Header = ({ navigationItems = [] }) => {
                                 Cart {cartCount > 0 && `(${cartCount})`}
                             </Link>
                         </Button>
-                        <Button
-                            asChild
-                            className='!bg-white !text-black hover:!bg-[#e79210] hover:!text-white group-hover:!bg-black group-hover:!text-white group-hover:hover:!bg-[#e79210]'
-                        >
-                            <Link to={isLoggedIn ? '/account' : '/login'}>
-                                {isLoggedIn ? 'Account' : 'Login'}
-                            </Link>
-                        </Button>
+                        {isLoggedIn ? (
+                            <Button
+                                onClick={() => {
+                                    // Clear authentication data
+                                    localStorage.removeItem('token');
+                                    localStorage.removeItem('userData');
+                                    localStorage.removeItem('cart');
+                                    // Update state
+                                    setIsLoggedIn(false);
+                                    setIsAdmin(false);
+                                    setCartCount(0);
+                                    // Redirect to home page
+                                    window.location.href = '/';
+                                }}
+                                className='!bg-white !text-black hover:!bg-[#e79210] hover:!text-white group-hover:!bg-black group-hover:!text-white group-hover:hover:!bg-[#e79210]'
+                            >
+                                Logout
+                            </Button>
+                        ) : (
+                            <Button
+                                asChild
+                                className='!bg-white !text-black hover:!bg-[#e79210] hover:!text-white group-hover:!bg-black group-hover:!text-white group-hover:hover:!bg-[#e79210]'
+                            >
+                                <Link to='/login'>Login</Link>
+                            </Button>
+                        )}
                     </div>
                 </div>
             </nav>
