@@ -132,22 +132,38 @@ const EditProducts = () => {
 
     const handleStockIncrease = (productId) => {
         setProducts((prevProducts) =>
-            prevProducts.map((product) =>
-                product.id === productId
-                    ? { ...product, stock: product.stock + 1 }
-                    : product
-            )
+            prevProducts.map((product) => {
+                if (product.id === productId) {
+                    const updatedProduct = {
+                        ...product,
+                        stock: product.stock + 1,
+                    };
+                    console.log(
+                        `Stock increased for ${product.name}: ${product.stock} -> ${updatedProduct.stock}`
+                    );
+                    return updatedProduct;
+                }
+                return product;
+            })
         );
         setHasChanges(true);
     };
 
     const handleStockDecrease = (productId) => {
         setProducts((prevProducts) =>
-            prevProducts.map((product) =>
-                product.id === productId && product.stock > 0
-                    ? { ...product, stock: product.stock - 1 }
-                    : product
-            )
+            prevProducts.map((product) => {
+                if (product.id === productId && product.stock > 0) {
+                    const updatedProduct = {
+                        ...product,
+                        stock: product.stock - 1,
+                    };
+                    console.log(
+                        `Stock decreased for ${product.name}: ${product.stock} -> ${updatedProduct.stock}`
+                    );
+                    return updatedProduct;
+                }
+                return product;
+            })
         );
         setHasChanges(true);
     };
@@ -273,25 +289,21 @@ const EditProducts = () => {
                                                         </span>
                                                         <span
                                                             className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
-                                                                (product.stock ===
+                                                                product.stock ===
                                                                 0
-                                                                    ? 'Out of Stock'
-                                                                    : product.availability) ===
-                                                                'In Stock'
-                                                                    ? 'bg-green-100 text-green-800'
-                                                                    : (product.stock ===
-                                                                      0
-                                                                          ? 'Out of Stock'
-                                                                          : product.availability) ===
-                                                                      'Pre-order'
-                                                                    ? 'bg-yellow-100 text-yellow-800'
-                                                                    : 'bg-red-100 text-red-800'
+                                                                    ? 'bg-red-100 text-red-800'
+                                                                    : 'bg-green-100 text-green-800'
                                                             }`}
                                                         >
-                                                            {product.stock === 0
-                                                                ? 'Out of Stock'
-                                                                : product.availability ||
-                                                                  'Unknown'}
+                                                            {(() => {
+                                                                console.log(
+                                                                    `Rendering stock status for ${product.name}: stock=${product.stock}, availability=${product.availability}`
+                                                                );
+                                                                return product.stock ===
+                                                                    0
+                                                                    ? 'Out of Stock'
+                                                                    : 'In Stock';
+                                                            })()}
                                                         </span>
                                                     </div>
                                                 </div>
