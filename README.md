@@ -25,3 +25,12 @@ The general operations of the website should allow user/customer to log in to ac
 ### Nicolaas Johan Jansen van Rensburg
 
 ### Rorisang Manamela
+
+
+### Current Design Stage Documents
+
+- [Theee Stooges | Design Choices | Group Design C: Adding Products (PDF)](link here)
+- [Theee Stooges | UX Reports | Group Design C: Adding Products (PDF)](link here)
+- [UEQ Report 1 | PnP (Google Sheet)]([link here](https://docs.google.com/spreadsheets/d/1hvjZeoK7GhmQdQLNAWHxzuekNeYtn9G6/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
+- [UEQ Report 1 | Takealot (Google Sheet)](l[ink here](https://docs.google.com/spreadsheets/d/1bKoPtM3RIuO20NY_Q7pnigq0KrI46VdU/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
+- [UEQ Report 1 | Shopify (Google Sheet)]([text](https://docs.google.com/spreadsheets/d/1KSN6UgQ1vS0TdyU0IcjfmIvuxwupxGnG/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
