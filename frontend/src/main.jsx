@@ -9,6 +9,7 @@ import AddProduct from './pages/edit-products.jsx';
 import AllProducts from './pages/all-products.jsx';
 import Cart from './pages/cart.jsx';
 import Category from './pages/category.jsx';
+import Checkout from './pages/checkout.jsx';
 import Community from './pages/community.jsx';
 import CreateProduct from './pages/create-product.jsx';
 import Generate from './pages/generate.jsx';
@@ -42,6 +43,7 @@ createRoot(document.getElementById('root')).render(
                 <Route path='/add-product' element={<AddProduct />} />
                 <Route path='/create-product' element={<CreateProduct />} />
                 <Route path='/cart' element={<Cart />} />
+                <Route path='/checkout' element={<Checkout />} />
             </Routes>
         </Router>
     </StrictMode>

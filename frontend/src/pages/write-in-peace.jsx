@@ -49,7 +49,7 @@ function WriteInPeace() {
         }
     }, []);
     return (
-        <div className='relative bg-[var(--text)]'>
+        <div className='relative bg-[#19191a]'>
             <Header />
             <HeroImagePP />
             <SoftwareBento />

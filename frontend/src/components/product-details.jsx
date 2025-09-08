@@ -34,9 +34,22 @@ const ProductDetails = ({ product }) => {
         };
     }, [sizeDropdownOpen]);
 
+    // Ensure quantity doesn't exceed available stock when product changes
+    React.useEffect(() => {
+        if (product && product.stock > 0 && quantity > product.stock) {
+            setQuantity(Math.min(quantity, product.stock));
+        }
+    }, [product, quantity]);
+
     if (!product) return null;
 
     const handleAddToCart = () => {
+        // Check if product is out of stock
+        if (product.stock === 0) {
+            console.log('Cannot add out of stock product to cart');
+            return;
+        }
+
         // Create cart item with all necessary information
         const cartItem = {
             id: product.id,
@@ -58,10 +71,30 @@ const ProductDetails = ({ product }) => {
             );
 
             if (existingItemIndex > -1) {
-                // Update quantity if item exists
-                existingCart[existingItemIndex].quantity += quantity;
+                // Check if adding the new quantity would exceed stock
+                const newTotalQuantity =
+                    existingCart[existingItemIndex].quantity + quantity;
+                if (newTotalQuantity > product.stock) {
+                    const remainingStock =
+                        product.stock -
+                        existingCart[existingItemIndex].quantity;
+                    if (remainingStock > 0) {
+                        // Only add what's available
+                        existingCart[existingItemIndex].quantity =
+                            product.stock;
+                        console.log(
+                            `Only ${remainingStock} more items available. Cart updated to maximum quantity.`
+                        );
+                    } else {
+                        console.log('Maximum quantity already in cart');
+                        return;
+                    }
+                } else {
+                    // Update quantity if within stock limits
+                    existingCart[existingItemIndex].quantity += quantity;
+                }
             } else {
-                // Add new item to cart
+                // Add new item to cart (quantity already validated by UI controls)
                 existingCart.push(cartItem);
             }
 
@@ -91,7 +124,7 @@ const ProductDetails = ({ product }) => {
                 quantity={quantity}
                 size={selectedSize}
             />
-            <div className='flex flex-col md:flex-row items-start gap-4 text-[var(--background)]'>
+            <div className='flex flex-col md:flex-row items-start gap-4 text-[white]'>
                 {/* Left: Main image and thumbnails */}
                 <div className='flex flex-col items-center gap-4 md:w-1/2 w-full'>
                     <img
@@ -112,6 +145,26 @@ const ProductDetails = ({ product }) => {
                     <p className='text-2xl font-bold mb-2'>
                         Total: R{totalPrice.toFixed(2)}
                     </p>
+
+                    {/* Stock Status */}
+                    <div className='mb-2'>
+                        <span
+                            className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
+                                product.stock === 0
+                                    ? 'bg-red-100 text-red-800'
+                                    : product.stock <= 5
+                                    ? 'bg-yellow-100 text-yellow-800'
+                                    : 'bg-green-100 text-green-800'
+                            }`}
+                        >
+                            {product.stock === 0
+                                ? 'Out of Stock'
+                                : product.stock <= 5
+                                ? `Only ${product.stock} left`
+                                : 'In Stock'}
+                        </span>
+                    </div>
+
                     <p className='mb-4'>{product.description}</p>
                     {/* Tags */}
                     <div className='flex gap-2 mb-4 flex-wrap'>
@@ -143,7 +196,7 @@ const ProductDetails = ({ product }) => {
                         >
                             <button
                                 type='button'
-                                className='w-full px-4 py-2 rounded-lg border border-white/30 bg-white/20 backdrop-blur-sm text-[var(--background)] font-medium flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-150 justify-between'
+                                className='w-full px-4 py-2 rounded-lg border border-white/30 bg-white/20 backdrop-blur-sm text-[white] font-medium flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-150 justify-between'
                                 style={{ minWidth: '140px' }}
                                 onClick={() =>
                                     setSizeDropdownOpen((open) => !open)
@@ -172,8 +225,8 @@ const ProductDetails = ({ product }) => {
                                             key={size}
                                             className={`px-4 py-2 cursor-pointer font-medium transition-all duration-150 border-b border-white/30 last:border-b-0 ${
                                                 selectedSize === size
-                                                    ? 'bg-white/60 text-[var(--background)]'
-                                                    : 'bg-white/20 text-[var(--background)] hover:underline'
+                                                    ? 'bg-white/60 text-[white]'
+                                                    : 'bg-white/20 text-[white] hover:underline'
                                             }`}
                                             style={
                                                 selectedSize === size
@@ -208,7 +261,12 @@ const ProductDetails = ({ product }) => {
                             <button
                                 type='button'
                                 aria-label='Decrease quantity'
-                                className='p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold'
+                                className={`p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold ${
+                                    product.stock === 0
+                                        ? 'opacity-50 cursor-not-allowed'
+                                        : ''
+                                }`}
+                                disabled={product.stock === 0}
                                 onClick={() =>
                                     setQuantity((q) => Math.max(1, q - 1))
                                 }
@@ -216,7 +274,9 @@ const ProductDetails = ({ product }) => {
                                 <FaMinus style={{ fontSize: '1em' }} />
                             </button>
                             <div
-                                className='w-15 h-8 flex items-center justify-center border rounded text-center text-lg font-medium select-none'
+                                className={`w-15 h-8 flex items-center justify-center border rounded text-center text-lg font-medium select-none ${
+                                    product.stock === 0 ? 'opacity-50' : ''
+                                }`}
                                 style={{ minWidth: 48 }}
                             >
                                 {quantity}
@@ -224,12 +284,41 @@ const ProductDetails = ({ product }) => {
                             <button
                                 type='button'
                                 aria-label='Increase quantity'
-                                className='p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold'
-                                onClick={() => setQuantity((q) => q + 1)}
+                                className={`p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold ${
+                                    product.stock === 0 ||
+                                    quantity >= product.stock
+                                        ? 'opacity-50 cursor-not-allowed'
+                                        : ''
+                                }`}
+                                disabled={
+                                    product.stock === 0 ||
+                                    quantity >= product.stock
+                                }
+                                onClick={() =>
+                                    setQuantity((q) =>
+                                        Math.min(product.stock, q + 1)
+                                    )
+                                }
                             >
                                 <FaPlus style={{ fontSize: '1em' }} />
                             </button>
                         </div>
+                        {/* Stock limit indicator */}
+                        {product.stock > 0 && (
+                            <div className='mt-2 text-sm text-gray-300'>
+                                {quantity >= product.stock ? (
+                                    <span className='text-yellow-400'>
+                                        Maximum quantity reached (
+                                        {product.stock} available)
+                                    </span>
+                                ) : (
+                                    <span>
+                                        {product.stock - quantity} more
+                                        available
+                                    </span>
+                                )}
+                            </div>
+                        )}
                     </div>
                     {/* Buttons */}
                     <div className='flex flex-col gap-3 w-full mt-2 justify-center'>
@@ -237,9 +326,16 @@ const ProductDetails = ({ product }) => {
                             onClick={handleAddToCart}
                             variant='cart'
                             size='lg'
-                            className='w-full'
+                            className={`w-full ${
+                                product.stock === 0
+                                    ? 'opacity-50 cursor-not-allowed'
+                                    : ''
+                            }`}
+                            disabled={product.stock === 0}
                         >
-                            Add to Cart
+                            {product.stock === 0
+                                ? 'Out of Stock'
+                                : 'Add to Cart'}
                         </Button>
                     </div>
                 </div>

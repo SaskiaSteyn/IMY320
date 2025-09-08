@@ -1,11 +1,11 @@
 import Block from '../components/block.jsx';
 import ChevronDown from '../components/chevron-down.jsx';
 
-const HeroCard = ({showChevron, zIndex}) => {
+const HeroCard = ({ showChevron, zIndex }) => {
     return (
         <div
             className='h-screen w-full relative card-section'
-            style={{zIndex}}
+            style={{ zIndex }}
         >
             <div className='flex gap-4 p-8 h-full relative'>
                 {/* Left Column - Large Hero Block */}
@@ -26,7 +26,7 @@ const HeroCard = ({showChevron, zIndex}) => {
                         ]}
                         image='/images/AdobeStock_1575577074.jpeg'
                         textColor='black'
-                        color='var(--olive)'
+                        color='#808000'
                     />
                 </div>
 
@@ -39,14 +39,14 @@ const HeroCard = ({showChevron, zIndex}) => {
                                 size='large'
                                 frontHeader='Prompts.'
                                 backHeader='Prompt Generator'
-                                content="Helps you choose random writing prompts to help you get started."
+                                content='Helps you choose random writing prompts to help you get started.'
                                 button={{
                                     text: 'Start Generating',
                                     href: '/generate',
                                 }}
                                 image='/images/chill-reading.jpeg'
                                 textColor='white'
-                                color='var(--forest)'
+                                color='#228B22'
                             />
                         </div>
                         <div className='flex-1'>
@@ -60,8 +60,8 @@ const HeroCard = ({showChevron, zIndex}) => {
                                     href: '/weekly-challenge',
                                 }}
                                 image='/images/AdobeStock_1452587198.jpeg'
-                                textColor='var(--forest)'
-                                color='var(--fog)'
+                                textColor='#228B22'
+                                color='#F5F5F5'
                             />
                         </div>
                     </div>
@@ -79,7 +79,7 @@ const HeroCard = ({showChevron, zIndex}) => {
                                     href: '/guides',
                                 }}
                                 image='/images/bookstack.jpeg'
-                                color='var(--cafe)'
+                                color='#8B4513'
                             />
                         </div>
 
@@ -97,7 +97,7 @@ const HeroCard = ({showChevron, zIndex}) => {
                                     }}
                                     image='/images/typewriter.jpeg'
                                     textColor='black'
-                                    color='var(--hazelwood)'
+                                    color='#D2B48C'
                                 />
                             </div>
                             <div className='flex-1'>
@@ -111,8 +111,8 @@ const HeroCard = ({showChevron, zIndex}) => {
                                         href: '/about',
                                     }}
                                     image='/images/Cove-logo-landing.png'
-                                    textColor='var(--forest)'
-                                    color='var(--candle-light)'
+                                    textColor='#228B22'
+                                    color='#FFF8DC'
                                 />
                             </div>
                         </div>

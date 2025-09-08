@@ -13,6 +13,12 @@ law of UX design covered in class. The group is required to conduct three (in to
 -   **Group Design A:** Login page – 3 August
 -   **Group Design B:** Products page – 17 August
 -   **Group Design C:** Customer Experience – 07 September
+-   [Theee Stooges | Design Choices | Group Design C: Adding Products (PDF)] ([link here](https://drive.google.com/file/d/1Kqg1pw5aQID_FPXTNl3Wko8n62zJmnEX/view?usp=sharing))
+-   [Theee Stooges | UX Reports | Group Design C: Adding Products (PDF)] ([link here](https://drive.google.com/file/d/1Cw7NkZiagfajNBoCgHfXmpaVkmBlRZ98/view?usp=sharing))
+-   [UEQ Report 1 | PnP (Google Sheet)] ([link here](https://docs.google.com/spreadsheets/d/1hvjZeoK7GhmQdQLNAWHxzuekNeYtn9G6/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
+-   [UEQ Report 1 | Takealot (Google Sheet)] ([link here](https://docs.google.com/spreadsheets/d/1bKoPtM3RIuO20NY_Q7pnigq0KrI46VdU/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
+-   [UEQ Report 1 | Shopify (Google Sheet)] ([link here](https://docs.google.com/spreadsheets/d/1KSN6UgQ1vS0TdyU0IcjfmIvuxwupxGnG/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
+
 -   **Group Design D:** UX Evaluation – 26 September (Class testing), 5 October
 -   **Group Design E:** Final website – 26 October
 
@@ -26,11 +32,4 @@ The general operations of the website should allow user/customer to log in to ac
 
 ### Rorisang Manamela
 
-
 ## Current Design Stage Documents
-
-- [Theee Stooges | Design Choices | Group Design C: Adding Products (PDF)] ([link here](https://drive.google.com/file/d/1Kqg1pw5aQID_FPXTNl3Wko8n62zJmnEX/view?usp=sharing))
-- [Theee Stooges | UX Reports | Group Design C: Adding Products (PDF)] ([link here](https://drive.google.com/file/d/1Cw7NkZiagfajNBoCgHfXmpaVkmBlRZ98/view?usp=sharing))
-- [UEQ Report 1 | PnP (Google Sheet)] ([link here](https://docs.google.com/spreadsheets/d/1hvjZeoK7GhmQdQLNAWHxzuekNeYtn9G6/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
-- [UEQ Report 1 | Takealot (Google Sheet)] ([link here](https://docs.google.com/spreadsheets/d/1bKoPtM3RIuO20NY_Q7pnigq0KrI46VdU/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
-- [UEQ Report 1 | Shopify (Google Sheet)] ([link here](https://docs.google.com/spreadsheets/d/1KSN6UgQ1vS0TdyU0IcjfmIvuxwupxGnG/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))

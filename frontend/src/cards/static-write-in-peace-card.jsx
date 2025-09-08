@@ -1,10 +1,9 @@
-import ChevronDown from '../components/chevron-down.jsx';
 import StaticBlock from '../components/static-block.jsx';
 
 const StaticWriteInPeaceCard = ({ zIndex }) => {
     return (
         <div
-            className='h-screen w-full relative bg-[var(--text)]'
+            className='h-screen w-full relative bg-[#19191a]'
             style={{ zIndex }}
         >
             <div className='p-8 h-full flex items-center justify-center overflow-hidden box-border'>
@@ -24,15 +23,15 @@ const StaticWriteInPeaceCard = ({ zIndex }) => {
                                 size={1}
                                 frontHeader='2. Block Distractions'
                                 content='Silence all the noise with one tap. Block notifications and create a distraction-free environment where your ideas can bloom without interruption.'
-                                color='var(--cafe)'
+                                color='#8B4513'
                                 textColor='white'
                             />
                             <StaticBlock
                                 size={1}
                                 frontHeader='3. Smart Sessions'
                                 content='Set custom session timers that adapt to your writing rhythm. Perfect for short bursts or long creative sprints, keeping you in complete control.'
-                                color='var(--cafe)'
-                                textColor='var(--text)'
+                                color='#8B4513'
+                                textColor='#19191a'
                             />
                         </div>
                         <div className='min-w-0 min-h-0 flex-1'>
@@ -40,7 +39,7 @@ const StaticWriteInPeaceCard = ({ zIndex }) => {
                                 size={1}
                                 frontHeader='5. Track Progress'
                                 content='Track your daily streaks and get insights into your productivity over time. Monitor your writing habits and celebrate your achievements as you build consistent writing routines.'
-                                color='var(--background)'
+                                color='white'
                                 textColor='white'
                             />
                         </div>
@@ -65,7 +64,7 @@ const StaticWriteInPeaceCard = ({ zIndex }) => {
                                 size={1}
                                 frontHeader='4. Set Goals'
                                 content="Set flexible writing goals and word count targets that adapt to your routine and preferences. Write in Peace removes friction so all that's left is you and your words."
-                                color='var(--cafe)'
+                                color='#8B4513'
                                 textColor='white'
                             />
                         </div>

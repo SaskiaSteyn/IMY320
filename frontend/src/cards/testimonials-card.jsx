@@ -35,10 +35,7 @@ const TestimonialsCard = ({ testimonials, zIndex }) => {
             </div>
 
             {/* Scroll Down Chevron */}
-            <ChevronDown
-                backgroundColor='var(--background)'
-                textColor='var(--text)'
-            />
+            <ChevronDown backgroundColor='white' textColor='#19191a' />
         </div>
     );
 };

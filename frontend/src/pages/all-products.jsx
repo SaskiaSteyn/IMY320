@@ -1,11 +1,10 @@
-import {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
-import {getAllProducts} from '../backend/api.js';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getAllProducts } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import AddedToCartPopup from '../components/added-to-cart-popup.jsx';
-import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
-import {Button} from '../components/ui/button.jsx';
+import { Button } from '../components/ui/button.jsx';
 
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
@@ -19,11 +18,11 @@ const AllProducts = () => {
     });
 
     const categories = [
-        {key: 'all', label: 'All Products'},
-        {key: 'mugs', label: 'Mugs'},
-        {key: 'hoodies', label: 'Hoodies'},
-        {key: 'totes', label: 'Tote Bags'},
-        {key: 'stickers', label: 'Stickers'},
+        { key: 'all', label: 'All Products' },
+        { key: 'mugs', label: 'Mugs' },
+        { key: 'hoodies', label: 'Hoodies' },
+        { key: 'totes', label: 'Tote Bags' },
+        { key: 'stickers', label: 'Stickers' },
     ];
 
     useEffect(() => {
@@ -67,6 +66,12 @@ const AllProducts = () => {
     };
 
     const handleAddToCart = (product) => {
+        // Check if product is out of stock
+        if (product.stock === 0) {
+            console.log('Cannot add out of stock product to cart');
+            return;
+        }
+
         // Get default size for the product
         const defaultSize =
             product.sizes && product.sizes.length > 0
@@ -111,7 +116,7 @@ const AllProducts = () => {
         }
 
         // Show popup
-        setPopupData({productName: product.name, quantity: 1});
+        setPopupData({ productName: product.name, quantity: 1 });
         setShowPopup(true);
     };
 
@@ -130,7 +135,6 @@ const AllProducts = () => {
             {/* Hero Section */}
             <div className='pt-24 pb-16 px-4 sm:px-6 lg:px-8'>
                 <div className='max-w-7xl mx-auto'>
-                    <Breadcrumbs showShop={false} />
                     <div className='text-center'>
                         <h1 className='text-4xl md:text-6xl font-bold text-white mb-6'>
                             Shop Merch
@@ -152,10 +156,11 @@ const AllProducts = () => {
                         <button
                             key={category.key}
                             onClick={() => handleCategoryFilter(category.key)}
-                            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${selectedCategory === category.key
-                                ? 'bg-[#e79210] text-black shadow-lg'
-                                : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
-                                }`}
+                            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
+                                selectedCategory === category.key
+                                    ? 'bg-[#e79210] text-black shadow-lg'
+                                    : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
+                            }`}
                         >
                             {category.label}
                         </button>
@@ -205,7 +210,8 @@ const AllProducts = () => {
                                                 className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-110'
                                                 onError={(e) => {
                                                     // Replace image with "No image found" text
-                                                    const parent = e.target.parentNode;
+                                                    const parent =
+                                                        e.target.parentNode;
                                                     parent.innerHTML = `
                                                         <div class="w-full h-full bg-gray-200 flex items-center justify-center">
                                                             <div class="text-center">
@@ -225,36 +231,76 @@ const AllProducts = () => {
                                                     {product.name}
                                                 </h3>
                                                 <p className='text-gray-600 text-base mb-4 leading-relaxed'>
-                                                    {product.description}
+                                                    {product.description ||
+                                                        product.descriptor}
                                                 </p>
 
-                                                {/* Product Tags */}
-                                                <div className='flex flex-wrap gap-2 mb-4'>
-                                                    {product.tags.map(
-                                                        (tag, index) => (
+                                                {/* Product Info Tags */}
+                                                <div className='flex flex-wrap gap-3 mb-4'>
+                                                    <span className='inline-flex items-center px-3 py-1 text-sm font-medium bg-gray-100 text-gray-800 rounded-full'>
+                                                        ID: {product.id}
+                                                    </span>
+                                                    {product.tags &&
+                                                        product.tags.length >
+                                                            0 && (
                                                             <button
-                                                                key={index}
                                                                 onClick={(
                                                                     e
                                                                 ) => {
                                                                     e.preventDefault();
                                                                     e.stopPropagation();
                                                                     handleCategoryFilter(
-                                                                        tag
+                                                                        product
+                                                                            .tags[0]
                                                                     );
                                                                 }}
-                                                                className='px-3 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full cursor-pointer'
+                                                                className='inline-flex items-center px-3 py-1 text-sm font-medium bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 transition-colors cursor-pointer'
                                                             >
-                                                                {tag}
+                                                                {product.tags[0]
+                                                                    .charAt(0)
+                                                                    .toUpperCase() +
+                                                                    product.tags[0].slice(
+                                                                        1
+                                                                    )}
                                                             </button>
-                                                        )
-                                                    )}
+                                                        )}
+                                                    <span
+                                                        className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
+                                                            (product.stock === 0
+                                                                ? 'Out of Stock'
+                                                                : product.availability) ===
+                                                            'In Stock'
+                                                                ? 'bg-green-100 text-green-800'
+                                                                : (product.stock ===
+                                                                  0
+                                                                      ? 'Out of Stock'
+                                                                      : product.availability) ===
+                                                                  'Pre-order'
+                                                                ? 'bg-yellow-100 text-yellow-800'
+                                                                : 'bg-red-100 text-red-800'
+                                                        }`}
+                                                    >
+                                                        {product.stock === 0
+                                                            ? 'Out of Stock'
+                                                            : product.availability ||
+                                                              'Unknown'}
+                                                    </span>
+                                                    {product.availabilityDate &&
+                                                        product.availability !==
+                                                            'In Stock' && (
+                                                            <span className='inline-flex items-center px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 rounded-full'>
+                                                                Available:{' '}
+                                                                {new Date(
+                                                                    product.availabilityDate
+                                                                ).toLocaleDateString()}
+                                                            </span>
+                                                        )}
                                                 </div>
 
                                                 {/* Available Sizes */}
                                                 {product.sizes &&
                                                     product.sizes[0] !==
-                                                    'One size' && (
+                                                        'One size' && (
                                                         <div className='mb-4'>
                                                             <span className='text-sm font-medium text-gray-700 mr-2'>
                                                                 Available sizes:
@@ -289,9 +335,18 @@ const AllProducts = () => {
                                                                 product
                                                             );
                                                         }}
-                                                        className='mt-6 self-center'
+                                                        disabled={
+                                                            product.stock === 0
+                                                        }
+                                                        className={`mt-6 self-center ${
+                                                            product.stock === 0
+                                                                ? 'opacity-50 cursor-not-allowed'
+                                                                : ''
+                                                        }`}
                                                     >
-                                                        Add to Cart
+                                                        {product.stock === 0
+                                                            ? 'Out of Stock'
+                                                            : 'Add to Cart'}
                                                     </Button>
                                                 </div>
                                             </div>
