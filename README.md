@@ -27,7 +27,7 @@ The general operations of the website should allow user/customer to log in to ac
 ### Rorisang Manamela
 
 
-### Current Design Stage Documents
+## Current Design Stage Documents
 
 - [Theee Stooges | Design Choices | Group Design C: Adding Products (PDF)](link here)
 - [Theee Stooges | UX Reports | Group Design C: Adding Products (PDF)](link here)
