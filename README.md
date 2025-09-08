@@ -29,8 +29,8 @@ The general operations of the website should allow user/customer to log in to ac
 
 ### Current Design Stage Documents
 
-- [Theee Stooges | Design Choices | Group Design C: Adding Products (PDF)](link here)
-- [Theee Stooges | UX Reports | Group Design C: Adding Products (PDF)](link here)
-- [UEQ Report 1 | PnP (Google Sheet)]([link here](https://docs.google.com/spreadsheets/d/1hvjZeoK7GhmQdQLNAWHxzuekNeYtn9G6/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
-- [UEQ Report 1 | Takealot (Google Sheet)](l[ink here](https://docs.google.com/spreadsheets/d/1bKoPtM3RIuO20NY_Q7pnigq0KrI46VdU/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
-- [UEQ Report 1 | Shopify (Google Sheet)]([text](https://docs.google.com/spreadsheets/d/1KSN6UgQ1vS0TdyU0IcjfmIvuxwupxGnG/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
+- [Theee Stooges | Design Choices | Group Design C: Adding Products (PDF)] ([link here](https://drive.google.com/file/d/1Kqg1pw5aQID_FPXTNl3Wko8n62zJmnEX/view?usp=sharing))
+- [Theee Stooges | UX Reports | Group Design C: Adding Products (PDF)] ([link here](https://drive.google.com/file/d/1Cw7NkZiagfajNBoCgHfXmpaVkmBlRZ98/view?usp=sharing))
+- [UEQ Report 1 | PnP (Google Sheet)] ([link here](https://docs.google.com/spreadsheets/d/1hvjZeoK7GhmQdQLNAWHxzuekNeYtn9G6/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
+- [UEQ Report 1 | Takealot (Google Sheet)] ([link here](https://docs.google.com/spreadsheets/d/1bKoPtM3RIuO20NY_Q7pnigq0KrI46VdU/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
+- [UEQ Report 1 | Shopify (Google Sheet)] ([link here](https://docs.google.com/spreadsheets/d/1KSN6UgQ1vS0TdyU0IcjfmIvuxwupxGnG/edit?usp=sharing&ouid=111657660373980998331&rtpof=true&sd=true))
