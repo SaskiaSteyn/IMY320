@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import {
     FaApple,
+    FaCheckCircle,
     FaCreditCard,
     FaGooglePay,
-    FaLock,
     FaPaypal,
-    FaShieldAlt,
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import FooterCard from '../cards/footer.jsx';
-import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
 import { Button } from '../components/ui/button.jsx';
 
@@ -20,6 +18,7 @@ function Checkout() {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
     const [isProcessing, setIsProcessing] = useState(false);
     const [orderComplete, setOrderComplete] = useState(false);
+    const [completedSteps, setCompletedSteps] = useState(new Set());
 
     // Form states
     const [customerInfo, setCustomerInfo] = useState({
@@ -70,8 +69,35 @@ function Checkout() {
         return total + item.price * item.quantity;
     }, 0);
     const shipping = subtotal > 500 ? 0 : 50; // Free shipping over R500
-    const tax = subtotal * 0.15; // 15% VAT
-    const total = subtotal + shipping + tax;
+    const total = subtotal + shipping; // VAT is already included in item prices
+
+    // Check form completion for progress tracking
+    const isCustomerInfoComplete =
+        customerInfo.email && customerInfo.firstName && customerInfo.lastName;
+    const isShippingComplete =
+        shippingAddress.address &&
+        shippingAddress.city &&
+        shippingAddress.state &&
+        shippingAddress.zipCode;
+    const isPaymentComplete =
+        selectedPaymentMethod !== 'card' ||
+        (cardInfo.cardNumber &&
+            cardInfo.expiryDate &&
+            cardInfo.cvv &&
+            cardInfo.cardholderName);
+
+    // Update progress when forms are completed
+    useEffect(() => {
+        const newCompletedSteps = new Set();
+        if (isCustomerInfoComplete) newCompletedSteps.add(1);
+        if (isShippingComplete) newCompletedSteps.add(2);
+        if (isPaymentComplete) newCompletedSteps.add(3);
+
+        setCompletedSteps(newCompletedSteps);
+    }, [isCustomerInfoComplete, isShippingComplete, isPaymentComplete]);
+
+    // Calculate overall progress
+    const progressPercentage = (completedSteps.size / 3) * 100;
 
     // Payment methods
     const paymentMethods = [
@@ -147,6 +173,12 @@ function Checkout() {
             setOrderComplete(true);
             localStorage.removeItem('cart');
             window.dispatchEvent(new Event('storage'));
+
+            // Scroll to top of page to show the order completion
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            });
         }, 3000);
     };
 
@@ -161,32 +193,65 @@ function Checkout() {
 
     if (orderComplete) {
         return (
-            <div className='min-h-screen bg-[#19191a]'>
+            <div className='min-h-screen bg-[#19191a] relative overflow-hidden'>
                 <Header />
-                <div className='pt-24 pb-16 px-4 sm:px-6 lg:px-8'>
-                    <div className='max-w-2xl mx-auto text-center'>
-                        <div className='bg-green-100 rounded-full w-24 h-24 mx-auto mb-8 flex items-center justify-center'>
-                            <FaShieldAlt className='text-green-600 text-4xl' />
+
+                {/* Confetti Effect */}
+                <div className='fixed inset-0 pointer-events-none z-10'>
+                    {[...Array(50)].map((_, i) => (
+                        <div
+                            key={i}
+                            className='absolute animate-ping'
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                                animationDelay: `${Math.random() * 3}s`,
+                                animationDuration: `${2 + Math.random() * 2}s`,
+                            }}
+                        >
+                            <div className='w-2 h-2 bg-[#e79210] rounded-full'></div>
                         </div>
-                        <h1 className='text-4xl font-bold text-white mb-4'>
-                            Order Complete!
-                        </h1>
-                        <p className='text-xl text-gray-300 mb-8'>
-                            Thank you for your purchase. Your order has been
-                            successfully placed.
+                    ))}
+                </div>
+
+                <div className='pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative z-20'>
+                    <div className='max-w-2xl mx-auto text-center min-h-screen flex flex-col justify-center'>
+                        <div className='text-[#e79210] mb-4'>
+                            <h1 className='text-6xl font-bold  mb-4'>
+                                Congratulations!
+                            </h1>
+                        </div>
+
+                        <p className='text-2xl mb-8 text-white'>
+                            You are the new owner of some awesome stuff!
                         </p>
+
+                        <div className='bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8'>
+                            <p className='text-lg text-gray-300'>
+                                Keep an eye on your email for your tracking
+                                number and keep a close eye on your order!
+                            </p>
+                        </div>
+
                         <div className='space-y-4'>
-                            <Button onClick={() => navigate('/products')}>
-                                Continue Shopping
-                            </Button>
-                            <div>
-                                <Link
-                                    to='/'
-                                    className='text-[#e79210] hover:underline'
+                            <Link to='/'>
+                                <Button
+                                    variant='secondary'
+                                    size='lg'
+                                    className='transition-all duration-300 text-white mr-4'
                                 >
-                                    Return to Home
-                                </Link>
-                            </div>
+                                    Return to home
+                                </Button>
+                            </Link>
+                            <Link to='/products'>
+                                <Button
+                                    onClick={() => navigate('/products')}
+                                    className='transition-all duration-300'
+                                    size='lg'
+                                >
+                                    Shop some more!
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -202,15 +267,32 @@ function Checkout() {
             {/* Hero Section */}
             <div className='pt-24 pb-16 px-4 sm:px-6 lg:px-8'>
                 <div className='max-w-7xl mx-auto'>
-                    <Breadcrumbs showShop={false} />
                     <div className='text-center'>
-                        <h1 className='text-4xl md:text-6xl font-bold text-white mb-6'>
-                            Checkout
-                        </h1>
+                        <div className='flex justify-center items-center gap-4 mb-6'>
+                            <h1 className='text-4xl md:text-6xl font-bold text-white'>
+                                Almost Yours!
+                            </h1>
+                        </div>
                         <p className='text-xl text-gray-300 mb-8 max-w-2xl mx-auto'>
-                            Complete your order and get your items delivered.
+                            Just a few more steps and your awesome stuff will be
+                            on its way!
                         </p>
-                        <div className='w-24 h-1 bg-[#e79210] mx-auto'></div>
+
+                        {/* Progress Bar */}
+                        <div className='max-w-md mx-auto mb-8'>
+                            <div className='flex justify-between text-sm text-gray-300 mb-2'>
+                                <span>Your Progress</span>
+                                <span>
+                                    {Math.round(progressPercentage)}% Complete
+                                </span>
+                            </div>
+                            <div className='w-full bg-gray-600 rounded-full h-3 overflow-hidden'>
+                                <div
+                                    className='h-full bg-gradient-to-r from-[#e79210] to-[#e75710] rounded-full transition-all duration-1000 ease-out relative'
+                                    style={{ width: `${progressPercentage}%` }}
+                                ></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -221,10 +303,25 @@ function Checkout() {
                     {/* Left Column - Forms */}
                     <div className='lg:col-span-2 space-y-8'>
                         {/* Customer Information */}
-                        <div className='bg-white rounded-lg p-6 shadow-lg'>
-                            <h2 className='text-2xl font-bold text-gray-900 mb-6'>
-                                Customer Information
-                            </h2>
+                        <div
+                            className={`bg-white rounded-lg p-6 shadow-lg transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${
+                                completedSteps.has(1)
+                                    ? 'ring-4 ring-green-400'
+                                    : ''
+                            }`}
+                        >
+                            <div className='flex items-center gap-3 mb-6'>
+                                {completedSteps.has(1) ? (
+                                    <FaCheckCircle className='text-green-500 text-2xl' />
+                                ) : (
+                                    <div className='w-8 h-8 rounded-full bg-[#e79210] text-black flex items-center justify-center font-bold text-lg'>
+                                        1
+                                    </div>
+                                )}
+                                <h2 className='text-2xl font-bold text-gray-900'>
+                                    Tell Us About You!
+                                </h2>
+                            </div>
                             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                                 <div>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>
@@ -240,7 +337,7 @@ function Checkout() {
                                                 e.target.value
                                             )
                                         }
-                                        className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
+                                        className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent transition-all duration-300 hover:border-[#e79210] hover:shadow-md focus:scale-105'
                                         placeholder='your@email.com'
                                         required
                                     />
@@ -305,10 +402,25 @@ function Checkout() {
                         </div>
 
                         {/* Shipping Address */}
-                        <div className='bg-white rounded-lg p-6 shadow-lg'>
-                            <h2 className='text-2xl font-bold text-gray-900 mb-6'>
-                                Shipping Address
-                            </h2>
+                        <div
+                            className={`bg-white rounded-lg p-6 shadow-lg transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${
+                                completedSteps.has(2)
+                                    ? 'ring-4 ring-green-400'
+                                    : ''
+                            }`}
+                        >
+                            <div className='flex items-center gap-3 mb-6'>
+                                {completedSteps.has(2) ? (
+                                    <FaCheckCircle className='text-green-500 text-2xl' />
+                                ) : (
+                                    <div className='w-8 h-8 rounded-full bg-[#e79210] text-black flex items-center justify-center font-bold text-lg'>
+                                        2
+                                    </div>
+                                )}
+                                <h2 className='text-2xl font-bold text-gray-900'>
+                                    Where Should We Send Your Stuff?
+                                </h2>
+                            </div>
                             <div className='space-y-4'>
                                 <div>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>
@@ -325,7 +437,7 @@ function Checkout() {
                                             )
                                         }
                                         className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
-                                        placeholder='123 Main Street'
+                                        placeholder='123 Your Awesome Street'
                                         required
                                     />
                                 </div>
@@ -417,20 +529,35 @@ function Checkout() {
                         </div>
 
                         {/* Payment Method */}
-                        <div className='bg-white rounded-lg p-6 shadow-lg'>
-                            <h2 className='text-2xl font-bold text-gray-900 mb-6'>
-                                Payment Method
-                            </h2>
+                        <div
+                            className={`bg-white rounded-lg p-6 shadow-lg transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${
+                                completedSteps.has(3)
+                                    ? 'ring-4 ring-green-400'
+                                    : ''
+                            }`}
+                        >
+                            <div className='flex items-center gap-3 mb-6'>
+                                {completedSteps.has(3) ? (
+                                    <FaCheckCircle className='text-green-500 text-2xl' />
+                                ) : (
+                                    <div className='w-8 h-8 rounded-full bg-[#e79210] text-black flex items-center justify-center font-bold text-lg'>
+                                        3
+                                    </div>
+                                )}
+                                <h2 className='text-2xl font-bold text-gray-900'>
+                                    How Would You Like to Pay?
+                                </h2>
+                            </div>
 
                             {/* Payment Method Selection */}
                             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-6'>
                                 {paymentMethods.map((method) => (
                                     <div
                                         key={method.id}
-                                        className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                                        className={`border-2 rounded-lg p-4 cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
                                             selectedPaymentMethod === method.id
-                                                ? 'border-[#e79210] bg-orange-50'
-                                                : 'border-gray-200 hover:border-gray-300'
+                                                ? 'border-[#e79210] bg-gradient-to-r from-orange-50 to-yellow-50 shadow-lg scale-105'
+                                                : 'border-gray-200 hover:border-[#e79210] hover:bg-gray-50'
                                         }`}
                                         onClick={() =>
                                             setSelectedPaymentMethod(method.id)
@@ -438,10 +565,10 @@ function Checkout() {
                                     >
                                         <div className='flex items-center space-x-3'>
                                             <method.icon
-                                                className={`text-2xl ${
+                                                className={`text-2xl transition-all duration-300 ${
                                                     selectedPaymentMethod ===
                                                     method.id
-                                                        ? 'text-[#e79210]'
+                                                        ? 'text-[#e79210] animate-pulse'
                                                         : 'text-gray-400'
                                                 }`}
                                             />
@@ -573,10 +700,12 @@ function Checkout() {
 
                     {/* Right Column - Order Summary */}
                     <div className='lg:col-span-1'>
-                        <div className='bg-white rounded-lg p-6 shadow-lg sticky top-8'>
-                            <h2 className='text-2xl font-bold text-gray-900 mb-6'>
-                                Order Summary
-                            </h2>
+                        <div className='bg-white rounded-lg p-6 shadow-lg sticky top-8 transform transition-all duration-300 hover:shadow-2xl'>
+                            <div className='flex items-center gap-2 mb-6'>
+                                <h2 className='text-2xl font-bold text-gray-900'>
+                                    Your Haul
+                                </h2>
+                            </div>
 
                             {/* Cart Items */}
                             <div className='space-y-4 mb-6'>
@@ -628,41 +757,45 @@ function Checkout() {
                                             : `R${shipping.toFixed(2)}`}
                                     </span>
                                 </div>
-                                <div className='flex justify-between text-gray-600'>
-                                    <span>VAT (15%)</span>
-                                    <span>R{tax.toFixed(2)}</span>
-                                </div>
                                 <div className='border-t pt-2 flex justify-between text-xl font-bold text-gray-900'>
                                     <span>Total</span>
                                     <span>R{total.toFixed(2)}</span>
                                 </div>
+                                <div className='text-xs text-gray-500 mt-2'>
+                                    VAT included in item prices
+                                </div>
                             </div>
 
                             {/* Security Notice */}
-                            <div className='mt-6 p-4 bg-gray-50 rounded-lg'>
-                                <div className='flex items-center space-x-2 text-sm text-gray-600'>
-                                    <FaLock className='text-green-600' />
-                                    <span>
-                                        Your payment information is secure and
-                                        encrypted
-                                    </span>
-                                </div>
+                            <div className='mt-6 p-4'>
+                                <p className='text-center text-xs text-gray-700'>
+                                    Secure & encrypted - your data is safe with
+                                    us!
+                                </p>
                             </div>
 
                             {/* Place Order Button */}
                             <Button
-                                className='w-full mt-6'
+                                className={`w-full mt-6 transform transition-all duration-300 ${
+                                    completedSteps.size === 3 ? '' : ''
+                                } ${isProcessing ? '' : ''}`}
                                 size='lg'
                                 onClick={handlePlaceOrder}
-                                disabled={isProcessing}
+                                disabled={
+                                    isProcessing || completedSteps.size < 3
+                                }
                             >
                                 {isProcessing ? (
                                     <div className='flex items-center space-x-2'>
                                         <div className='w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin'></div>
-                                        <span>Processing...</span>
+                                        <span>Processing your order</span>
                                     </div>
+                                ) : completedSteps.size === 3 ? (
+                                    <span className='flex items-center justify-center space-x-2'>
+                                        <span>Process my order!</span>
+                                    </span>
                                 ) : (
-                                    `Place Order • R${total.toFixed(2)}`
+                                    <span>Complete all steps above ↑</span>
                                 )}
                             </Button>
 
@@ -672,7 +805,7 @@ function Checkout() {
                                     to='/cart'
                                     className='text-[#e79210] hover:underline text-sm'
                                 >
-                                    ← Back to Cart
+                                    Back to Cart
                                 </Link>
                             </div>
                         </div>
