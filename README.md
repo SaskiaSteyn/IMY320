@@ -16,7 +16,7 @@ _Submitted: September 7, 2025_ ✅
 
 ---
 
-##### 📑 **Design Documentation**
+## 📑 **Design Documentation: Design C**
 
 -   📝 **[Design Choices - Adding Products](https://drive.google.com/file/d/1Kqg1pw5aQID_FPXTNl3Wko8n62zJmnEX/view?usp=sharing)** _(PDF)_
 
