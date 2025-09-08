@@ -44,7 +44,55 @@ const Catalogue = ({ CallScroll }) => {
     }, []);
 
     const handleAddToCart = (item) => {
-        // Add your cart logic here
+        // Check if product is out of stock
+        if (item.stock === 0) {
+            console.log('Cannot add out of stock product to cart');
+            return;
+        }
+
+        // Get default size for the product
+        const defaultSize =
+            item.sizes && item.sizes.length > 0 ? item.sizes[0] : 'One size';
+
+        // Create cart item
+        const cartItem = {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: 1,
+            image: item.image,
+            size: defaultSize,
+            type: 'merchandise',
+        };
+
+        // Get existing cart from localStorage
+        try {
+            const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Check if item with same id and size already exists in cart
+            const existingItemIndex = existingCart.findIndex(
+                (cartItem) =>
+                    cartItem.id === item.id && cartItem.size === defaultSize
+            );
+
+            if (existingItemIndex > -1) {
+                // Update quantity if item exists
+                existingCart[existingItemIndex].quantity += 1;
+            } else {
+                // Add new item to cart
+                existingCart.push(cartItem);
+            }
+
+            // Save updated cart to localStorage
+            localStorage.setItem('cart', JSON.stringify(existingCart));
+
+            // Trigger storage event to update cart count in header
+            window.dispatchEvent(new Event('storage'));
+        } catch (error) {
+            console.error('Error updating cart:', error);
+        }
+
+        // Show popup
         setPopupItem(item);
         setShowPopup(true);
     };
@@ -276,6 +324,24 @@ const Catalogue = ({ CallScroll }) => {
                                                                 </span>
                                                             )
                                                         )}
+                                                        {/* Stock Status */}
+                                                        <span
+                                                            className={`px-2 py-1 text-xs font-medium rounded ${
+                                                                item.stock === 0
+                                                                    ? 'bg-red-500 text-white'
+                                                                    : item.stock <=
+                                                                      5
+                                                                    ? 'bg-yellow-500 text-black'
+                                                                    : 'bg-green-500 text-white'
+                                                            }`}
+                                                        >
+                                                            {item.stock === 0
+                                                                ? 'Out of Stock'
+                                                                : item.stock <=
+                                                                  5
+                                                                ? `Only ${item.stock} left`
+                                                                : 'In Stock'}
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <p
@@ -293,13 +359,20 @@ const Catalogue = ({ CallScroll }) => {
                                                 onClick={() =>
                                                     handleAddToCart(item)
                                                 }
-                                                className='px-4 py-2 rounded-lg font-medium text-white transition-all duration-200 hover:opacity-90 flex items-center gap-2'
+                                                disabled={item.stock === 0}
+                                                className={`px-4 py-2 rounded-lg font-medium text-white transition-all duration-200 hover:opacity-90 flex items-center gap-2 ${
+                                                    item.stock === 0
+                                                        ? 'opacity-50 cursor-not-allowed'
+                                                        : ''
+                                                }`}
                                                 style={{
                                                     backgroundColor: '#8B4513',
                                                 }}
                                             >
                                                 <FaShoppingCart className='text-sm' />
-                                                Add to Cart
+                                                {item.stock === 0
+                                                    ? 'Out of Stock'
+                                                    : 'Add to Cart'}
                                             </button>
                                         </div>
                                     </div>

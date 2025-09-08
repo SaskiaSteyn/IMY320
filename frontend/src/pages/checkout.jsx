@@ -7,6 +7,7 @@ import {
     FaPaypal,
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
+import { adjustStock } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Header from '../components/header.jsx';
 import { Button } from '../components/ui/button.jsx';
@@ -167,19 +168,45 @@ function Checkout() {
     const handlePlaceOrder = async () => {
         setIsProcessing(true);
 
-        // Simulate payment processing
-        setTimeout(() => {
-            setIsProcessing(false);
-            setOrderComplete(true);
-            localStorage.removeItem('cart');
-            window.dispatchEvent(new Event('storage'));
+        try {
+            // Adjust stock for each item in the cart
+            for (const item of cartItems) {
+                // Skip stock adjustment for subscription items
+                if (item.type === 'subscription') {
+                    continue;
+                }
 
-            // Scroll to top of page to show the order completion
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-            });
-        }, 3000);
+                const stockAdjustment = -item.quantity; // Negative adjustment to decrease stock
+                const response = await adjustStock(item.id, stockAdjustment);
+
+                if (response.error) {
+                    console.error(
+                        'Failed to adjust stock for product:',
+                        item.id,
+                        response.error
+                    );
+                    // Continue with other items even if one fails
+                }
+            }
+
+            // Simulate payment processing delay
+            setTimeout(() => {
+                setIsProcessing(false);
+                setOrderComplete(true);
+                localStorage.removeItem('cart');
+                window.dispatchEvent(new Event('storage'));
+
+                // Scroll to top of page to show the order completion
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                });
+            }, 1500); // Reduced delay since we're already processing
+        } catch (error) {
+            console.error('Error processing order:', error);
+            setIsProcessing(false);
+            // You might want to show an error message to the user here
+        }
     };
 
     if (loading) {

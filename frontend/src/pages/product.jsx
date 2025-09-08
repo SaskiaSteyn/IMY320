@@ -39,6 +39,29 @@ const ProductPage = () => {
         };
 
         fetchProducts();
+
+        // Listen for storage events (cart updates) to refresh product data
+        const handleStorageChange = () => {
+            fetchProducts();
+        };
+
+        // Listen for page visibility changes to refresh data when returning to page
+        const handleVisibilityChange = () => {
+            if (!document.hidden) {
+                fetchProducts();
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            document.removeEventListener(
+                'visibilitychange',
+                handleVisibilityChange
+            );
+        };
     }, [id]);
 
     if (loading) {

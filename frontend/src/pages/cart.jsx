@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaMinus, FaPlus, FaShoppingCart, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { getAllProducts } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
@@ -9,13 +10,25 @@ import { Button } from '../components/ui/button.jsx';
 function Cart() {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [productStock, setProductStock] = useState({});
 
-    // Load cart items from localStorage
+    // Load cart items from localStorage and fetch current stock
     useEffect(() => {
-        const loadCartItems = () => {
+        const loadCartItems = async () => {
             try {
+                // Load cart items
                 const cart = JSON.parse(localStorage.getItem('cart')) || [];
                 setCartItems(Array.isArray(cart) ? cart : []);
+
+                // Fetch current product stock information
+                const response = await getAllProducts();
+                if (!response.error) {
+                    const stockMap = {};
+                    response.forEach((product) => {
+                        stockMap[product.id] = product.stock;
+                    });
+                    setProductStock(stockMap);
+                }
             } catch (error) {
                 console.error('Error loading cart:', error);
                 setCartItems([]);
@@ -27,7 +40,7 @@ function Cart() {
         loadCartItems();
 
         // Listen for storage changes to update cart
-        const handleStorageChange = () => {
+        const handleStorageChange = async () => {
             loadCartItems();
         };
 
@@ -43,9 +56,18 @@ function Cart() {
         window.dispatchEvent(new Event('storage'));
     };
 
-    // Handle quantity change
+    // Handle quantity change with stock validation
     const handleQuantityChange = (itemId, newQuantity) => {
         if (newQuantity < 1) return;
+
+        // Check stock limit
+        const availableStock = productStock[itemId];
+        if (availableStock !== undefined && newQuantity > availableStock) {
+            console.log(
+                `Cannot increase quantity. Only ${availableStock} items available in stock.`
+            );
+            return;
+        }
 
         const updatedCart = cartItems.map((item) =>
             item.id === itemId ? { ...item, quantity: newQuantity } : item
@@ -257,10 +279,58 @@ function Cart() {
                                                                         1
                                                                 )
                                                             }
-                                                            className='p-2 border border-gray-300 rounded-lg flex items-center justify-center h-10 w-10 text-base font-bold hover:bg-gray-50 transition-colors'
+                                                            className={`p-2 border border-gray-300 rounded-lg flex items-center justify-center h-10 w-10 text-base font-bold transition-colors ${
+                                                                productStock[
+                                                                    item.id
+                                                                ] !==
+                                                                    undefined &&
+                                                                item.quantity >=
+                                                                    productStock[
+                                                                        item.id
+                                                                    ]
+                                                                    ? 'opacity-50 cursor-not-allowed'
+                                                                    : 'hover:bg-gray-50'
+                                                            }`}
+                                                            disabled={
+                                                                productStock[
+                                                                    item.id
+                                                                ] !==
+                                                                    undefined &&
+                                                                item.quantity >=
+                                                                    productStock[
+                                                                        item.id
+                                                                    ]
+                                                            }
                                                         >
                                                             <FaPlus />
                                                         </button>
+                                                        {/* Stock limit indicator */}
+                                                        {productStock[
+                                                            item.id
+                                                        ] !== undefined && (
+                                                            <div className='ml-2 text-xs text-gray-500'>
+                                                                {item.quantity >=
+                                                                productStock[
+                                                                    item.id
+                                                                ] ? (
+                                                                    <span className='text-yellow-600'>
+                                                                        Max
+                                                                        stock
+                                                                        reached
+                                                                    </span>
+                                                                ) : (
+                                                                    <span>
+                                                                        {productStock[
+                                                                            item
+                                                                                .id
+                                                                        ] -
+                                                                            item.quantity}{' '}
+                                                                        more
+                                                                        available
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 )}
 
@@ -297,6 +367,51 @@ function Cart() {
                                 </div>
                             ))}
                         </div>
+
+                        {/* Stock Warning Messages */}
+                        {cartItems.some(
+                            (item) =>
+                                productStock[item.id] !== undefined &&
+                                item.quantity > productStock[item.id]
+                        ) && (
+                            <div className='mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg'>
+                                <div className='flex items-start'>
+                                    <div className='text-yellow-800'>
+                                        <h3 className='text-sm font-medium mb-2'>
+                                            ⚠️ Stock Availability Notice
+                                        </h3>
+                                        <div className='text-sm space-y-1'>
+                                            {cartItems
+                                                .filter(
+                                                    (item) =>
+                                                        productStock[
+                                                            item.id
+                                                        ] !== undefined &&
+                                                        item.quantity >
+                                                            productStock[
+                                                                item.id
+                                                            ]
+                                                )
+                                                .map((item) => (
+                                                    <div key={item.id}>
+                                                        <strong>
+                                                            {item.name}
+                                                        </strong>
+                                                        : Only{' '}
+                                                        {productStock[item.id]}{' '}
+                                                        available (you have{' '}
+                                                        {item.quantity} in cart)
+                                                    </div>
+                                                ))}
+                                        </div>
+                                        <p className='text-xs mt-2 text-yellow-600'>
+                                            Please adjust quantities before
+                                            proceeding to checkout.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Cart Summary */}
                         <div className='rounded-lg shadow-lg p-6'>

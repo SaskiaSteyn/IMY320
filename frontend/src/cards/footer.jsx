@@ -1,29 +1,10 @@
-import { useEffect, useState } from 'react';
-import { FaShoppingCart } from 'react-icons/fa';
 import { FiArrowUp } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import AuthButton from '../components/auth-button.jsx';
+import CartButton from '../components/cart-button.jsx';
 import { Button } from '../components/ui/button-header.jsx';
 
 const FooterCard = ({ zIndex }) => {
-    const [cartCount, setCartCount] = useState(0);
-
-    // Update cart count (unique items, not quantity)
-    useEffect(() => {
-        const updateCartCount = () => {
-            try {
-                const cart = JSON.parse(localStorage.getItem('cart')) || [];
-                console.log('Footer - Cart contents:', cart);
-                console.log('Footer - Cart length:', cart.length);
-                setCartCount(Array.isArray(cart) ? cart.length : 0);
-            } catch {
-                setCartCount(0);
-            }
-        };
-        updateCartCount();
-        window.addEventListener('storage', updateCartCount);
-        return () => window.removeEventListener('storage', updateCartCount);
-    }, []);
-
     return (
         <div
             className=' w-full relative bg-black border-t border-[#525252] flex items-center justify-center text-white'
@@ -101,18 +82,8 @@ const FooterCard = ({ zIndex }) => {
 
                     {/* Action Buttons */}
                     <div className='flex gap-4'>
-                        <Button variant='outline' asChild className='relative'>
-                            <Link
-                                to='/cart'
-                                className='flex items-center gap-2'
-                            >
-                                <FaShoppingCart className='w-4 h-4' />
-                                Cart {cartCount > 0 && `(${cartCount})`}
-                            </Link>
-                        </Button>
-                        <Button asChild>
-                            <Link to='/login'>Login</Link>
-                        </Button>
+                        <CartButton variant='outline' className='relative' />
+                        <AuthButton />
                     </div>
 
                     <div className='text-sm text-gray-400 text-center'>

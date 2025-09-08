@@ -34,6 +34,13 @@ const ProductDetails = ({ product }) => {
         };
     }, [sizeDropdownOpen]);
 
+    // Ensure quantity doesn't exceed available stock when product changes
+    React.useEffect(() => {
+        if (product && product.stock > 0 && quantity > product.stock) {
+            setQuantity(Math.min(quantity, product.stock));
+        }
+    }, [product, quantity]);
+
     if (!product) return null;
 
     const handleAddToCart = () => {
@@ -64,10 +71,30 @@ const ProductDetails = ({ product }) => {
             );
 
             if (existingItemIndex > -1) {
-                // Update quantity if item exists
-                existingCart[existingItemIndex].quantity += quantity;
+                // Check if adding the new quantity would exceed stock
+                const newTotalQuantity =
+                    existingCart[existingItemIndex].quantity + quantity;
+                if (newTotalQuantity > product.stock) {
+                    const remainingStock =
+                        product.stock -
+                        existingCart[existingItemIndex].quantity;
+                    if (remainingStock > 0) {
+                        // Only add what's available
+                        existingCart[existingItemIndex].quantity =
+                            product.stock;
+                        console.log(
+                            `Only ${remainingStock} more items available. Cart updated to maximum quantity.`
+                        );
+                    } else {
+                        console.log('Maximum quantity already in cart');
+                        return;
+                    }
+                } else {
+                    // Update quantity if within stock limits
+                    existingCart[existingItemIndex].quantity += quantity;
+                }
             } else {
-                // Add new item to cart
+                // Add new item to cart (quantity already validated by UI controls)
                 existingCart.push(cartItem);
             }
 
@@ -258,16 +285,40 @@ const ProductDetails = ({ product }) => {
                                 type='button'
                                 aria-label='Increase quantity'
                                 className={`p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold ${
-                                    product.stock === 0
+                                    product.stock === 0 ||
+                                    quantity >= product.stock
                                         ? 'opacity-50 cursor-not-allowed'
                                         : ''
                                 }`}
-                                disabled={product.stock === 0}
-                                onClick={() => setQuantity((q) => q + 1)}
+                                disabled={
+                                    product.stock === 0 ||
+                                    quantity >= product.stock
+                                }
+                                onClick={() =>
+                                    setQuantity((q) =>
+                                        Math.min(product.stock, q + 1)
+                                    )
+                                }
                             >
                                 <FaPlus style={{ fontSize: '1em' }} />
                             </button>
                         </div>
+                        {/* Stock limit indicator */}
+                        {product.stock > 0 && (
+                            <div className='mt-2 text-sm text-gray-300'>
+                                {quantity >= product.stock ? (
+                                    <span className='text-yellow-400'>
+                                        Maximum quantity reached (
+                                        {product.stock} available)
+                                    </span>
+                                ) : (
+                                    <span>
+                                        {product.stock - quantity} more
+                                        available
+                                    </span>
+                                )}
+                            </div>
+                        )}
                     </div>
                     {/* Buttons */}
                     <div className='flex flex-col gap-3 w-full mt-2 justify-center'>

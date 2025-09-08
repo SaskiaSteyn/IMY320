@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { FaShoppingCart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { Button } from './ui/button-header';
+import AuthButton from './auth-button';
+import CartButton from './cart-button';
 
 // Utility function to check if user has admin role
 const isUserAdmin = () => {
@@ -25,28 +25,14 @@ const isUserAdmin = () => {
 const Header = ({ navigationItems = [] }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [cartCount, setCartCount] = useState(0);
 
-    // Update cart count (unique items, not quantity)
-    useEffect(() => {
-        const updateCartCount = () => {
-            try {
-                const cart = JSON.parse(localStorage.getItem('cart')) || [];
-                console.log('Cart contents:', cart);
-                console.log('Cart length:', cart.length);
-                setCartCount(Array.isArray(cart) ? cart.length : 0);
-            } catch {
-                setCartCount(0);
-            }
-        };
-        updateCartCount();
-        window.addEventListener('storage', updateCartCount);
-        return () => window.removeEventListener('storage', updateCartCount);
-    }, []);
+    // Handle auth state changes from AuthButton
+    const handleAuthChange = ({ isLoggedIn: loggedIn, isAdmin: admin }) => {
+        setIsLoggedIn(loggedIn);
+        setIsAdmin(admin);
+    };
 
-    // Default navigation items if none provided
-
-    // Check if user is logged in
+    // Check if user is logged in (initial check)
     useEffect(() => {
         const checkAuthStatus = () => {
             const token = localStorage.getItem('token');
@@ -138,44 +124,20 @@ const Header = ({ navigationItems = [] }) => {
                 {/* Right: Login/Account Button And Cart*/}
                 <div className='flex-1 flex items-center justify-end'>
                     <div className='flex gap-2'>
-                        <Button
+                        <CartButton
                             variant='outline'
-                            asChild
                             className='relative !text-white !border-white !bg-transparent group-hover:!text-black group-hover:!border-black hover:!bg-white/20 group-hover:hover:!bg-black/10'
-                        >
-                            <Link
-                                to='/cart'
-                                className='flex items-center gap-2'
-                            >
-                                <FaShoppingCart className='w-4 h-4' />
-                                Cart {cartCount > 0 && `(${cartCount})`}
-                            </Link>
-                        </Button>
+                        />
                         {isLoggedIn ? (
-                            <Button
-                                onClick={() => {
-                                    // Clear authentication data
-                                    localStorage.removeItem('token');
-                                    localStorage.removeItem('userData');
-                                    localStorage.removeItem('cart');
-                                    // Update state
-                                    setIsLoggedIn(false);
-                                    setIsAdmin(false);
-                                    setCartCount(0);
-                                    // Redirect to home page
-                                    window.location.href = '/';
-                                }}
+                            <AuthButton
+                                onAuthChange={handleAuthChange}
                                 className='!bg-white !text-black hover:!bg-[#e79210] hover:!text-white group-hover:!bg-black group-hover:!text-white group-hover:hover:!bg-[#e79210]'
-                            >
-                                Logout
-                            </Button>
+                            />
                         ) : (
-                            <Button
-                                asChild
+                            <AuthButton
+                                onAuthChange={handleAuthChange}
                                 className='!bg-white !text-black hover:!bg-[#e79210] hover:!text-white group-hover:!bg-black group-hover:!text-white group-hover:hover:!bg-[#e79210]'
-                            >
-                                <Link to='/login'>Login</Link>
-                            </Button>
+                            />
                         )}
                     </div>
                 </div>
