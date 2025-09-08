@@ -266,24 +266,14 @@ const AllProducts = () => {
                                                         )}
                                                     <span
                                                         className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
-                                                            (product.stock === 0
-                                                                ? 'Out of Stock'
-                                                                : product.availability) ===
-                                                            'In Stock'
-                                                                ? 'bg-green-100 text-green-800'
-                                                                : (product.stock ===
-                                                                  0
-                                                                      ? 'Out of Stock'
-                                                                      : product.availability) ===
-                                                                  'Pre-order'
-                                                                ? 'bg-yellow-100 text-yellow-800'
-                                                                : 'bg-red-100 text-red-800'
+                                                            product.stock === 0
+                                                                ? 'bg-red-100 text-red-800'
+                                                                : 'bg-green-100 text-green-800'
                                                         }`}
                                                     >
                                                         {product.stock === 0
                                                             ? 'Out of Stock'
-                                                            : product.availability ||
-                                                              'Unknown'}
+                                                            : 'In Stock'}
                                                     </span>
                                                     {product.availabilityDate &&
                                                         product.availability !==
