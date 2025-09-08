@@ -37,6 +37,12 @@ const ProductDetails = ({ product }) => {
     if (!product) return null;
 
     const handleAddToCart = () => {
+        // Check if product is out of stock
+        if (product.stock === 0) {
+            console.log('Cannot add out of stock product to cart');
+            return;
+        }
+
         // Create cart item with all necessary information
         const cartItem = {
             id: product.id,
@@ -112,6 +118,27 @@ const ProductDetails = ({ product }) => {
                     <p className='text-2xl font-bold mb-2'>
                         Total: R{totalPrice.toFixed(2)}
                     </p>
+                    
+                    {/* Stock Status */}
+                    <div className='mb-2'>
+                        <span
+                            className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
+                                product.stock === 0
+                                    ? 'bg-red-100 text-red-800'
+                                    : product.stock <= 5
+                                    ? 'bg-yellow-100 text-yellow-800'
+                                    : 'bg-green-100 text-green-800'
+                            }`}
+                        >
+                            {product.stock === 0 
+                                ? 'Out of Stock'
+                                : product.stock <= 5
+                                ? `Only ${product.stock} left`
+                                : 'In Stock'
+                            }
+                        </span>
+                    </div>
+                    
                     <p className='mb-4'>{product.description}</p>
                     {/* Tags */}
                     <div className='flex gap-2 mb-4 flex-wrap'>
@@ -208,7 +235,10 @@ const ProductDetails = ({ product }) => {
                             <button
                                 type='button'
                                 aria-label='Decrease quantity'
-                                className='p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold'
+                                className={`p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold ${
+                                    product.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                                }`}
+                                disabled={product.stock === 0}
                                 onClick={() =>
                                     setQuantity((q) => Math.max(1, q - 1))
                                 }
@@ -216,7 +246,9 @@ const ProductDetails = ({ product }) => {
                                 <FaMinus style={{ fontSize: '1em' }} />
                             </button>
                             <div
-                                className='w-15 h-8 flex items-center justify-center border rounded text-center text-lg font-medium select-none'
+                                className={`w-15 h-8 flex items-center justify-center border rounded text-center text-lg font-medium select-none ${
+                                    product.stock === 0 ? 'opacity-50' : ''
+                                }`}
                                 style={{ minWidth: 48 }}
                             >
                                 {quantity}
@@ -224,7 +256,10 @@ const ProductDetails = ({ product }) => {
                             <button
                                 type='button'
                                 aria-label='Increase quantity'
-                                className='p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold'
+                                className={`p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold ${
+                                    product.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                                }`}
+                                disabled={product.stock === 0}
                                 onClick={() => setQuantity((q) => q + 1)}
                             >
                                 <FaPlus style={{ fontSize: '1em' }} />
@@ -237,9 +272,10 @@ const ProductDetails = ({ product }) => {
                             onClick={handleAddToCart}
                             variant='cart'
                             size='lg'
-                            className='w-full'
+                            className={`w-full ${product.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={product.stock === 0}
                         >
-                            Add to Cart
+                            {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
                         </Button>
                     </div>
                 </div>

@@ -1,20 +1,34 @@
 import { useEffect, useState } from 'react';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { adjustStock, getAllProducts } from '../backend/api.js';
+import { adjustStock, getAllProducts, updateProduct } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
-import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
+import SaveChangesPopup from '../components/save-changes-popup.jsx';
 import { Button } from '../components/ui/button.jsx';
 
 const EditProducts = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [adjustingStock, setAdjustingStock] = useState(null); // Track which product's stock is being adjusted
+    const [hasChanges, setHasChanges] = useState(false);
+    const [savingChanges, setSavingChanges] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupData, setPopupData] = useState({
+        type: 'success',
+        message: '',
+        details: '',
+    });
+    const [recentlyUpdated, setRecentlyUpdated] = useState(new Set()); // Track recently auto-saved products
 
     useEffect(() => {
         GetAllProducts();
     }, []);
+
+    const showNotification = (type, message, details = '') => {
+        setPopupData({ type, message, details });
+        setShowPopup(true);
+    };
 
     async function GetAllProducts() {
         try {
@@ -33,22 +47,131 @@ const EditProducts = () => {
         }
     }
 
+    const handleSaveAllChanges = async () => {
+        setSavingChanges(true);
+        try {
+            let successCount = 0;
+            let errorCount = 0;
+            let updatedProducts = [];
+
+            for (const product of products) {
+                // Check if product needs availability update based on stock
+                const currentAvailability = product.availability;
+                const expectedAvailability =
+                    product.stock === 0 ? 'Out of Stock' : 'In Stock';
+                const needsUpdate =
+                    currentAvailability !== expectedAvailability;
+
+                console.log(
+                    `Product ${product.id}: Stock=${product.stock}, Current=${currentAvailability}, Expected=${expectedAvailability}, NeedsUpdate=${needsUpdate}`
+                );
+
+                if (needsUpdate) {
+                    const result = await updateProduct(product.id, {
+                        availability: expectedAvailability,
+                    });
+
+                    if (result.error) {
+                        console.error(
+                            `Failed to update product ${product.id}:`,
+                            result.error
+                        );
+                        errorCount++;
+                    } else {
+                        successCount++;
+                        updatedProducts.push(product.name);
+                    }
+                }
+            }
+
+            if (successCount > 0) {
+                showNotification(
+                    'success',
+                    'Availability Status Updated!',
+                    `Updated availability for ${successCount} product${
+                        successCount !== 1 ? 's' : ''
+                    }: ${updatedProducts.join(', ')}`
+                );
+                GetAllProducts(); // Refresh the products list
+                setHasChanges(false);
+            }
+
+            if (errorCount > 0) {
+                showNotification(
+                    'error',
+                    'Some Availability Updates Failed',
+                    `Failed to update availability for ${errorCount} product${
+                        errorCount !== 1 ? 's' : ''
+                    }. Please try again.`
+                );
+            }
+
+            if (successCount === 0 && errorCount === 0) {
+                showNotification(
+                    'warning',
+                    'No Availability Updates Needed',
+                    'All product availability statuses are already correct based on current stock levels'
+                );
+            }
+        } catch (error) {
+            console.error('Error saving changes:', error);
+            showNotification(
+                'error',
+                'Save Failed',
+                'An unexpected error occurred. Please try again.'
+            );
+        } finally {
+            setSavingChanges(false);
+        }
+    };
+
     const handleStockIncrease = async (productId) => {
         setAdjustingStock(`${productId}-increase`);
         try {
             const result = await adjustStock(productId, 1);
             if (result.error) {
-                alert(`Error increasing stock: ${result.error}`);
+                showNotification(
+                    'error',
+                    'Stock Update Failed',
+                    `Error increasing stock: ${result.error}`
+                );
             } else {
                 console.log(
                     `Stock increased for ${productId}: ${result.previousStock} → ${result.newStock}`
                 );
+
+                // Show auto-save feedback
+                setRecentlyUpdated((prev) => new Set(prev.add(productId)));
+                setTimeout(() => {
+                    setRecentlyUpdated((prev) => {
+                        const newSet = new Set(prev);
+                        newSet.delete(productId);
+                        return newSet;
+                    });
+                }, 2000); // Remove the indicator after 2 seconds
+
+                // Mark that changes have been made (for availability updates)
+                setHasChanges(true);
                 // Refresh the products list to show updated stock
                 GetAllProducts();
+
+                // Show brief success notification
+                showNotification(
+                    'success',
+                    'Stock Updated',
+                    `${
+                        products.find((p) => p.id === productId)?.name ||
+                        'product'
+                    }`
+                );
             }
         } catch (error) {
             console.error('Error increasing stock:', error);
-            alert('Failed to increase stock. Please try again.');
+            showNotification(
+                'error',
+                'Stock Update Failed',
+                'Failed to increase stock. Please try again.'
+            );
         } finally {
             setAdjustingStock(null);
         }
@@ -59,17 +182,48 @@ const EditProducts = () => {
         try {
             const result = await adjustStock(productId, -1);
             if (result.error) {
-                alert(`Error decreasing stock: ${result.error}`);
+                showNotification(
+                    'error',
+                    'Stock Update Failed',
+                    `Error decreasing stock: ${result.error}`
+                );
             } else {
                 console.log(
                     `Stock decreased for ${productId}: ${result.previousStock} → ${result.newStock}`
                 );
+
+                // Show auto-save feedback
+                setRecentlyUpdated((prev) => new Set(prev.add(productId)));
+                setTimeout(() => {
+                    setRecentlyUpdated((prev) => {
+                        const newSet = new Set(prev);
+                        newSet.delete(productId);
+                        return newSet;
+                    });
+                }, 2000); // Remove the indicator after 2 seconds
+
+                // Mark that changes have been made (for availability updates)
+                setHasChanges(true);
                 // Refresh the products list to show updated stock
                 GetAllProducts();
+
+                // Show brief success notification
+                showNotification(
+                    'success',
+                    'Stock Updated',
+                    `${
+                        products.find((p) => p.id === productId)?.name ||
+                        'product'
+                    }`
+                );
             }
         } catch (error) {
             console.error('Error decreasing stock:', error);
-            alert('Failed to decrease stock. Please try again.');
+            showNotification(
+                'error',
+                'Stock Update Failed',
+                'Failed to decrease stock. Please try again.'
+            );
         } finally {
             setAdjustingStock(null);
         }
@@ -96,7 +250,8 @@ const EditProducts = () => {
                         </h1>
                         <p className='text-xl text-gray-300 mb-8 max-w-2xl mx-auto'>
                             Manage inventory and monitor stock levels for all
-                            Cove merchandise.
+                            Cove merchandise. Stock changes are automatically
+                            saved to the database.
                         </p>
                         <div className='w-24 h-1 bg-[#e79210] mx-auto'></div>
                     </div>
@@ -116,6 +271,9 @@ const EditProducts = () => {
                     <span className='text-gray-400'>
                         Total Products: {products.length}
                     </span>
+                    <div className='text-sm text-gray-500 mt-1'>
+                        Stock changes are automatically saved
+                    </div>
                 </div>
             </div>
 
@@ -176,17 +334,25 @@ const EditProducts = () => {
                                                         </span>
                                                         <span
                                                             className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
-                                                                product.availability ===
+                                                                (product.stock ===
+                                                                0
+                                                                    ? 'Out of Stock'
+                                                                    : product.availability) ===
                                                                 'In Stock'
-                                                                    ? 'bg-gray-200 text-gray-800'
-                                                                    : product.availability ===
+                                                                    ? 'bg-green-100 text-green-800'
+                                                                    : (product.stock ===
+                                                                      0
+                                                                          ? 'Out of Stock'
+                                                                          : product.availability) ===
                                                                       'Pre-order'
-                                                                    ? 'bg-gray-300 text-gray-700'
-                                                                    : 'bg-gray-400 text-gray-900'
+                                                                    ? 'bg-yellow-100 text-yellow-800'
+                                                                    : 'bg-red-100 text-red-800'
                                                             }`}
                                                         >
-                                                            {product.availability ||
-                                                                'Unknown'}
+                                                            {product.stock === 0
+                                                                ? 'Out of Stock'
+                                                                : product.availability ||
+                                                                  'Unknown'}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -208,8 +374,11 @@ const EditProducts = () => {
                                             {/* Stock Management */}
                                             <div className='flex items-center gap-4'>
                                                 <div className='flex items-center gap-2'>
-                                                    <span className='text-sm font-medium text-gray-700 mr-3'>
+                                                    <span className='text-sm font-medium text-gray-700 mr-3 flex items-center gap-1'>
                                                         Stock:
+                                                        <span className='text-xs text-gray-500'>
+                                                            (auto-saved)
+                                                        </span>
                                                     </span>
                                                     <button
                                                         onClick={() =>
@@ -228,7 +397,7 @@ const EditProducts = () => {
                                                                 ? 'bg-gray-200 text-gray-400'
                                                                 : product.stock <=
                                                                   0
-                                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                                ? 'bg-gray-100 text-gray-400 cursor-pointer'
                                                                 : 'hover:bg-gray-50 cursor-pointer'
                                                         }`}
                                                         title={
@@ -239,7 +408,15 @@ const EditProducts = () => {
                                                     >
                                                         <FaMinus />
                                                     </button>
-                                                    <div className='w-16 h-10 flex items-center justify-center border border-gray-300 rounded-lg text-center text-lg font-medium bg-gray-50'>
+                                                    <div
+                                                        className={`w-16 h-10 flex items-center justify-center border rounded-lg text-center text-lg font-medium transition-all duration-300 ${
+                                                            recentlyUpdated.has(
+                                                                product.id
+                                                            )
+                                                                ? 'border-green-400 bg-green-50 text-green-800 shadow-md'
+                                                                : 'border-gray-300 bg-gray-50'
+                                                        }`}
+                                                    >
                                                         {product.stock}
                                                     </div>
                                                     <button
@@ -285,6 +462,15 @@ const EditProducts = () => {
             </div>
 
             <FooterCard />
+
+            {/* Save Changes Popup */}
+            <SaveChangesPopup
+                show={showPopup}
+                onClose={() => setShowPopup(false)}
+                type={popupData.type}
+                message={popupData.message}
+                details={popupData.details}
+            />
         </div>
     );
 };

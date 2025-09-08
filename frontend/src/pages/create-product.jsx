@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { addProduct, uploadImage } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
-import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
 import { Button } from '../components/ui/button.jsx';
 
@@ -226,7 +225,6 @@ const CreateProduct = () => {
             {/* Hero Section */}
             <div className='pt-24 pb-16 px-4 sm:px-6 lg:px-8'>
                 <div className='max-w-4xl mx-auto'>
-                    <Breadcrumbs />
                     <div className='text-center'>
                         <h1 className='text-4xl md:text-6xl font-bold text-white mb-6'>
                             Create New Product
