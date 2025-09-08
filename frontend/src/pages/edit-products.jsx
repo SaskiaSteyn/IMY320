@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { adjustStock, getAllProducts, updateProduct } from '../backend/api.js';
+import { adjustStock, getAllProducts } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Header from '../components/header.jsx';
 import SaveChangesPopup from '../components/save-changes-popup.jsx';
@@ -9,17 +9,16 @@ import { Button } from '../components/ui/button.jsx';
 
 const EditProducts = () => {
     const [products, setProducts] = useState([]);
+    const [originalProducts, setOriginalProducts] = useState([]); // Store original state from database
     const [loading, setLoading] = useState(true);
-    const [adjustingStock, setAdjustingStock] = useState(null); // Track which product's stock is being adjusted
-    const [hasChanges, setHasChanges] = useState(false);
     const [savingChanges, setSavingChanges] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [popupData, setPopupData] = useState({
         type: 'success',
         message: '',
         details: '',
     });
-    const [recentlyUpdated, setRecentlyUpdated] = useState(new Set()); // Track recently auto-saved products
 
     useEffect(() => {
         GetAllProducts();
@@ -36,13 +35,16 @@ const EditProducts = () => {
             if (allProducts.error) {
                 console.error('API Error:', allProducts.error);
                 setProducts([]);
+                setOriginalProducts([]);
             } else {
                 setProducts(allProducts);
+                setOriginalProducts([...allProducts]); // Deep copy for comparison
             }
             setLoading(false);
         } catch (error) {
             console.error('Error fetching products:', error);
             setProducts([]);
+            setOriginalProducts([]);
             setLoading(false);
         }
     }
@@ -55,25 +57,27 @@ const EditProducts = () => {
             let updatedProducts = [];
 
             for (const product of products) {
-                // Check if product needs availability update based on stock
-                const currentAvailability = product.availability;
-                const expectedAvailability =
-                    product.stock === 0 ? 'Out of Stock' : 'In Stock';
-                const needsUpdate =
-                    currentAvailability !== expectedAvailability;
-
-                console.log(
-                    `Product ${product.id}: Stock=${product.stock}, Current=${currentAvailability}, Expected=${expectedAvailability}, NeedsUpdate=${needsUpdate}`
+                // Find the original product to compare changes
+                const originalProduct = originalProducts.find(
+                    (p) => p.id === product.id
                 );
+                if (!originalProduct) continue;
 
-                if (needsUpdate) {
-                    const result = await updateProduct(product.id, {
-                        availability: expectedAvailability,
-                    });
+                // Check if stock has changed
+                const stockChanged = product.stock !== originalProduct.stock;
 
+                if (stockChanged) {
+                    // Calculate the stock adjustment needed
+                    const stockAdjustment =
+                        product.stock - originalProduct.stock;
+
+                    const result = await adjustStock(
+                        product.id,
+                        stockAdjustment
+                    );
                     if (result.error) {
                         console.error(
-                            `Failed to update product ${product.id}:`,
+                            `Failed to update stock for product ${product.id}:`,
                             result.error
                         );
                         errorCount++;
@@ -87,20 +91,21 @@ const EditProducts = () => {
             if (successCount > 0) {
                 showNotification(
                     'success',
-                    'Availability Status Updated!',
-                    `Updated availability for ${successCount} product${
+                    'Changes Saved Successfully!',
+                    `Updated ${successCount} product${
                         successCount !== 1 ? 's' : ''
                     }: ${updatedProducts.join(', ')}`
                 );
-                GetAllProducts(); // Refresh the products list
+                // Refresh the products list to get updated data from database
+                await GetAllProducts();
                 setHasChanges(false);
             }
 
             if (errorCount > 0) {
                 showNotification(
                     'error',
-                    'Some Availability Updates Failed',
-                    `Failed to update availability for ${errorCount} product${
+                    'Some Updates Failed',
+                    `Failed to update ${errorCount} product${
                         errorCount !== 1 ? 's' : ''
                     }. Please try again.`
                 );
@@ -109,8 +114,8 @@ const EditProducts = () => {
             if (successCount === 0 && errorCount === 0) {
                 showNotification(
                     'warning',
-                    'No Availability Updates Needed',
-                    'All product availability statuses are already correct based on current stock levels'
+                    'No Changes Detected',
+                    'No stock changes were made since the last save.'
                 );
             }
         } catch (error) {
@@ -125,108 +130,26 @@ const EditProducts = () => {
         }
     };
 
-    const handleStockIncrease = async (productId) => {
-        setAdjustingStock(`${productId}-increase`);
-        try {
-            const result = await adjustStock(productId, 1);
-            if (result.error) {
-                showNotification(
-                    'error',
-                    'Stock Update Failed',
-                    `Error increasing stock: ${result.error}`
-                );
-            } else {
-                console.log(
-                    `Stock increased for ${productId}: ${result.previousStock} → ${result.newStock}`
-                );
-
-                // Show auto-save feedback
-                setRecentlyUpdated((prev) => new Set(prev.add(productId)));
-                setTimeout(() => {
-                    setRecentlyUpdated((prev) => {
-                        const newSet = new Set(prev);
-                        newSet.delete(productId);
-                        return newSet;
-                    });
-                }, 2000); // Remove the indicator after 2 seconds
-
-                // Mark that changes have been made (for availability updates)
-                setHasChanges(true);
-                // Refresh the products list to show updated stock
-                GetAllProducts();
-
-                // Show brief success notification
-                showNotification(
-                    'success',
-                    'Stock Updated',
-                    `${
-                        products.find((p) => p.id === productId)?.name ||
-                        'product'
-                    }`
-                );
-            }
-        } catch (error) {
-            console.error('Error increasing stock:', error);
-            showNotification(
-                'error',
-                'Stock Update Failed',
-                'Failed to increase stock. Please try again.'
-            );
-        } finally {
-            setAdjustingStock(null);
-        }
+    const handleStockIncrease = (productId) => {
+        setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+                product.id === productId
+                    ? { ...product, stock: product.stock + 1 }
+                    : product
+            )
+        );
+        setHasChanges(true);
     };
 
-    const handleStockDecrease = async (productId) => {
-        setAdjustingStock(`${productId}-decrease`);
-        try {
-            const result = await adjustStock(productId, -1);
-            if (result.error) {
-                showNotification(
-                    'error',
-                    'Stock Update Failed',
-                    `Error decreasing stock: ${result.error}`
-                );
-            } else {
-                console.log(
-                    `Stock decreased for ${productId}: ${result.previousStock} → ${result.newStock}`
-                );
-
-                // Show auto-save feedback
-                setRecentlyUpdated((prev) => new Set(prev.add(productId)));
-                setTimeout(() => {
-                    setRecentlyUpdated((prev) => {
-                        const newSet = new Set(prev);
-                        newSet.delete(productId);
-                        return newSet;
-                    });
-                }, 2000); // Remove the indicator after 2 seconds
-
-                // Mark that changes have been made (for availability updates)
-                setHasChanges(true);
-                // Refresh the products list to show updated stock
-                GetAllProducts();
-
-                // Show brief success notification
-                showNotification(
-                    'success',
-                    'Stock Updated',
-                    `${
-                        products.find((p) => p.id === productId)?.name ||
-                        'product'
-                    }`
-                );
-            }
-        } catch (error) {
-            console.error('Error decreasing stock:', error);
-            showNotification(
-                'error',
-                'Stock Update Failed',
-                'Failed to decrease stock. Please try again.'
-            );
-        } finally {
-            setAdjustingStock(null);
-        }
+    const handleStockDecrease = (productId) => {
+        setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+                product.id === productId && product.stock > 0
+                    ? { ...product, stock: product.stock - 1 }
+                    : product
+            )
+        );
+        setHasChanges(true);
     };
 
     if (loading) {
@@ -250,8 +173,8 @@ const EditProducts = () => {
                         </h1>
                         <p className='text-xl text-gray-300 mb-8 max-w-2xl mx-auto'>
                             Manage inventory and monitor stock levels for all
-                            Cove merchandise. Stock changes are automatically
-                            saved to the database.
+                            Cove merchandise. Make changes and save them all at
+                            once.
                         </p>
                         <div className='w-24 h-1 bg-[#e79210] mx-auto'></div>
                     </div>
@@ -261,6 +184,16 @@ const EditProducts = () => {
             {/* Action Buttons */}
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8'>
                 <div className='flex flex-wrap justify-center gap-4'>
+                    <Button
+                        variant='secondary'
+                        onClick={handleSaveAllChanges}
+                        disabled={savingChanges || !hasChanges}
+                        className='px-6 py-3 text-white'
+                    >
+                        {savingChanges
+                            ? 'Saving Changes...'
+                            : 'Save All Changes'}
+                    </Button>
                     <Link to='/create-product'>
                         <Button className='bg-[#e79210] text-black px-6 py-3'>
                             Create New Product
@@ -270,9 +203,15 @@ const EditProducts = () => {
                 <div className='text-center mt-4'>
                     <span className='text-gray-400'>
                         Total Products: {products.length}
+                        {hasChanges && (
+                            <span className='text-yellow-400 ml-2'>
+                                • Unsaved Changes
+                            </span>
+                        )}
                     </span>
                     <div className='text-sm text-gray-500 mt-1'>
-                        Stock changes are automatically saved
+                        Stock changes will be saved when you click "Save All
+                        Changes"
                     </div>
                 </div>
             </div>
@@ -374,11 +313,8 @@ const EditProducts = () => {
                                             {/* Stock Management */}
                                             <div className='flex items-center gap-4'>
                                                 <div className='flex items-center gap-2'>
-                                                    <span className='text-sm font-medium text-gray-700 mr-3 flex items-center gap-1'>
+                                                    <span className='text-sm font-medium text-gray-700 mr-3'>
                                                         Stock:
-                                                        <span className='text-xs text-gray-500'>
-                                                            (auto-saved)
-                                                        </span>
                                                     </span>
                                                     <button
                                                         onClick={() =>
@@ -387,17 +323,11 @@ const EditProducts = () => {
                                                             )
                                                         }
                                                         disabled={
-                                                            adjustingStock ===
-                                                                `${product.id}-decrease` ||
                                                             product.stock <= 0
                                                         }
                                                         className={`p-2 border border-gray-300 rounded-lg flex items-center justify-center h-10 w-10 text-base font-bold transition-colors ${
-                                                            adjustingStock ===
-                                                            `${product.id}-decrease`
-                                                                ? 'bg-gray-200 text-gray-400'
-                                                                : product.stock <=
-                                                                  0
-                                                                ? 'bg-gray-100 text-gray-400 cursor-pointer'
+                                                            product.stock <= 0
+                                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                                                 : 'hover:bg-gray-50 cursor-pointer'
                                                         }`}
                                                         title={
@@ -408,15 +338,7 @@ const EditProducts = () => {
                                                     >
                                                         <FaMinus />
                                                     </button>
-                                                    <div
-                                                        className={`w-16 h-10 flex items-center justify-center border rounded-lg text-center text-lg font-medium transition-all duration-300 ${
-                                                            recentlyUpdated.has(
-                                                                product.id
-                                                            )
-                                                                ? 'border-green-400 bg-green-50 text-green-800 shadow-md'
-                                                                : 'border-gray-300 bg-gray-50'
-                                                        }`}
-                                                    >
+                                                    <div className='w-16 h-10 flex items-center justify-center border border-gray-300 rounded-lg text-center text-lg font-medium bg-gray-50'>
                                                         {product.stock}
                                                     </div>
                                                     <button
@@ -425,16 +347,7 @@ const EditProducts = () => {
                                                                 product.id
                                                             )
                                                         }
-                                                        disabled={
-                                                            adjustingStock ===
-                                                            `${product.id}-increase`
-                                                        }
-                                                        className={`p-2 border border-gray-300 rounded-lg flex items-center justify-center h-10 w-10 text-base font-bold transition-colors ${
-                                                            adjustingStock ===
-                                                            `${product.id}-increase`
-                                                                ? 'bg-gray-200 text-gray-400'
-                                                                : 'hover:bg-gray-50 cursor-pointer'
-                                                        }`}
+                                                        className='p-2 border border-gray-300 rounded-lg flex items-center justify-center h-10 w-10 text-base font-bold transition-colors hover:bg-gray-50 cursor-pointer'
                                                         title='Increase Stock'
                                                     >
                                                         <FaPlus />

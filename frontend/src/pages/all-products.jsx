@@ -266,17 +266,24 @@ const AllProducts = () => {
                                                         )}
                                                     <span
                                                         className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
-                                                            (product.stock === 0 ? 'Out of Stock' : product.availability) ===
+                                                            (product.stock === 0
+                                                                ? 'Out of Stock'
+                                                                : product.availability) ===
                                                             'In Stock'
                                                                 ? 'bg-green-100 text-green-800'
-                                                                : (product.stock === 0 ? 'Out of Stock' : product.availability) ===
+                                                                : (product.stock ===
+                                                                  0
+                                                                      ? 'Out of Stock'
+                                                                      : product.availability) ===
                                                                   'Pre-order'
                                                                 ? 'bg-yellow-100 text-yellow-800'
                                                                 : 'bg-red-100 text-red-800'
                                                         }`}
                                                     >
-                                                        {product.stock === 0 ? 'Out of Stock' : (product.availability ||
-                                                            'Unknown')}
+                                                        {product.stock === 0
+                                                            ? 'Out of Stock'
+                                                            : product.availability ||
+                                                              'Unknown'}
                                                     </span>
                                                     {product.availabilityDate &&
                                                         product.availability !==
@@ -328,10 +335,18 @@ const AllProducts = () => {
                                                                 product
                                                             );
                                                         }}
-                                                        disabled={product.stock === 0}
-                                                        className={`mt-6 self-center ${product.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                        disabled={
+                                                            product.stock === 0
+                                                        }
+                                                        className={`mt-6 self-center ${
+                                                            product.stock === 0
+                                                                ? 'opacity-50 cursor-not-allowed'
+                                                                : ''
+                                                        }`}
                                                     >
-                                                        {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                                                        {product.stock === 0
+                                                            ? 'Out of Stock'
+                                                            : 'Add to Cart'}
                                                     </Button>
                                                 </div>
                                             </div>

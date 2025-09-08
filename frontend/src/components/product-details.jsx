@@ -118,7 +118,7 @@ const ProductDetails = ({ product }) => {
                     <p className='text-2xl font-bold mb-2'>
                         Total: R{totalPrice.toFixed(2)}
                     </p>
-                    
+
                     {/* Stock Status */}
                     <div className='mb-2'>
                         <span
@@ -130,15 +130,14 @@ const ProductDetails = ({ product }) => {
                                     : 'bg-green-100 text-green-800'
                             }`}
                         >
-                            {product.stock === 0 
+                            {product.stock === 0
                                 ? 'Out of Stock'
                                 : product.stock <= 5
                                 ? `Only ${product.stock} left`
-                                : 'In Stock'
-                            }
+                                : 'In Stock'}
                         </span>
                     </div>
-                    
+
                     <p className='mb-4'>{product.description}</p>
                     {/* Tags */}
                     <div className='flex gap-2 mb-4 flex-wrap'>
@@ -236,7 +235,9 @@ const ProductDetails = ({ product }) => {
                                 type='button'
                                 aria-label='Decrease quantity'
                                 className={`p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold ${
-                                    product.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                                    product.stock === 0
+                                        ? 'opacity-50 cursor-not-allowed'
+                                        : ''
                                 }`}
                                 disabled={product.stock === 0}
                                 onClick={() =>
@@ -257,7 +258,9 @@ const ProductDetails = ({ product }) => {
                                 type='button'
                                 aria-label='Increase quantity'
                                 className={`p-2 border rounded flex items-center justify-center h-8 w-8 text-base font-bold ${
-                                    product.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                                    product.stock === 0
+                                        ? 'opacity-50 cursor-not-allowed'
+                                        : ''
                                 }`}
                                 disabled={product.stock === 0}
                                 onClick={() => setQuantity((q) => q + 1)}
@@ -272,10 +275,16 @@ const ProductDetails = ({ product }) => {
                             onClick={handleAddToCart}
                             variant='cart'
                             size='lg'
-                            className={`w-full ${product.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`w-full ${
+                                product.stock === 0
+                                    ? 'opacity-50 cursor-not-allowed'
+                                    : ''
+                            }`}
                             disabled={product.stock === 0}
                         >
-                            {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                            {product.stock === 0
+                                ? 'Out of Stock'
+                                : 'Add to Cart'}
                         </Button>
                     </div>
                 </div>
