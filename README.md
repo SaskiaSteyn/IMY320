@@ -44,5 +44,3 @@ The general operations of the website should allow user/customer to log in to ac
 ### Nicolaas Johan Jansen van Rensburg
 
 ### Rorisang Manamela
-
-## Current Design Stage Documents
