@@ -58,6 +58,7 @@
 
 .banner-layer-foreground {
     z-index: 30;
+    background-color: transparent;
 }
 
 /* Typing line SVG styling */
@@ -267,6 +268,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .typing-line-svg,
     .floating-text {
         animation: none !important;

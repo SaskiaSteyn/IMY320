@@ -17,6 +17,7 @@ import Guides from './pages/guides.jsx';
 import Login from './pages/login.jsx';
 import ProductPage from './pages/product.jsx';
 import Signup from './pages/signup.jsx';
+import TestSpin from './pages/test-spin.jsx';
 import WeeklyChallenge from './pages/weekly-challenge.jsx';
 import WriteInPeace from './pages/write-in-peace.jsx';
 import ScrollToTop from './scroll-to-top.jsx';
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')).render(
             <ScrollToTop />
             <Routes>
                 <Route path='/' element={<App />} />
+                <Route path='/test-spin' element={<TestSpin />} />
                 <Route path='/write-in-peace' element={<WriteInPeace />} />
                 <Route path='/generate' element={<Generate />} />
                 <Route path='/weekly-challenge' element={<WeeklyChallenge />} />
