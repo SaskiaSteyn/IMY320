@@ -5,12 +5,19 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
+      - DOCKER_ENV=true
     volumes:
       - ./backend:/app
       - /app/node_modules
     env_file:
       - .env
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   frontend:
     build: ./frontend
@@ -22,7 +29,8 @@ services:
       - ./frontend:/app
       - /app/node_modules
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
