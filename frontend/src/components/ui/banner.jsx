@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import LaptopSpin from './laptop-spin';
 import './banner.css';
 
 const Banner = ({
@@ -6,7 +7,6 @@ const Banner = ({
     className = '',
     children,
     backgroundImage = '/images/new/Background.png',
-    foregroundImage = '/images/new/computer.png',
 }) => {
     const [scrollY, setScrollY] = useState(0);
     const bannerRef = useRef(null);
@@ -44,7 +44,7 @@ const Banner = ({
     }, []);
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('scroll', handleScroll, {passive: true});
         return () => {
             window.removeEventListener('scroll', handleScroll);
             if (rafRef.current) {
@@ -114,7 +114,7 @@ const Banner = ({
         <div
             ref={bannerRef}
             className={`banner-container ${className}`}
-            style={{ height }}
+            style={{height}}
         >
             {/* Debug info */}
             {debug && (
@@ -165,9 +165,8 @@ const Banner = ({
                 return (
                     <div
                         key={index}
-                        className={`banner-layer banner-layer-typing-line typing-line-${
-                            index + 1
-                        }`}
+                        className={`banner-layer banner-layer-typing-line typing-line-${index + 1
+                            }`}
                         style={{
                             transform: `translate3d(0, ${lineOffset}px, 0)`,
                             zIndex: line.zIndex,
@@ -179,15 +178,13 @@ const Banner = ({
                             className='w-full h-full object-contain typing-line-svg'
                             onLoad={() =>
                                 console.log(
-                                    `Typing line ${index + 1} loaded: ${
-                                        line.src
+                                    `Typing line ${index + 1} loaded: ${line.src
                                     }`
                                 )
                             }
                             onError={(e) =>
                                 console.error(
-                                    `Failed to load typing line ${index + 1}: ${
-                                        line.src
+                                    `Failed to load typing line ${index + 1}: ${line.src
                                     }`,
                                     e
                                 )
@@ -197,23 +194,18 @@ const Banner = ({
                 );
             })}
 
-            {/* Foreground layer - fastest parallax (computer overlay) */}
-            {foregroundImage && (
-                <div
-                    className='banner-layer banner-layer-foreground'
-                    style={{
-                        transform: `translate3d(0, ${foregroundOffset}px, 0)`,
-                    }}
-                >
-                    <div className='absolute inset-0'>
-                        <img
-                            src={foregroundImage}
-                            alt='Computer overlay'
-                            className='w-full h-full object-contain'
-                        />
-                    </div>
+            {/* Foreground layer - interactive spinning laptop */}
+            <div
+                className='banner-layer banner-layer-foreground'
+                style={{
+                    transform: `translate3d(0, ${foregroundOffset}px, 0)`,
+                    backgroundColor: 'transparent', // Ensure transparent background
+                }}
+            >
+                <div className='absolute inset-0' style={{backgroundColor: 'transparent'}}>
+                    <LaptopSpin className="w-full h-full" />
                 </div>
-            )}
+            </div>
 
             {/* Content overlay - static, no parallax movement */}
             <div className='banner-content'>

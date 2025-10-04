@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-require('dotenv').config({ path: '../.env' })
+require('dotenv').config({path: '../.env'})
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
         const uploadPath = path.join(__dirname, '../frontend/public/images/merch')
         // Ensure the directory exists
         if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true })
+            fs.mkdirSync(uploadPath, {recursive: true})
         }
         cb(null, uploadPath)
     },
@@ -91,21 +91,25 @@ const Product = mongoose.model('Product', ProductSchema)
 // REGISTRATION ROUTE
 //
 app.post('/register', async (req, res) => {
-    const { userIDNumber, username, email, password, role } = req.body
+    const {username, email, password, role} = req.body
 
     // Validate required fields
     if (!username || !email || !password) {
-        return res.status(400).json({ error: 'Username, email, and password are required' })
+        return res.status(400).json({error: 'Username, email, and password are required'})
     }
 
     const hashedPassword = require('bcryptjs').hashSync(password, 10)
 
     try {
         // Check if user already exists
-        const existingUser = await User.findOne({ $or: [{ username }, { email }] })
+        const existingUser = await User.findOne({$or: [{username}, {email}]})
         if (existingUser) {
-            return res.status(400).json({ error: 'User with this username or email already exists' })
+            return res.status(400).json({error: 'User with this username or email already exists'})
         }
+
+        // Generate next user ID number by finding the highest existing ID and adding 1
+        const lastUser = await User.findOne({}, {}, {sort: {'userIDNumber': -1}})
+        const nextUserIDNumber = lastUser ? (lastUser.userIDNumber || 0) + 1 : 1
 
         const user = await User.create({
             userIDNumber: nextUserIDNumber,
@@ -116,11 +120,11 @@ app.post('/register', async (req, res) => {
         })
 
         // Don't send password in response
-        const { password: _, ...userResponse } = user.toObject()
+        const {password: _, ...userResponse} = user.toObject()
         res.json(userResponse)
     } catch (err) {
         console.error('Registration error:', err)
-        res.status(500).json({ error: 'Registration failed' })
+        res.status(500).json({error: 'Registration failed'})
     }
 })
 
@@ -128,21 +132,21 @@ app.post('/register', async (req, res) => {
 // LOGIN ROUTE
 //
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body
+    const {username, password} = req.body
 
     // Validate required fields
     if (!username || !password) {
-        return res.status(400).json({ error: 'Username and password are required' })
+        return res.status(400).json({error: 'Username and password are required'})
     }
 
     try {
-        const user = await User.findOne({ username })
-        if (!user) return res.status(400).json({ error: 'User not found' })
+        const user = await User.findOne({username})
+        if (!user) return res.status(400).json({error: 'User not found'})
 
         const valid = require('bcryptjs').compareSync(password, user.password)
-        if (!valid) return res.status(401).json({ error: 'Incorrect password' })
+        if (!valid) return res.status(401).json({error: 'Incorrect password'})
 
-        const token = require('jsonwebtoken').sign({ id: user._id, role: user.role }, 'secret123')
+        const token = require('jsonwebtoken').sign({id: user._id, role: user.role}, 'secret123')
         res.json({
             token,
             user: {
@@ -154,7 +158,7 @@ app.post('/login', async (req, res) => {
         })
     } catch (err) {
         console.error('Login error:', err)
-        res.status(500).json({ error: 'Login failed' })
+        res.status(500).json({error: 'Login failed'})
     }
 })
 
@@ -162,7 +166,7 @@ app.post('/login', async (req, res) => {
 // LOGOUT ROUTE
 //
 app.post('/logout', (req, res) => {
-    res.json({ message: 'Logged out successfully' })
+    res.json({message: 'Logged out successfully'})
 })
 
 
@@ -176,7 +180,7 @@ app.get('/products', async (req, res) => {
         res.json(products)
     } catch (err) {
         console.error('Error fetching products:', err)
-        res.status(500).json({ error: 'Failed to fetch products' })
+        res.status(500).json({error: 'Failed to fetch products'})
     }
 })
 
@@ -184,30 +188,30 @@ app.get('/products', async (req, res) => {
 app.post('/products/tags', async (req, res) => {
     const tags = req.body.tagsArray
     if (!tags) {
-        return res.status(400).json({ error: 'Tags parameter is required' })
+        return res.status(400).json({error: 'Tags parameter is required'})
     }
     // tags can be an array or a comma-separated string
     const tagsArray = Array.isArray(tags) ? tags : tags.split(',')
     try {
         // Find products that have ANY of the specified tags (using $in for OR logic)
-        const products = await Product.find({ tags: { $in: tagsArray } })
+        const products = await Product.find({tags: {$in: tagsArray}})
         res.json(products)
     } catch (err) {
         console.error('Error fetching products by tags:', err)
-        res.status(500).json({ error: 'Failed to fetch products by tags' })
+        res.status(500).json({error: 'Failed to fetch products by tags'})
     }
 })
 
 // POST to add a new product
 app.post('/products/add', async (req, res) => {
-    const { ...productData } = req.body
+    const {...productData} = req.body
 
     try {
         const product = await Product.create(productData)
         res.status(201).json(product)
     } catch (err) {
         console.error('Error adding product:', err)
-        res.status(500).json({ error: 'Failed to add product' })
+        res.status(500).json({error: 'Failed to add product'})
     }
 })
 
@@ -218,37 +222,37 @@ app.put('/products/:id', async (req, res) => {
 
     try {
         const product = await Product.findOneAndUpdate(
-            { id: productId },
+            {id: productId},
             updateData,
-            { new: true, runValidators: true }
+            {new: true, runValidators: true}
         )
 
         if (!product) {
-            return res.status(404).json({ error: 'Product not found' })
+            return res.status(404).json({error: 'Product not found'})
         }
 
         res.json(product)
     } catch (err) {
         console.error('Error updating product:', err)
-        res.status(500).json({ error: 'Failed to update product' })
+        res.status(500).json({error: 'Failed to update product'})
     }
 })
 
 // POST to adjust product stock by ID
 app.post('/products/:id/adjust-stock', async (req, res) => {
     const productId = req.params.id
-    const { adjustment } = req.body
+    const {adjustment} = req.body
 
     // Validate adjustment parameter
     if (typeof adjustment !== 'number') {
-        return res.status(400).json({ error: 'Adjustment must be a number' })
+        return res.status(400).json({error: 'Adjustment must be a number'})
     }
 
     try {
-        const product = await Product.findOne({ id: productId })
+        const product = await Product.findOne({id: productId})
 
         if (!product) {
-            return res.status(404).json({ error: 'Product not found' })
+            return res.status(404).json({error: 'Product not found'})
         }
 
         // Calculate new stock level
@@ -263,8 +267,9 @@ app.post('/products/:id/adjust-stock', async (req, res) => {
             })
         }
 
-        // Update the product stock
+        // Update the product stock and availability
         product.stock = newStock
+        product.availability = newStock > 0 ? 'In Stock' : 'Out of Stock'
         await product.save()
 
         res.json({
@@ -272,11 +277,12 @@ app.post('/products/:id/adjust-stock', async (req, res) => {
             productId: productId,
             previousStock: product.stock - adjustment,
             newStock: product.stock,
-            adjustment: adjustment
+            adjustment: adjustment,
+            availability: product.availability
         })
     } catch (err) {
         console.error('Error adjusting stock:', err)
-        res.status(500).json({ error: 'Failed to adjust stock' })
+        res.status(500).json({error: 'Failed to adjust stock'})
     }
 })
 
@@ -284,7 +290,7 @@ app.post('/products/:id/adjust-stock', async (req, res) => {
 app.post('/upload-image', upload.single('image'), (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ error: 'No image file uploaded' })
+            return res.status(400).json({error: 'No image file uploaded'})
         }
 
         // Return the filename that can be used in the product creation
@@ -299,7 +305,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
         })
     } catch (error) {
         console.error('Error uploading image:', error)
-        res.status(500).json({ error: 'Failed to upload image' })
+        res.status(500).json({error: 'Failed to upload image'})
     }
 })
 
