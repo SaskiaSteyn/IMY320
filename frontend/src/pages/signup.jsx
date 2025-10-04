@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { FaApple, FaDiscord, FaGoogle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import { login, register } from '../backend/api';
-import { Button } from '../components/ui/button.jsx';
+import {useState} from 'react';
+import {FaApple, FaDiscord, FaGoogle} from 'react-icons/fa';
+import {useNavigate} from 'react-router-dom';
+import {login, register} from '../backend/api';
+import {Button} from '../components/ui/button.jsx';
+import Header from '../components/header.jsx';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Signup = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: value,
@@ -95,6 +96,7 @@ const Signup = () => {
                     background: 'linear-gradient(135deg, #19191a, #373737)',
                 }}
             >
+                <Header />
                 <div className='bg-white/90 auth-container p-8 w-full max-w-4xl min-h-[80vh] flex items-center justify-center shadow-lg rounded-lg relative border border-gray-300'>
                     {/* Static Logo positioned like the final state of login page */}
                     <div className='absolute top-4 left-1/2 transform -translate-x-1/2'>
