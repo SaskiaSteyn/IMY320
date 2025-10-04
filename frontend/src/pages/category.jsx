@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { getProductsByTags } from '../backend/api.js';
+import {useEffect, useState} from 'react';
+import {Link, useParams} from 'react-router-dom';
+import {getProductsByTags} from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import AddedToCartPopup from '../components/added-to-cart-popup.jsx';
 import Breadcrumbs from '../components/breadcrumbs.jsx';
 import Header from '../components/header.jsx';
-import { Button } from '../components/ui/button.jsx';
+import {Button} from '../components/ui/button.jsx';
 
 const Category = () => {
-    const { categoryName } = useParams();
+    const {categoryName} = useParams();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showPopup, setShowPopup] = useState(false);
@@ -109,7 +109,7 @@ const Category = () => {
         }
 
         // Show popup
-        setPopupData({ productName: product.name, quantity: 1 });
+        setPopupData({productName: product.name, quantity: 1});
         setShowPopup(true);
     };
 
@@ -157,10 +157,12 @@ const Category = () => {
                         {products.map((product) => (
                             <Link
                                 key={product.id}
-                                to={`/product/${product.id}`}
-                                className='block'
+                                to={product.stock === 0 ? '#' : `/product/${product.id}`}
+                                className={`block ${product.stock === 0 ? 'cursor-default' : ''}`}
+                                onClick={product.stock === 0 ? (e) => e.preventDefault() : undefined}
                             >
-                                <div className='bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer group'>
+                                <div className={`bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl group ${product.stock === 0 ? 'cursor-default' : 'cursor-pointer'
+                                    }`}>
                                     <div className='flex flex-col md:flex-row'>
                                         {/* Product Image */}
                                         <div className='md:w-1/3 lg:w-1/4 h-64 md:h-auto overflow-hidden'>
@@ -204,7 +206,7 @@ const Category = () => {
                                                 {/* Available Sizes */}
                                                 {product.sizes &&
                                                     product.sizes[0] !==
-                                                        'One size' && (
+                                                    'One size' && (
                                                         <div className='mb-4'>
                                                             <span className='text-sm font-medium text-gray-700 mr-2'>
                                                                 Available sizes:
