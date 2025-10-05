@@ -164,7 +164,7 @@ const Login = () => {
                                         value={formData.username}
                                         onChange={handleChange}
                                         placeholder='Username'
-                                        className='p-3 bg-[#19191a] focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
+                                        className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
                                     />
                                 </div>
 
@@ -176,7 +176,7 @@ const Login = () => {
                                         value={formData.password}
                                         onChange={handleChange}
                                         placeholder='Password'
-                                        className='p-3 bg-[#19191a] focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
+                                        className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
                                     />
                                 </div>
 
