@@ -1,7 +1,10 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-require('dotenv').config({path: '../.env'})
+// Load dotenv only if not in Docker (docker-compose handles env vars)
+if (!process.env.DOCKER_ENV) {
+    require('dotenv').config({path: '../.env'})
+}
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
@@ -54,9 +57,19 @@ const upload = multer({
 // connection string
 let username = process.env.DB_USERNAME
 let password = process.env.DB_PASSWORD
+
+if (!username || !password) {
+    console.error('Missing required environment variables: DB_USERNAME and/or DB_PASSWORD')
+    console.error('Please make sure your .env file is properly configured')
+    process.exit(1)
+}
+
 mongoose.connect(`mongodb+srv://${username}:${password}@theeestooges.7wpudcx.mongodb.net/stooges?retryWrites=true&w=majority&appName=TheeeStooges`)
     .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('MongoDB connection error:', err))
+    .catch(err => {
+        console.error('MongoDB connection error:', err)
+        process.exit(1)
+    })
 
 // Entry in DB
 const UserSchema = new mongoose.Schema({
@@ -309,7 +322,18 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
     }
 })
 
-app.listen(3000, () => {
-    console.log('Server running on port 3000')
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+    });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
 });
 

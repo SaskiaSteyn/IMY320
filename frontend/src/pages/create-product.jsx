@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { addProduct, uploadImage } from '../backend/api.js';
+import {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import {addProduct, uploadImage} from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Header from '../components/header.jsx';
-import { Button } from '../components/ui/button.jsx';
+import {Button} from '../components/ui/button.jsx';
 
 const CreateProduct = () => {
     const navigate = useNavigate();
@@ -11,7 +11,8 @@ const CreateProduct = () => {
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState('');
     const [uploadingImage, setUploadingImage] = useState(false);
-    const [message, setMessage] = useState({ type: '', text: '' });
+    const [message, setMessage] = useState({type: '', text: ''});
+    const [validationErrors, setValidationErrors] = useState({});
     const [formData, setFormData] = useState({
         id: '',
         name: '',
@@ -24,13 +25,15 @@ const CreateProduct = () => {
         sizes: ['One size'],
         availability: 'In Stock',
         availabilityDate: '',
+        email: '',
+        phone: '',
     });
 
     const categories = [
-        { key: 'mugs', label: 'Mugs', leadTime: 14 },
-        { key: 'hoodies', label: 'Hoodies', leadTime: 21 },
-        { key: 'totes', label: 'Tote Bags', leadTime: 7 },
-        { key: 'stickers', label: 'Stickers', leadTime: 3 },
+        {key: 'mugs', label: 'Mugs', leadTime: 14},
+        {key: 'hoodies', label: 'Hoodies', leadTime: 21},
+        {key: 'totes', label: 'Tote Bags', leadTime: 7},
+        {key: 'stickers', label: 'Stickers', leadTime: 3},
     ];
 
     const sizeOptions = {
@@ -40,12 +43,151 @@ const CreateProduct = () => {
         stickers: ['One size'],
     };
 
+    // Validation functions
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const formatPhoneNumber = (phone) => {
+        // Remove all non-digit characters
+        const digitsOnly = phone.replace(/\D/g, '');
+        return digitsOnly;
+    };
+
+    const validatePhoneNumber = (phone) => {
+        const formatted = formatPhoneNumber(phone);
+        // Check if it's 10 digits starting with 0
+        return /^0\d{9}$/.test(formatted);
+    };
+
+    const validateAvailabilityDate = (date) => {
+        if (!date) return false;
+        const selectedDate = new Date(date);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+        return selectedDate >= tomorrow;
+    };
+
+    const validateField = (name, value) => {
+        let error = '';
+
+        // Check for empty required fields
+        const requiredFields = ['id', 'name', 'descriptor', 'price', 'availabilityDate', 'email', 'phone'];
+        if (requiredFields.includes(name) && (!value || value.toString().trim() === '')) {
+            const fieldLabels = {
+                id: 'Product ID',
+                name: 'Product Name',
+                descriptor: 'Product Description',
+                price: 'Price',
+                availabilityDate: 'Availability Date',
+                email: 'Contact Email',
+                phone: 'Contact Phone'
+            };
+            error = `${fieldLabels[name]} is required`;
+        }
+        // Check specific field formats only if field is not empty
+        else if (value && value.toString().trim() !== '') {
+            switch (name) {
+                case 'email':
+                    if (!validateEmail(value)) {
+                        error = 'Please enter a valid email format (e.g., user@example.com)';
+                    }
+                    break;
+                case 'phone':
+                    if (!validatePhoneNumber(value)) {
+                        error = 'Please enter a valid phone number (e.g., 0826468521)';
+                    }
+                    break;
+                case 'availabilityDate':
+                    if (!validateAvailabilityDate(value)) {
+                        error = 'Availability date must be at least 1 day from today';
+                    }
+                    break;
+                case 'price':
+                    if (parseFloat(value) <= 0) {
+                        error = 'Price must be greater than 0';
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        setValidationErrors(prev => ({
+            ...prev,
+            [name]: error
+        }));
+    };
+
+    const validateAllFields = () => {
+        const errors = {};
+
+        // Required fields validation
+        if (!formData.id || formData.id.trim() === '') {
+            errors.id = 'Product ID is required';
+        }
+        if (!formData.name || formData.name.trim() === '') {
+            errors.name = 'Product Name is required';
+        }
+        if (!formData.descriptor || formData.descriptor.trim() === '') {
+            errors.descriptor = 'Product Description is required';
+        }
+        if (!formData.image || formData.image.trim() === '') {
+            errors.image = 'Product Image is required';
+        }
+        if (!formData.price || formData.price.toString().trim() === '') {
+            errors.price = 'Price is required';
+        }
+        if (!formData.availabilityDate || formData.availabilityDate.trim() === '') {
+            errors.availabilityDate = 'Availability Date is required';
+        }
+        if (!formData.email || formData.email.trim() === '') {
+            errors.email = 'Contact Email is required';
+        }
+        if (!formData.phone || formData.phone.trim() === '') {
+            errors.phone = 'Contact Phone is required';
+        }
+        if (!formData.tags.length) {
+            errors.category = 'Product Category is required';
+        }
+
+        // Format validation for non-empty fields
+        if (formData.email && formData.email.trim() !== '' && !validateEmail(formData.email)) {
+            errors.email = 'Please enter a valid email format (e.g., user@example.com)';
+        }
+        if (formData.phone && formData.phone.trim() !== '' && !validatePhoneNumber(formData.phone)) {
+            errors.phone = 'Please enter a valid phone number (e.g., 0826468521)';
+        }
+        if (formData.availabilityDate && formData.availabilityDate.trim() !== '' && !validateAvailabilityDate(formData.availabilityDate)) {
+            errors.availabilityDate = 'Availability date must be at least 1 day from today';
+        }
+        if (formData.price && formData.price.toString().trim() !== '' && parseFloat(formData.price) <= 0) {
+            errors.price = 'Price must be greater than 0';
+        }
+
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
+
+        let processedValue = value;
+
+        // Format phone number to store as digits only
+        if (name === 'phone') {
+            processedValue = formatPhoneNumber(value);
+        }
+
         setFormData((prev) => ({
             ...prev,
-            [name]: value,
+            [name]: processedValue,
         }));
+
+        // Validate field on change
+        validateField(name, processedValue);
     };
 
     const handleCategoryChange = (e) => {
@@ -71,6 +213,19 @@ const CreateProduct = () => {
             id: generatedId,
             sizes: sizeOptions[category] || ['One size'],
         }));
+
+        // Clear category validation error if category is selected
+        if (category) {
+            setValidationErrors(prev => ({
+                ...prev,
+                category: ''
+            }));
+        }
+
+        // Validate the new availability date
+        validateField('availabilityDate', formattedDate);
+        // Validate the new ID
+        validateField('id', generatedId);
     };
 
     const handleSizeChange = (size) => {
@@ -98,12 +253,13 @@ const CreateProduct = () => {
 
     const handleImageUpload = async () => {
         if (!imageFile) {
-            setMessage({ type: 'error', text: 'Please select an image first' });
+            // If no file selected, trigger file input click
+            document.getElementById('image-file-input').click();
             return;
         }
 
         setUploadingImage(true);
-        setMessage({ type: '', text: '' }); // Clear previous messages
+        setMessage({type: '', text: ''}); // Clear previous messages
 
         try {
             const result = await uploadImage(imageFile);
@@ -119,6 +275,13 @@ const CreateProduct = () => {
                     ...prev,
                     image: result.filename, // Use filename instead of imageUrl to get just the filename with extension
                 }));
+
+                // Clear image validation error
+                setValidationErrors(prev => ({
+                    ...prev,
+                    image: ''
+                }));
+
                 setMessage({
                     type: 'success',
                     text: 'Image uploaded successfully!',
@@ -137,42 +300,15 @@ const CreateProduct = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setMessage({ type: '', text: '' }); // Clear previous messages
+        setMessage({type: '', text: ''}); // Clear previous messages
 
         try {
-            // Validate required fields
-            if (
-                !formData.id ||
-                !formData.name ||
-                !formData.descriptor ||
-                !formData.image ||
-                !formData.price ||
-                !formData.tags.length ||
-                !formData.stock ||
-                !formData.availabilityDate ||
-                !formData.brand ||
-                !formData.availability
-            ) {
+            // Validate all fields and show individual error messages
+            if (!validateAllFields()) {
                 setMessage({
                     type: 'error',
-                    text: 'Please fill in all required fields',
+                    text: 'Please fix the errors below and try again',
                 });
-                setLoading(false);
-                return;
-            }
-
-            // Additional validation
-            if (parseFloat(formData.price) <= 0) {
-                setMessage({
-                    type: 'error',
-                    text: 'Price must be greater than 0',
-                });
-                setLoading(false);
-                return;
-            }
-
-            if (parseInt(formData.stock) < 0) {
-                setMessage({ type: 'error', text: 'Stock cannot be negative' });
                 setLoading(false);
                 return;
             }
@@ -254,6 +390,11 @@ const CreateProduct = () => {
                             <p className='text-xs text-gray-500 mb-2'>
                                 Please select a product category to continue
                             </p>
+                            {validationErrors.category && (
+                                <div className='text-red-600 text-sm mb-2'>
+                                    {validationErrors.category}
+                                </div>
+                            )}
                             <select
                                 name='category'
                                 value={selectedCategory || ''}
@@ -282,6 +423,11 @@ const CreateProduct = () => {
                                 Unique identifier for the product
                                 (auto-generated)
                             </p>
+                            {validationErrors.id && (
+                                <div className='text-red-600 text-sm mb-2'>
+                                    {validationErrors.id}
+                                </div>
+                            )}
                             <input
                                 type='text'
                                 name='id'
@@ -300,12 +446,63 @@ const CreateProduct = () => {
                             <p className='text-xs text-gray-500 mb-2'>
                                 Enter a descriptive name for your product
                             </p>
+                            {validationErrors.name && (
+                                <div className='text-red-600 text-sm mb-2'>
+                                    {validationErrors.name}
+                                </div>
+                            )}
                             <input
                                 type='text'
                                 name='name'
                                 value={formData.name}
                                 onChange={handleInputChange}
                                 placeholder='e.g., Classic White Mug'
+                                className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#e79210] focus:border-[#e79210]'
+                            />
+                        </div>
+
+                        {/* Contact Email */}
+                        <div>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
+                                Contact Email *
+                            </label>
+                            <p className='text-xs text-gray-500 mb-2'>
+                                Email address for product inquiries
+                            </p>
+                            {validationErrors.email && (
+                                <div className='text-red-600 text-sm mb-2'>
+                                    {validationErrors.email}
+                                </div>
+                            )}
+                            <input
+                                type='email'
+                                name='email'
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                placeholder='user@example.com'
+                                className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#e79210] focus:border-[#e79210]'
+                            />
+                        </div>
+
+                        {/* Contact Phone */}
+                        <div>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
+                                Contact Phone *
+                            </label>
+                            <p className='text-xs text-gray-500 mb-2'>
+                                Phone number for product inquiries
+                            </p>
+                            {validationErrors.phone && (
+                                <div className='text-red-600 text-sm mb-2'>
+                                    {validationErrors.phone}
+                                </div>
+                            )}
+                            <input
+                                type='tel'
+                                name='phone'
+                                value={formData.phone}
+                                onChange={handleInputChange}
+                                placeholder='0826468521'
                                 className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#e79210] focus:border-[#e79210]'
                             />
                         </div>
@@ -319,6 +516,11 @@ const CreateProduct = () => {
                                 Provide a detailed description of the product
                                 features and benefits
                             </p>
+                            {validationErrors.descriptor && (
+                                <div className='text-red-600 text-sm mb-2'>
+                                    {validationErrors.descriptor}
+                                </div>
+                            )}
                             <textarea
                                 name='descriptor'
                                 value={formData.descriptor}
@@ -338,11 +540,17 @@ const CreateProduct = () => {
                                 Upload a high-quality image or provide an image
                                 URL
                             </p>
+                            {validationErrors.image && (
+                                <div className='text-red-600 text-sm mb-2'>
+                                    {validationErrors.image}
+                                </div>
+                            )}
 
                             {/* File Upload Input */}
                             <div className='flex flex-col gap-4'>
                                 <div className='flex items-center gap-4'>
                                     <input
+                                        id='image-file-input'
                                         type='file'
                                         accept='image/*'
                                         onChange={handleImageChange}
@@ -351,12 +559,8 @@ const CreateProduct = () => {
                                     <Button
                                         type='button'
                                         onClick={handleImageUpload}
-                                        disabled={!imageFile || uploadingImage}
-                                        variant={
-                                            uploadingImage || !imageFile
-                                                ? 'outline'
-                                                : 'default'
-                                        }
+                                        disabled={uploadingImage}
+                                        className='bg-[#e79210] hover:bg-[#d68410] text-black font-medium px-6 py-2'
                                     >
                                         {uploadingImage
                                             ? 'Uploading...'
@@ -369,11 +573,10 @@ const CreateProduct = () => {
                                     (message.text.includes('image') ||
                                         message.text.includes('Image')) && (
                                         <div
-                                            className={`px-3 py-2 rounded-md text-sm ${
-                                                message.type === 'success'
-                                                    ? 'bg-green-100 text-green-800 border border-green-200'
-                                                    : 'bg-red-100 text-red-800 border border-red-200'
-                                            }`}
+                                            className={`px-3 py-2 rounded-md text-sm ${message.type === 'success'
+                                                ? 'bg-green-100 text-green-800 border border-green-200'
+                                                : 'bg-red-100 text-red-800 border border-red-200'
+                                                }`}
                                         >
                                             {message.text}
                                         </div>
@@ -403,6 +606,11 @@ const CreateProduct = () => {
                             <p className='text-xs text-gray-500 mb-2'>
                                 Enter the product price in South African Rand
                             </p>
+                            {validationErrors.price && (
+                                <div className='text-red-600 text-sm mb-2'>
+                                    {validationErrors.price}
+                                </div>
+                            )}
                             <input
                                 type='number'
                                 step='0.01'
@@ -442,6 +650,11 @@ const CreateProduct = () => {
                                 When will this product be available for
                                 purchase?
                             </p>
+                            {validationErrors.availabilityDate && (
+                                <div className='text-red-600 text-sm mb-2'>
+                                    {validationErrors.availabilityDate}
+                                </div>
+                            )}
                             <input
                                 type='date'
                                 name='availabilityDate'
@@ -474,11 +687,10 @@ const CreateProduct = () => {
                                             onClick={() =>
                                                 handleSizeChange(size)
                                             }
-                                            className={`px-3 py-1 text-sm rounded-full border transition-colors duration-200 ${
-                                                formData.sizes.includes(size)
-                                                    ? 'bg-[#e79210] text-black border-[#e79210]'
-                                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                                            }`}
+                                            className={`px-3 py-1 text-sm rounded-full border transition-colors duration-200 ${formData.sizes.includes(size)
+                                                ? 'bg-[#e79210] text-black border-[#e79210]'
+                                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                                }`}
                                         >
                                             {size}
                                         </button>
@@ -489,24 +701,6 @@ const CreateProduct = () => {
                                 </p>
                             </div>
                         )}
-
-                        {/* Brand */}
-                        <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-1'>
-                                Brand *
-                            </label>
-                            <p className='text-xs text-gray-500 mb-2'>
-                                Product brand (automatically set to Cove)
-                            </p>
-                            <input
-                                type='text'
-                                name='brand'
-                                value={formData.brand}
-                                onChange={handleInputChange}
-                                className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#e79210] focus:border-[#e79210] bg-gray-50'
-                                readOnly
-                            />
-                        </div>
 
                         {/* Availability Status */}
                         <div>
@@ -547,11 +741,10 @@ const CreateProduct = () => {
                             {/* Message Display */}
                             {message.text && (
                                 <div
-                                    className={`px-4 py-2 rounded-md text-sm font-medium ${
-                                        message.type === 'success'
-                                            ? 'bg-green-100 text-green-800 border border-green-200'
-                                            : 'bg-red-100 text-red-800 border border-red-200'
-                                    }`}
+                                    className={`px-4 py-2 rounded-md text-sm font-medium ${message.type === 'success'
+                                        ? 'bg-green-100 text-green-800 border border-green-200'
+                                        : 'bg-red-100 text-red-800 border border-red-200'
+                                        }`}
                                 >
                                     {message.text}
                                 </div>
@@ -560,11 +753,10 @@ const CreateProduct = () => {
                             <Button
                                 type='submit'
                                 disabled={loading}
-                                className={`w-full sm:w-auto ${
-                                    loading
-                                        ? 'opacity-50 cursor-not-allowed'
-                                        : ''
-                                }`}
+                                className={`w-full sm:w-auto ${loading
+                                    ? 'opacity-50 cursor-not-allowed'
+                                    : ''
+                                    }`}
                             >
                                 {loading
                                     ? 'Creating Product...'

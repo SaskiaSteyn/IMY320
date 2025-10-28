@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../backend/api';
-import { FaApple, FaDiscord, FaGoogle } from 'react-icons/fa';
-import { Button } from '../components/ui/button.jsx';
+import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {login} from '../backend/api';
+import {FaApple, FaDiscord, FaGoogle} from 'react-icons/fa';
+import {Button} from '../components/ui/button.jsx';
+import Header from '../components/header.jsx';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Login = () => {
     }, []);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: value,
@@ -78,22 +79,21 @@ const Login = () => {
                     background: 'linear-gradient(135deg, #19191a, #373737)',
                 }}
             >
+                <Header />
                 <div className='bg-white auth-container p-8 w-full max-w-4xl min-h-[80vh] flex items-center justify-center shadow-lg rounded-lg relative border border-gray-300'>
                     {/* Animated Logo - starts centered and large, moves to top and shrinks */}
                     <div
-                        className={`absolute transition-all duration-2000 ease-out ${
-                            animationStarted
-                                ? 'top-4 left-1/2 transform -translate-x-1/2'
-                                : 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
-                        }`}
+                        className={`absolute transition-all duration-2000 ease-out ${animationStarted
+                            ? 'top-4 left-1/2 transform -translate-x-1/2'
+                            : 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
+                            }`}
                     >
                         <div className='text-center'>
                             <h1
-                                className={`header-logo transition-all duration-2500 ease-out ${
-                                    animationStarted
-                                        ? 'text-9xl'
-                                        : 'text-[12rem]'
-                                }`}
+                                className={`header-logo transition-all duration-2500 ease-out ${animationStarted
+                                    ? 'text-9xl'
+                                    : 'text-[12rem]'
+                                    }`}
                                 style={{
                                     color: '#19191a',
                                     fontSize: animationStarted
@@ -112,9 +112,8 @@ const Login = () => {
                                 COVE
                             </h1>
                             <p
-                                className={`transition-all duration-2500 ease-out italic ${
-                                    animationStarted ? 'text-2xl' : 'text-2xl'
-                                }`}
+                                className={`transition-all duration-2500 ease-out italic ${animationStarted ? 'text-2xl' : 'text-2xl'
+                                    }`}
                                 style={{
                                     color: '#19191a',
                                     marginTop: animationStarted
@@ -133,9 +132,8 @@ const Login = () => {
 
                     {/* Login Form - fades in during logo animation */}
                     <div
-                        className={`w-full transition-opacity duration-1500 ease-out delay-700 ${
-                            animationStarted ? 'opacity-100' : 'opacity-0'
-                        }`}
+                        className={`w-full transition-opacity duration-1500 ease-out delay-700 ${animationStarted ? 'opacity-100' : 'opacity-0'
+                            }`}
                     >
                         {/* Spacer for logo - adjusted to better accommodate the larger logo */}
                         <div className='h-28 mb-4'></div>
@@ -166,7 +164,7 @@ const Login = () => {
                                         value={formData.username}
                                         onChange={handleChange}
                                         placeholder='Username'
-                                        className='p-3 bg-[#19191a] focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
+                                        className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
                                     />
                                 </div>
 
@@ -178,7 +176,7 @@ const Login = () => {
                                         value={formData.password}
                                         onChange={handleChange}
                                         placeholder='Password'
-                                        className='p-3 bg-[#19191a] focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
+                                        className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
                                     />
                                 </div>
 
