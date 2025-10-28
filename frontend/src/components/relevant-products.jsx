@@ -33,7 +33,7 @@ const RelevantProducts = ({ currentProduct, allProducts }) => {
                             {item.name}
                         </div>
                         <div className='text-md font-bold mb-2 text-center text-black'>
-                            ${item.price ? item.price.toFixed(2) : ''}
+                            R{item.price ? item.price.toFixed(2) : ''}
                         </div>
                         <div className='flex gap-1 flex-wrap justify-center'>
                             {item.tags.map((tag, idx) => (

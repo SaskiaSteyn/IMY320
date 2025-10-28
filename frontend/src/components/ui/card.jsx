@@ -1,8 +1,20 @@
 import * as React from 'react';
 import { cn } from '../../lib/utils';
+import { Button } from './button';
 
 const Card = React.forwardRef(
-    ({ className, backgroundImage, title, text, ...props }, ref) => (
+    (
+        {
+            className,
+            backgroundImage,
+            title,
+            text,
+            link,
+            buttonText = 'Learn More',
+            ...props
+        },
+        ref
+    ) => (
         <div
             ref={ref}
             className={cn('shadow-sm relative overflow-hidden', className)}
@@ -35,6 +47,13 @@ const Card = React.forwardRef(
                         ) : (
                             <p>{text}</p>
                         )}
+                    </div>
+                )}
+                {link && (
+                    <div className='mt-4'>
+                        <Button onClick={() => (window.location.href = link)}>
+                            {buttonText}
+                        </Button>
                     </div>
                 )}
             </div>
@@ -88,7 +107,19 @@ const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
 CardFooter.displayName = 'CardFooter';
 
 const ImageCard = React.forwardRef(
-    ({ className, image, imageAlt, title, text, ...props }, ref) => (
+    (
+        {
+            className,
+            image,
+            imageAlt,
+            title,
+            text,
+            link,
+            buttonText = 'Learn More',
+            ...props
+        },
+        ref
+    ) => (
         <div
             ref={ref}
             className={cn(
@@ -129,6 +160,13 @@ const ImageCard = React.forwardRef(
                         ) : (
                             <p>{text}</p>
                         )}
+                    </div>
+                )}
+                {link && (
+                    <div className='mt-4'>
+                        <Button onClick={() => (window.location.href = link)}>
+                            {buttonText}
+                        </Button>
                     </div>
                 )}
             </div>

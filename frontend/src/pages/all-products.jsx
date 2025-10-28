@@ -1,10 +1,10 @@
-import {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
-import {getAllProducts} from '../backend/api.js';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getAllProducts } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import AddedToCartPopup from '../components/added-to-cart-popup.jsx';
 import Header from '../components/header.jsx';
-import {Button} from '../components/ui/button.jsx';
+import { Button } from '../components/ui/button.jsx';
 
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
@@ -18,11 +18,11 @@ const AllProducts = () => {
     });
 
     const categories = [
-        {key: 'all', label: 'All Products'},
-        {key: 'mugs', label: 'Mugs'},
-        {key: 'hoodies', label: 'Hoodies'},
-        {key: 'totes', label: 'Tote Bags'},
-        {key: 'stickers', label: 'Stickers'},
+        { key: 'all', label: 'All Products' },
+        { key: 'mugs', label: 'Mugs' },
+        { key: 'hoodies', label: 'Hoodies' },
+        { key: 'totes', label: 'Tote Bags' },
+        { key: 'stickers', label: 'Stickers' },
     ];
 
     useEffect(() => {
@@ -116,7 +116,7 @@ const AllProducts = () => {
         }
 
         // Show popup
-        setPopupData({productName: product.name, quantity: 1});
+        setPopupData({ productName: product.name, quantity: 1 });
         setShowPopup(true);
     };
 
@@ -156,10 +156,11 @@ const AllProducts = () => {
                         <button
                             key={category.key}
                             onClick={() => handleCategoryFilter(category.key)}
-                            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${selectedCategory === category.key
-                                ? 'bg-[#e79210] text-black shadow-lg'
-                                : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
-                                }`}
+                            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
+                                selectedCategory === category.key
+                                    ? 'bg-[#e79210] text-black shadow-lg'
+                                    : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
+                            }`}
                         >
                             {category.label}
                         </button>
@@ -196,12 +197,27 @@ const AllProducts = () => {
                         {filteredProducts.map((product) => (
                             <Link
                                 key={product.id}
-                                to={product.stock === 0 ? '#' : `/product/${product.id}`}
-                                className={`block ${product.stock === 0 ? 'cursor-default' : ''}`}
-                                onClick={product.stock === 0 ? (e) => e.preventDefault() : undefined}
+                                to={
+                                    product.stock === 0
+                                        ? '#'
+                                        : `/product/${product.id}`
+                                }
+                                className={`block ${
+                                    product.stock === 0 ? 'cursor-default' : ''
+                                }`}
+                                onClick={
+                                    product.stock === 0
+                                        ? (e) => e.preventDefault()
+                                        : undefined
+                                }
                             >
-                                <div className={`bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl group ${product.stock === 0 ? 'cursor-default' : 'cursor-pointer'
-                                    }`}>
+                                <div
+                                    className={`bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl group ${
+                                        product.stock === 0
+                                            ? 'cursor-default'
+                                            : 'cursor-pointer'
+                                    }`}
+                                >
                                     <div className='flex flex-col md:flex-row'>
                                         {/* Product Image */}
                                         <div className='md:w-1/3 lg:w-1/4 h-64 md:h-auto overflow-hidden'>
@@ -243,7 +259,7 @@ const AllProducts = () => {
                                                     </span>
                                                     {product.tags &&
                                                         product.tags.length >
-                                                        0 && (
+                                                            0 && (
                                                             <button
                                                                 onClick={(
                                                                     e
@@ -266,10 +282,11 @@ const AllProducts = () => {
                                                             </button>
                                                         )}
                                                     <span
-                                                        className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${product.stock === 0
-                                                            ? 'bg-red-100 text-red-800'
-                                                            : 'bg-green-100 text-green-800'
-                                                            }`}
+                                                        className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
+                                                            product.stock === 0
+                                                                ? 'bg-red-100 text-red-800'
+                                                                : 'bg-green-100 text-green-800'
+                                                        }`}
                                                     >
                                                         {product.stock === 0
                                                             ? 'Out of Stock'
@@ -277,7 +294,7 @@ const AllProducts = () => {
                                                     </span>
                                                     {product.availabilityDate &&
                                                         product.availability !==
-                                                        'In Stock' && (
+                                                            'In Stock' && (
                                                             <span className='inline-flex items-center px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 rounded-full'>
                                                                 Available:{' '}
                                                                 {new Date(
@@ -286,22 +303,6 @@ const AllProducts = () => {
                                                             </span>
                                                         )}
                                                 </div>
-
-                                                {/* Available Sizes */}
-                                                {product.sizes &&
-                                                    product.sizes[0] !==
-                                                    'One size' && (
-                                                        <div className='mb-4'>
-                                                            <span className='text-sm font-medium text-gray-700 mr-2'>
-                                                                Available sizes:
-                                                            </span>
-                                                            <span className='text-sm text-gray-600'>
-                                                                {product.sizes.join(
-                                                                    ', '
-                                                                )}
-                                                            </span>
-                                                        </div>
-                                                    )}
                                             </div>
 
                                             {/* Price and Actions */}
@@ -328,10 +329,11 @@ const AllProducts = () => {
                                                         disabled={
                                                             product.stock === 0
                                                         }
-                                                        className={`mt-6 self-center ${product.stock === 0
-                                                            ? 'opacity-50 cursor-not-allowed'
-                                                            : ''
-                                                            }`}
+                                                        className={`mt-6 self-center ${
+                                                            product.stock === 0
+                                                                ? 'opacity-50 cursor-not-allowed'
+                                                                : ''
+                                                        }`}
                                                     >
                                                         {product.stock === 0
                                                             ? 'Out of Stock'

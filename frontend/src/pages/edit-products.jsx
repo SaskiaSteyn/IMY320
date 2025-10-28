@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
-import { FaMinus, FaPlus } from 'react-icons/fa';
+import { FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { adjustStock, getAllProducts } from '../backend/api.js';
+import {
+    adjustStock,
+    deleteProduct,
+    getAllProducts,
+    updateProduct,
+} from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Header from '../components/header.jsx';
 import SaveChangesPopup from '../components/save-changes-popup.jsx';
@@ -19,6 +24,23 @@ const EditProducts = () => {
         message: '',
         details: '',
     });
+    const [productToDelete, setProductToDelete] = useState(null);
+
+    const hasProductChanges = (product) => {
+        const originalProduct = originalProducts.find(
+            (p) => p.id === product.id
+        );
+        if (!originalProduct) return false;
+
+        return (
+            originalProduct.stock !== product.stock ||
+            originalProduct.name !== product.name ||
+            originalProduct.descriptor !== product.descriptor ||
+            originalProduct.price !== product.price ||
+            JSON.stringify(originalProduct.tags) !==
+                JSON.stringify(product.tags)
+        );
+    };
 
     useEffect(() => {
         GetAllProducts();
@@ -63,27 +85,74 @@ const EditProducts = () => {
                 );
                 if (!originalProduct) continue;
 
-                // Check if stock has changed
+                // Check what has changed
                 const stockChanged = product.stock !== originalProduct.stock;
+                const nameChanged = product.name !== originalProduct.name;
+                const descriptorChanged =
+                    product.descriptor !== originalProduct.descriptor;
+                const priceChanged = product.price !== originalProduct.price;
+                const tagsChanged =
+                    JSON.stringify(product.tags) !==
+                    JSON.stringify(originalProduct.tags);
 
-                if (stockChanged) {
-                    // Calculate the stock adjustment needed
-                    const stockAdjustment =
-                        product.stock - originalProduct.stock;
+                const hasChanges =
+                    stockChanged ||
+                    nameChanged ||
+                    descriptorChanged ||
+                    priceChanged ||
+                    tagsChanged;
 
-                    const result = await adjustStock(
-                        product.id,
-                        stockAdjustment
-                    );
-                    if (result.error) {
-                        console.error(
-                            `Failed to update stock for product ${product.id}:`,
-                            result.error
+                if (hasChanges) {
+                    let updateSuccessful = true;
+
+                    // Handle stock changes through adjustStock API
+                    if (stockChanged) {
+                        const stockAdjustment =
+                            product.stock - originalProduct.stock;
+                        const stockResult = await adjustStock(
+                            product.id,
+                            stockAdjustment
                         );
-                        errorCount++;
-                    } else {
+                        if (stockResult.error) {
+                            console.error(
+                                `Failed to update stock for product ${product.id}:`,
+                                stockResult.error
+                            );
+                            updateSuccessful = false;
+                        }
+                    }
+
+                    // Handle other changes through updateProduct API
+                    if (
+                        nameChanged ||
+                        descriptorChanged ||
+                        priceChanged ||
+                        tagsChanged
+                    ) {
+                        const updateData = {
+                            name: product.name,
+                            descriptor: product.descriptor,
+                            price: product.price,
+                            tags: product.tags,
+                        };
+                        const updateResult = await updateProduct(
+                            product.id,
+                            updateData
+                        );
+                        if (updateResult.error) {
+                            console.error(
+                                `Failed to update details for product ${product.id}:`,
+                                updateResult.error
+                            );
+                            updateSuccessful = false;
+                        }
+                    }
+
+                    if (updateSuccessful) {
                         successCount++;
                         updatedProducts.push(product.name);
+                    } else {
+                        errorCount++;
                     }
                 }
             }
@@ -257,11 +326,16 @@ const EditProducts = () => {
                                     <div className='lg:w-1/4 h-48 lg:h-auto overflow-hidden'>
                                         <img
                                             className='w-full h-full object-cover transition-transform duration-300 hover:scale-110'
-                                            src={product.image}
+                                            src='/images/merch/placeholder.png'
                                             alt={product.name}
-                                            onError={(e) => {
-                                                e.target.src =
-                                                    '/images/placeholder.png';
+                                            ref={(img) => {
+                                                if (img && product.image) {
+                                                    const testImg = new Image();
+                                                    testImg.onload = () => {
+                                                        img.src = product.image;
+                                                    };
+                                                    testImg.src = product.image;
+                                                }
                                             }}
                                         />
                                     </div>
@@ -271,22 +345,104 @@ const EditProducts = () => {
                                         <div>
                                             <div className='flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4'>
                                                 <div className='flex-1'>
-                                                    <h3 className='text-2xl font-bold text-gray-900 mb-2'>
-                                                        {product.name}
-                                                    </h3>
-                                                    <p className='text-gray-600 mb-3 leading-relaxed'>
-                                                        {product.descriptor ||
-                                                            product.description}
-                                                    </p>
+                                                    <input
+                                                        type='text'
+                                                        className='text-2xl font-bold text-gray-900 mb-2 w-full border-b border-transparent hover:border-gray-300 focus:border-[#e79210] focus:outline-none px-2 py-1 rounded'
+                                                        value={product.name}
+                                                        onChange={(e) => {
+                                                            setProducts(
+                                                                (
+                                                                    prevProducts
+                                                                ) =>
+                                                                    prevProducts.map(
+                                                                        (p) =>
+                                                                            p.id ===
+                                                                            product.id
+                                                                                ? {
+                                                                                      ...p,
+                                                                                      name: e
+                                                                                          .target
+                                                                                          .value,
+                                                                                  }
+                                                                                : p
+                                                                    )
+                                                            );
+                                                            setHasChanges(true);
+                                                        }}
+                                                    />
+                                                    <textarea
+                                                        className='text-gray-600 mb-3 leading-relaxed w-full border-b border-transparent hover:border-gray-300 focus:border-[#e79210] focus:outline-none px-2 py-1 rounded resize-none'
+                                                        defaultValue={
+                                                            product.descriptor ||
+                                                            product.description ||
+                                                            ''
+                                                        }
+                                                        rows='2'
+                                                        onInput={(e) => {
+                                                            setProducts(
+                                                                (
+                                                                    prevProducts
+                                                                ) =>
+                                                                    prevProducts.map(
+                                                                        (p) =>
+                                                                            p.id ===
+                                                                            product.id
+                                                                                ? {
+                                                                                      ...p,
+                                                                                      descriptor:
+                                                                                          e
+                                                                                              .target
+                                                                                              .value,
+                                                                                  }
+                                                                                : p
+                                                                    )
+                                                            );
+                                                            setHasChanges(true);
+                                                        }}
+                                                    />
                                                     <div className='flex flex-wrap gap-3 mb-3'>
                                                         <span className='inline-flex items-center px-3 py-1 text-sm font-medium bg-gray-100 text-gray-800 rounded-full'>
                                                             ID: {product.id}
                                                         </span>
-                                                        <span className='inline-flex items-center px-3 py-1 text-sm font-medium bg-gray-200 text-gray-800 rounded-full'>
-                                                            {product
-                                                                .tags?.[0] ||
-                                                                'Uncategorized'}
-                                                        </span>
+                                                        <input
+                                                            type='text'
+                                                            className='px-3 py-1 text-sm font-medium bg-gray-200 text-gray-800 rounded-full border-transparent hover:border-gray-300 focus:border-[#e79210] focus:outline-none'
+                                                            value={
+                                                                product
+                                                                    .tags?.[0] ||
+                                                                'Uncategorized'
+                                                            }
+                                                            onChange={(e) => {
+                                                                setProducts(
+                                                                    (
+                                                                        prevProducts
+                                                                    ) =>
+                                                                        prevProducts.map(
+                                                                            (
+                                                                                p
+                                                                            ) =>
+                                                                                p.id ===
+                                                                                product.id
+                                                                                    ? {
+                                                                                          ...p,
+                                                                                          tags: [
+                                                                                              e
+                                                                                                  .target
+                                                                                                  .value,
+                                                                                              ...(p.tags?.slice(
+                                                                                                  1
+                                                                                              ) ||
+                                                                                                  []),
+                                                                                          ],
+                                                                                      }
+                                                                                    : p
+                                                                        )
+                                                                );
+                                                                setHasChanges(
+                                                                    true
+                                                                );
+                                                            }}
+                                                        />
                                                         <span
                                                             className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
                                                                 product.stock ===
@@ -313,9 +469,54 @@ const EditProducts = () => {
                                                     <p className='text-sm text-gray-500 mb-1'>
                                                         Price
                                                     </p>
-                                                    <p className='text-3xl font-bold text-gray-900'>
-                                                        R{product.price}
-                                                    </p>
+                                                    <div className='flex items-center'>
+                                                        <span className='text-3xl font-bold text-gray-900 mr-1'>
+                                                            R
+                                                        </span>
+                                                        <input
+                                                            type='number'
+                                                            className='text-3xl font-bold text-gray-900 w-32 border-b border-transparent hover:border-gray-300 focus:border-[#e79210] focus:outline-none px-2 py-1 rounded'
+                                                            value={
+                                                                product.price
+                                                            }
+                                                            min='0'
+                                                            step='0.01'
+                                                            onChange={(e) => {
+                                                                const value =
+                                                                    parseFloat(
+                                                                        e.target
+                                                                            .value
+                                                                    );
+                                                                if (
+                                                                    !isNaN(
+                                                                        value
+                                                                    ) &&
+                                                                    value >= 0
+                                                                ) {
+                                                                    setProducts(
+                                                                        (
+                                                                            prevProducts
+                                                                        ) =>
+                                                                            prevProducts.map(
+                                                                                (
+                                                                                    p
+                                                                                ) =>
+                                                                                    p.id ===
+                                                                                    product.id
+                                                                                        ? {
+                                                                                              ...p,
+                                                                                              price: value,
+                                                                                          }
+                                                                                        : p
+                                                                            )
+                                                                    );
+                                                                    setHasChanges(
+                                                                        true
+                                                                    );
+                                                                }
+                                                            }}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -369,12 +570,95 @@ const EditProducts = () => {
 
                                             {/* Action Buttons */}
                                             <div className='flex gap-3'>
-                                                <Button asChild>
+                                                {hasProductChanges(product) && (
+                                                    <Button
+                                                        variant='secondary'
+                                                        onClick={async () => {
+                                                            setSavingChanges(
+                                                                true
+                                                            );
+                                                            try {
+                                                                const originalProduct =
+                                                                    originalProducts.find(
+                                                                        (p) =>
+                                                                            p.id ===
+                                                                            product.id
+                                                                    );
+
+                                                                // Handle stock changes
+                                                                if (
+                                                                    product.stock !==
+                                                                    originalProduct.stock
+                                                                ) {
+                                                                    const stockAdjustment =
+                                                                        product.stock -
+                                                                        originalProduct.stock;
+                                                                    await adjustStock(
+                                                                        product.id,
+                                                                        stockAdjustment
+                                                                    );
+                                                                }
+
+                                                                // Handle other changes
+                                                                const updateData =
+                                                                    {
+                                                                        name: product.name,
+                                                                        descriptor:
+                                                                            product.descriptor,
+                                                                        price: product.price,
+                                                                        tags: product.tags,
+                                                                    };
+
+                                                                await updateProduct(
+                                                                    product.id,
+                                                                    updateData
+                                                                );
+                                                                showNotification(
+                                                                    'success',
+                                                                    'Changes Saved',
+                                                                    `Successfully updated ${product.name}`
+                                                                );
+                                                                await GetAllProducts();
+                                                                setHasChanges(
+                                                                    false
+                                                                );
+                                                            } catch (err) {
+                                                                showNotification(
+                                                                    'error',
+                                                                    'Save Failed',
+                                                                    'An unexpected error occurred'
+                                                                );
+                                                            } finally {
+                                                                setSavingChanges(
+                                                                    false
+                                                                );
+                                                            }
+                                                        }}
+                                                        disabled={savingChanges}
+                                                    >
+                                                        {savingChanges
+                                                            ? 'Saving...'
+                                                            : 'Save Changes'}
+                                                    </Button>
+                                                )}
+                                                <Button>
                                                     <Link
                                                         to={`/product/${product.id}`}
                                                     >
                                                         View Details
                                                     </Link>
+                                                </Button>
+                                                <Button
+                                                    variant='destructive'
+                                                    onClick={() =>
+                                                        setProductToDelete(
+                                                            product
+                                                        )
+                                                    }
+                                                    className='bg-red-600 hover:bg-red-700 text-white'
+                                                >
+                                                    <FaTrash className='mr-2' />
+                                                    Delete
                                                 </Button>
                                             </div>
                                         </div>
@@ -385,6 +669,76 @@ const EditProducts = () => {
                     </div>
                 )}
             </div>
+
+            {/* Delete Confirmation Dialog */}
+            {productToDelete && (
+                <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+                    <div className='bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4'>
+                        <h3 className='text-xl font-bold text-gray-900 mb-4'>
+                            Confirm Delete
+                        </h3>
+                        <p className='text-gray-600 mb-6'>
+                            Are you sure you want to delete "
+                            {productToDelete.name}"? This action cannot be
+                            undone.
+                        </p>
+                        <div className='flex justify-end gap-4'>
+                            <Button
+                                variant='secondary'
+                                onClick={() => setProductToDelete(null)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant='destructive'
+                                className='bg-red-600 hover:bg-red-700 text-white'
+                                onClick={async () => {
+                                    try {
+                                        console.log(
+                                            'Attempting to delete product:',
+                                            {
+                                                id: productToDelete.id,
+                                                name: productToDelete.name,
+                                            }
+                                        );
+                                        const result = await deleteProduct(
+                                            productToDelete.id
+                                        );
+                                        if (result.error) {
+                                            console.error(
+                                                'Delete failed:',
+                                                result.error
+                                            );
+                                            showNotification(
+                                                'error',
+                                                'Delete Failed',
+                                                result.error
+                                            );
+                                        } else {
+                                            showNotification(
+                                                'success',
+                                                'Product Deleted',
+                                                `Successfully deleted ${productToDelete.name}`
+                                            );
+                                            await GetAllProducts();
+                                        }
+                                    } catch (err) {
+                                        console.error('Delete failed:', err);
+                                        showNotification(
+                                            'error',
+                                            'Delete Failed',
+                                            'An unexpected error occurred'
+                                        );
+                                    }
+                                    setProductToDelete(null);
+                                }}
+                            >
+                                Delete
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <FooterCard />
 
