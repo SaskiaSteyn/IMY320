@@ -1,17 +1,16 @@
-import {useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {addProduct, uploadImage} from '../backend/api.js';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { addProduct, uploadImage } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Header from '../components/header.jsx';
-import {Button} from '../components/ui/button.jsx';
+import { Button } from '../components/ui/button.jsx';
 
 const CreateProduct = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState('');
-    const [uploadingImage, setUploadingImage] = useState(false);
-    const [message, setMessage] = useState({type: '', text: ''});
+    const [message, setMessage] = useState({ type: '', text: '' });
     const [validationErrors, setValidationErrors] = useState({});
     const [formData, setFormData] = useState({
         id: '',
@@ -30,10 +29,10 @@ const CreateProduct = () => {
     });
 
     const categories = [
-        {key: 'mugs', label: 'Mugs', leadTime: 14},
-        {key: 'hoodies', label: 'Hoodies', leadTime: 21},
-        {key: 'totes', label: 'Tote Bags', leadTime: 7},
-        {key: 'stickers', label: 'Stickers', leadTime: 3},
+        { key: 'mugs', label: 'Mugs', leadTime: 14 },
+        { key: 'hoodies', label: 'Hoodies', leadTime: 21 },
+        { key: 'totes', label: 'Tote Bags', leadTime: 7 },
+        { key: 'stickers', label: 'Stickers', leadTime: 3 },
     ];
 
     const sizeOptions = {
@@ -74,8 +73,19 @@ const CreateProduct = () => {
         let error = '';
 
         // Check for empty required fields
-        const requiredFields = ['id', 'name', 'descriptor', 'price', 'availabilityDate', 'email', 'phone'];
-        if (requiredFields.includes(name) && (!value || value.toString().trim() === '')) {
+        const requiredFields = [
+            'id',
+            'name',
+            'descriptor',
+            'price',
+            'availabilityDate',
+            'email',
+            'phone',
+        ];
+        if (
+            requiredFields.includes(name) &&
+            (!value || value.toString().trim() === '')
+        ) {
             const fieldLabels = {
                 id: 'Product ID',
                 name: 'Product Name',
@@ -83,7 +93,7 @@ const CreateProduct = () => {
                 price: 'Price',
                 availabilityDate: 'Availability Date',
                 email: 'Contact Email',
-                phone: 'Contact Phone'
+                phone: 'Contact Phone',
             };
             error = `${fieldLabels[name]} is required`;
         }
@@ -92,17 +102,20 @@ const CreateProduct = () => {
             switch (name) {
                 case 'email':
                     if (!validateEmail(value)) {
-                        error = 'Please enter a valid email format (e.g., user@example.com)';
+                        error =
+                            'Please enter a valid email format (e.g., user@example.com)';
                     }
                     break;
                 case 'phone':
                     if (!validatePhoneNumber(value)) {
-                        error = 'Please enter a valid phone number (e.g., 0826468521)';
+                        error =
+                            'Please enter a valid phone number (e.g., 0826468521)';
                     }
                     break;
                 case 'availabilityDate':
                     if (!validateAvailabilityDate(value)) {
-                        error = 'Availability date must be at least 1 day from today';
+                        error =
+                            'Availability date must be at least 1 day from today';
                     }
                     break;
                 case 'price':
@@ -115,9 +128,9 @@ const CreateProduct = () => {
             }
         }
 
-        setValidationErrors(prev => ({
+        setValidationErrors((prev) => ({
             ...prev,
-            [name]: error
+            [name]: error,
         }));
     };
 
@@ -134,13 +147,16 @@ const CreateProduct = () => {
         if (!formData.descriptor || formData.descriptor.trim() === '') {
             errors.descriptor = 'Product Description is required';
         }
-        if (!formData.image || formData.image.trim() === '') {
+        if ((!formData.image || formData.image.trim() === '') && !imageFile) {
             errors.image = 'Product Image is required';
         }
         if (!formData.price || formData.price.toString().trim() === '') {
             errors.price = 'Price is required';
         }
-        if (!formData.availabilityDate || formData.availabilityDate.trim() === '') {
+        if (
+            !formData.availabilityDate ||
+            formData.availabilityDate.trim() === ''
+        ) {
             errors.availabilityDate = 'Availability Date is required';
         }
         if (!formData.email || formData.email.trim() === '') {
@@ -154,16 +170,35 @@ const CreateProduct = () => {
         }
 
         // Format validation for non-empty fields
-        if (formData.email && formData.email.trim() !== '' && !validateEmail(formData.email)) {
-            errors.email = 'Please enter a valid email format (e.g., user@example.com)';
+        if (
+            formData.email &&
+            formData.email.trim() !== '' &&
+            !validateEmail(formData.email)
+        ) {
+            errors.email =
+                'Please enter a valid email format (e.g., user@example.com)';
         }
-        if (formData.phone && formData.phone.trim() !== '' && !validatePhoneNumber(formData.phone)) {
-            errors.phone = 'Please enter a valid phone number (e.g., 0826468521)';
+        if (
+            formData.phone &&
+            formData.phone.trim() !== '' &&
+            !validatePhoneNumber(formData.phone)
+        ) {
+            errors.phone =
+                'Please enter a valid phone number (e.g., 0826468521)';
         }
-        if (formData.availabilityDate && formData.availabilityDate.trim() !== '' && !validateAvailabilityDate(formData.availabilityDate)) {
-            errors.availabilityDate = 'Availability date must be at least 1 day from today';
+        if (
+            formData.availabilityDate &&
+            formData.availabilityDate.trim() !== '' &&
+            !validateAvailabilityDate(formData.availabilityDate)
+        ) {
+            errors.availabilityDate =
+                'Availability date must be at least 1 day from today';
         }
-        if (formData.price && formData.price.toString().trim() !== '' && parseFloat(formData.price) <= 0) {
+        if (
+            formData.price &&
+            formData.price.toString().trim() !== '' &&
+            parseFloat(formData.price) <= 0
+        ) {
             errors.price = 'Price must be greater than 0';
         }
 
@@ -172,7 +207,7 @@ const CreateProduct = () => {
     };
 
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
 
         let processedValue = value;
 
@@ -216,9 +251,9 @@ const CreateProduct = () => {
 
         // Clear category validation error if category is selected
         if (category) {
-            setValidationErrors(prev => ({
+            setValidationErrors((prev) => ({
                 ...prev,
-                category: ''
+                category: '',
             }));
         }
 
@@ -246,71 +281,60 @@ const CreateProduct = () => {
             const reader = new FileReader();
             reader.onload = (e) => {
                 setImagePreview(e.target.result);
+                // Clear any existing image validation error
+                setValidationErrors((prev) => ({
+                    ...prev,
+                    image: '',
+                }));
+                // Set a temporary value in formData to pass validation
+                setFormData((prev) => ({
+                    ...prev,
+                    image: 'pending_upload',
+                }));
             };
             reader.readAsDataURL(file);
         }
     };
 
-    const handleImageUpload = async () => {
-        if (!imageFile) {
-            // If no file selected, trigger file input click
-            document.getElementById('image-file-input').click();
-            return;
-        }
-
-        setUploadingImage(true);
-        setMessage({type: '', text: ''}); // Clear previous messages
-
-        try {
-            const result = await uploadImage(imageFile);
-
-            if (result.error) {
-                setMessage({
-                    type: 'error',
-                    text: `Error uploading image: ${result.error}`,
-                });
-            } else {
-                // Update form data with the uploaded image filename (including extension)
-                setFormData((prev) => ({
-                    ...prev,
-                    image: result.filename, // Use filename instead of imageUrl to get just the filename with extension
-                }));
-
-                // Clear image validation error
-                setValidationErrors(prev => ({
-                    ...prev,
-                    image: ''
-                }));
-
-                setMessage({
-                    type: 'success',
-                    text: 'Image uploaded successfully!',
-                });
-            }
-        } catch (error) {
-            console.error('Error uploading image:', error);
-            setMessage({
-                type: 'error',
-                text: 'An error occurred while uploading the image',
-            });
-        } finally {
-            setUploadingImage(false);
-        }
-    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setMessage({type: '', text: ''}); // Clear previous messages
+        setMessage({ type: '', text: '' }); // Clear previous messages
 
         try {
             // Validate all fields and show individual error messages
             if (!validateAllFields()) {
                 setMessage({
                     type: 'error',
-                    text: 'Please fix the errors below and try again',
+                    text: 'Please fix the errors above and try again',
                 });
                 setLoading(false);
                 return;
+            }
+
+            // Upload image if one is selected
+            let imagePath = formData.image;
+            if (imageFile) {
+                try {
+                    const result = await uploadImage(imageFile);
+                    if (result.error) {
+                        setMessage({
+                            type: 'error',
+                            text: `Error uploading image: ${result.error}`,
+                        });
+                        setLoading(false);
+                        return;
+                    }
+                    imagePath = result.filename;
+                } catch (error) {
+                    console.error('Error uploading image:', error);
+                    setMessage({
+                        type: 'error',
+                        text: 'An error occurred while uploading the image',
+                    });
+                    setLoading(false);
+                    return;
+                }
             }
 
             // Prepare data for API
@@ -318,9 +342,9 @@ const CreateProduct = () => {
                 ...formData,
                 price: parseFloat(formData.price),
                 stock: parseInt(formData.stock),
-                image: formData.image.startsWith('/images/merch/')
-                    ? formData.image
-                    : `/images/merch/${formData.image}`,
+                image: imagePath.startsWith('/images/merch/')
+                    ? imagePath
+                    : `/images/merch/${imagePath}`,
             };
 
             const result = await addProduct(productData);
@@ -548,53 +572,76 @@ const CreateProduct = () => {
 
                             {/* File Upload Input */}
                             <div className='flex flex-col gap-4'>
-                                <div className='flex items-center gap-4'>
+                                <div
+                                    className={`border-2 rounded-lg p-6 text-center transition-all ${
+                                        validationErrors.image
+                                            ? 'border-red-500 bg-red-50'
+                                            : imagePreview
+                                            ? 'border-green-500 bg-green-50'
+                                            : 'border-gray-300'
+                                    }`}
+                                >
                                     <input
                                         id='image-file-input'
                                         type='file'
                                         accept='image/*'
                                         onChange={handleImageChange}
-                                        className='flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#e79210] focus:border-[#e79210]'
+                                        className='hidden'
                                     />
                                     <Button
                                         type='button'
-                                        onClick={handleImageUpload}
-                                        disabled={uploadingImage}
-                                        className='bg-[#e79210] hover:bg-[#d68410] text-black font-medium px-6 py-2'
+                                        onClick={() =>
+                                            document
+                                                .getElementById(
+                                                    'image-file-input'
+                                                )
+                                                .click()
+                                        }
+                                        className='bg-[#e79210] hover:bg-[#d68410] text-black font-medium px-6 py-2 w-full sm:w-auto mb-4'
                                     >
-                                        {uploadingImage
-                                            ? 'Uploading...'
-                                            : 'Upload'}
+                                        Choose File
                                     </Button>
-                                </div>
 
-                                {/* Image Upload Message */}
-                                {message.text &&
-                                    (message.text.includes('image') ||
-                                        message.text.includes('Image')) && (
-                                        <div
-                                            className={`px-3 py-2 rounded-md text-sm ${message.type === 'success'
-                                                ? 'bg-green-100 text-green-800 border border-green-200'
-                                                : 'bg-red-100 text-red-800 border border-red-200'
-                                                }`}
-                                        >
-                                            {message.text}
+                                    {/* Image Preview */}
+                                    {imagePreview ? (
+                                        <div className='relative inline-block'>
+                                            <img
+                                                src={imagePreview}
+                                                alt='Preview'
+                                                className='w-48 h-48 object-contain rounded-md border mx-auto'
+                                            />
+                                            <button
+                                                type='button'
+                                                onClick={() => {
+                                                    setImageFile(null);
+                                                    setImagePreview('');
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        image: '',
+                                                    }));
+                                                    // Reset validation error when image is removed
+                                                    setValidationErrors(
+                                                        (prev) => ({
+                                                            ...prev,
+                                                            image: 'Product Image is required',
+                                                        })
+                                                    );
+                                                }}
+                                                className='absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 focus:outline-none'
+                                            >
+                                                ×
+                                            </button>
+                                            <p className='text-sm text-gray-600 mt-2'>
+                                                Selected image
+                                            </p>
                                         </div>
-                                    )}
-
-                                {/* Image Preview */}
-                                {imagePreview && (
-                                    <div className='flex items-center gap-4'>
-                                        <img
-                                            src={imagePreview}
-                                            alt='Preview'
-                                            className='w-20 h-20 object-cover rounded-md border'
-                                        />
-                                        <p className='text-sm text-gray-600'>
-                                            Preview of selected image
+                                    ) : (
+                                        <p className='text-sm text-gray-500'>
+                                            No image selected. Click "Choose
+                                            File" to select an image.
                                         </p>
-                                    </div>
-                                )}
+                                    )}
+                                </div>
                             </div>
                         </div>
 
@@ -687,10 +734,11 @@ const CreateProduct = () => {
                                             onClick={() =>
                                                 handleSizeChange(size)
                                             }
-                                            className={`px-3 py-1 text-sm rounded-full border transition-colors duration-200 ${formData.sizes.includes(size)
-                                                ? 'bg-[#e79210] text-black border-[#e79210]'
-                                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                                                }`}
+                                            className={`px-3 py-1 text-sm rounded-full border transition-colors duration-200 ${
+                                                formData.sizes.includes(size)
+                                                    ? 'bg-[#e79210] text-black border-[#e79210]'
+                                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                            }`}
                                         >
                                             {size}
                                         </button>
@@ -741,10 +789,11 @@ const CreateProduct = () => {
                             {/* Message Display */}
                             {message.text && (
                                 <div
-                                    className={`px-4 py-2 rounded-md text-sm font-medium ${message.type === 'success'
-                                        ? 'bg-green-100 text-green-800 border border-green-200'
-                                        : 'bg-red-100 text-red-800 border border-red-200'
-                                        }`}
+                                    className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                        message.type === 'success'
+                                            ? 'bg-green-100 text-green-800 border border-green-200'
+                                            : 'bg-red-100 text-red-800 border border-red-200'
+                                    }`}
                                 >
                                     {message.text}
                                 </div>
@@ -753,10 +802,11 @@ const CreateProduct = () => {
                             <Button
                                 type='submit'
                                 disabled={loading}
-                                className={`w-full sm:w-auto ${loading
-                                    ? 'opacity-50 cursor-not-allowed'
-                                    : ''
-                                    }`}
+                                className={`w-full sm:w-auto ${
+                                    loading
+                                        ? 'opacity-50 cursor-not-allowed'
+                                        : ''
+                                }`}
                             >
                                 {loading
                                     ? 'Creating Product...'
