@@ -10,7 +10,6 @@ Middle buttons out of place
 Static things should not have hover effects
 Login fields black
 Login logo make it centered
-Re-enter password in signup
 Remove one sign up page
 Make confirm easier on each change in admin
 Create new and save all changes look weird next to each other
@@ -18,7 +17,6 @@ Better feedback for changes to stock amounts
 You may also like section used dollars
 Progress doesn’t go down for checkout when something is emptied
 Add an eye to see password
-Add a password strength feedback
 Rest-in-peace can only be added once to cart, but the price is still added
 Make laptop spinning animation bigger
 Fields like email can be autoflled in checkout
