@@ -171,11 +171,12 @@ const ProductDetails = ({ product }) => {
                         {product.tags.map((tag, idx) => (
                             <span
                                 key={idx}
-                                className='px-2 py-1 text-xs font-medium'
+                                className='px-2 py-1 text-xs font-medium select-none'
                                 style={{
                                     backgroundColor: '#d2d1d6',
                                     borderRadius: '5px',
                                     color: '#000',
+                                    cursor: 'default',
                                 }}
                             >
                                 {tag}

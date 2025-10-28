@@ -1,10 +1,10 @@
 //create a static hero image component with hover effect
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { cn } from '../../lib/utils';
-import { Button } from './button';
+import {useState} from 'react';
+import {Link} from 'react-router-dom';
+import {cn} from '../../lib/utils';
+import {Button} from './button';
 
-const HeroImage = ({ className }) => {
+const HeroImage = ({className}) => {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -22,8 +22,8 @@ const HeroImage = ({ className }) => {
             <img
                 src={
                     isHovered
-                        ? '/images/new/Laptop hover transparent.png'
-                        : '/images/new/Laptop transparent.png'
+                        ? '/images/LaptopStaticTiltedRender.png'
+                        : '/images/LaptopStaticRender.png'
                 }
                 alt='Write in Peace laptop'
                 className='absolute inset-0 h-full object-cover transition-opacity duration-300'

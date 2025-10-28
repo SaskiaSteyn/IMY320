@@ -197,10 +197,27 @@ const AllProducts = () => {
                         {filteredProducts.map((product) => (
                             <Link
                                 key={product.id}
-                                to={`/product/${product.id}`}
-                                className='block'
+                                to={
+                                    product.stock === 0
+                                        ? '#'
+                                        : `/product/${product.id}`
+                                }
+                                className={`block ${
+                                    product.stock === 0 ? 'cursor-default' : ''
+                                }`}
+                                onClick={
+                                    product.stock === 0
+                                        ? (e) => e.preventDefault()
+                                        : undefined
+                                }
                             >
-                                <div className='bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer group'>
+                                <div
+                                    className={`bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl group ${
+                                        product.stock === 0
+                                            ? 'cursor-default'
+                                            : 'cursor-pointer'
+                                    }`}
+                                >
                                     <div className='flex flex-col md:flex-row'>
                                         {/* Product Image */}
                                         <div className='md:w-1/3 lg:w-1/4 h-64 md:h-auto overflow-hidden'>
@@ -286,22 +303,6 @@ const AllProducts = () => {
                                                             </span>
                                                         )}
                                                 </div>
-
-                                                {/* Available Sizes */}
-                                                {product.sizes &&
-                                                    product.sizes[0] !==
-                                                        'One size' && (
-                                                        <div className='mb-4'>
-                                                            <span className='text-sm font-medium text-gray-700 mr-2'>
-                                                                Available sizes:
-                                                            </span>
-                                                            <span className='text-sm text-gray-600'>
-                                                                {product.sizes.join(
-                                                                    ', '
-                                                                )}
-                                                            </span>
-                                                        </div>
-                                                    )}
                                             </div>
 
                                             {/* Price and Actions */}

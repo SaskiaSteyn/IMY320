@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
     FaChevronDown,
     FaChevronUp,
     FaShoppingCart,
     FaTimes,
 } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import { getAllProducts } from '../backend/api.js';
+import {Link} from 'react-router-dom';
+import {getAllProducts} from '../backend/api.js';
 import AddedToCartPopup from './added-to-cart-popup';
 
-const Catalogue = ({ CallScroll }) => {
+const Catalogue = ({CallScroll}) => {
     const [selectedTag, setSelectedTag] = useState('all');
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [catalogueItems, setCatalogueItems] = useState([]);
@@ -154,11 +154,11 @@ const Catalogue = ({ CallScroll }) => {
                 <div className='p-8 text-center'>
                     <h2
                         className='text-4xl font-bold text-center mb-12'
-                        style={{ color: 'white' }}
+                        style={{color: 'white'}}
                     >
                         Cove Merch
                     </h2>
-                    <div className='text-xl' style={{ color: 'white' }}>
+                    <div className='text-xl' style={{color: 'white'}}>
                         Loading products...
                     </div>
                 </div>
@@ -178,7 +178,7 @@ const Catalogue = ({ CallScroll }) => {
                     <div className='p-8'>
                         <h2
                             className='text-4xl font-bold text-center mb-12'
-                            style={{ color: 'white' }}
+                            style={{color: 'white'}}
                         >
                             Cove Merch
                         </h2>
@@ -188,14 +188,14 @@ const Catalogue = ({ CallScroll }) => {
                             <div className='flex items-center gap-4 justify-center'>
                                 <span
                                     className='text-lg font-medium'
-                                    style={{ color: 'white' }}
+                                    style={{color: 'white'}}
                                 >
                                     Filter by category:
                                 </span>
                                 <div className='relative' ref={dropdownRef}>
                                     <button
                                         className='px-4 py-2 rounded-lg border border-white/30 bg-white/20 backdrop-blur-sm text-white font-medium flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white/50 min-w-[140px]'
-                                        style={{ color: 'white' }}
+                                        style={{color: 'white'}}
                                         onClick={() =>
                                             setDropdownOpen((open) => !open)
                                         }
@@ -205,9 +205,9 @@ const Catalogue = ({ CallScroll }) => {
                                         {selectedTag === 'all'
                                             ? 'All Items'
                                             : selectedTag
-                                                  .charAt(0)
-                                                  .toUpperCase() +
-                                              selectedTag.slice(1)}
+                                                .charAt(0)
+                                                .toUpperCase() +
+                                            selectedTag.slice(1)}
                                         {dropdownOpen ? (
                                             <FaChevronUp />
                                         ) : (
@@ -217,23 +217,22 @@ const Catalogue = ({ CallScroll }) => {
                                     {dropdownOpen && (
                                         <ul
                                             className='absolute left-0 mt-2 w-full rounded-lg shadow-lg bg-white/20 backdrop-blur-sm border border-white/30 z-10'
-                                            style={{ minWidth: '140px' }}
+                                            style={{minWidth: '140px'}}
                                             role='listbox'
                                         >
                                             {availableTags.map((tag) => (
                                                 <li
                                                     key={tag}
-                                                    className={`px-4 py-2 cursor-pointer font-medium transition-all duration-150 border-b border-white/30 ${
-                                                        selectedTag === tag
+                                                    className={`px-4 py-2 cursor-pointer font-medium transition-all duration-150 border-b border-white/30 ${selectedTag === tag
                                                             ? 'bg-white/20 text-[white]'
                                                             : 'bg-white/20 text-[white] hover:underline'
-                                                    }`}
+                                                        }`}
                                                     style={
                                                         selectedTag === tag
                                                             ? {
-                                                                  fontWeight:
-                                                                      'bold',
-                                                              }
+                                                                fontWeight:
+                                                                    'bold',
+                                                            }
                                                             : {}
                                                     }
                                                     onClick={() => {
@@ -248,9 +247,9 @@ const Catalogue = ({ CallScroll }) => {
                                                     {tag === 'all'
                                                         ? 'All Items'
                                                         : tag
-                                                              .charAt(0)
-                                                              .toUpperCase() +
-                                                          tag.slice(1)}
+                                                            .charAt(0)
+                                                            .toUpperCase() +
+                                                        tag.slice(1)}
                                                 </li>
                                             ))}
                                         </ul>
@@ -276,15 +275,14 @@ const Catalogue = ({ CallScroll }) => {
                                 >
                                     <div className='flex items-center justify-between p-4'>
                                         <Link
-                                            to={`/product/${item.id}`}
-                                            className='flex-1 flex items-center gap-4 text-left hover:bg-white/10 transition-all duration-200 rounded-lg p-2 no-underline'
+                                            to={item.stock === 0 ? '#' : `/product/${item.id}`}
+                                            className={`flex-1 flex items-center gap-4 text-left hover:bg-white/10 transition-all duration-200 rounded-lg p-2 no-underline ${item.stock === 0 ? 'cursor-default' : ''
+                                                }`}
                                             style={{
                                                 textDecoration: 'none',
                                                 color: 'inherit',
                                             }}
-                                            onClick={() =>
-                                                handleItemClicked(item)
-                                            }
+                                            onClick={item.stock === 0 ? (e) => e.preventDefault() : () => handleItemClicked(item)}
                                             id={`catalog-item-${item.id}`}
                                         >
                                             {/* Item Image */}
@@ -326,21 +324,20 @@ const Catalogue = ({ CallScroll }) => {
                                                         )}
                                                         {/* Stock Status */}
                                                         <span
-                                                            className={`px-2 py-1 text-xs font-medium rounded ${
-                                                                item.stock === 0
+                                                            className={`px-2 py-1 text-xs font-medium rounded ${item.stock === 0
                                                                     ? 'bg-red-500 text-white'
                                                                     : item.stock <=
-                                                                      5
-                                                                    ? 'bg-yellow-500 text-black'
-                                                                    : 'bg-green-500 text-white'
-                                                            }`}
+                                                                        5
+                                                                        ? 'bg-yellow-500 text-black'
+                                                                        : 'bg-green-500 text-white'
+                                                                }`}
                                                         >
                                                             {item.stock === 0
                                                                 ? 'Out of Stock'
                                                                 : item.stock <=
-                                                                  5
-                                                                ? `Only ${item.stock} left`
-                                                                : 'In Stock'}
+                                                                    5
+                                                                    ? `Only ${item.stock} left`
+                                                                    : 'In Stock'}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -360,11 +357,10 @@ const Catalogue = ({ CallScroll }) => {
                                                     handleAddToCart(item)
                                                 }
                                                 disabled={item.stock === 0}
-                                                className={`px-4 py-2 rounded-lg font-medium text-white transition-all duration-200 hover:opacity-90 flex items-center gap-2 ${
-                                                    item.stock === 0
+                                                className={`px-4 py-2 rounded-lg font-medium text-white transition-all duration-200 hover:opacity-90 flex items-center gap-2 ${item.stock === 0
                                                         ? 'opacity-50 cursor-not-allowed'
                                                         : ''
-                                                }`}
+                                                    }`}
                                                 style={{
                                                     backgroundColor: '#8B4513',
                                                 }}

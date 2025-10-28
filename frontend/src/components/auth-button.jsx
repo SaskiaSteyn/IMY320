@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from './ui/button-header';
+import {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 
 // Utility function to check if user has admin role
 const isUserAdmin = () => {
@@ -39,7 +38,7 @@ const AuthButton = ({
 
             // Notify parent component of auth state change if callback provided
             if (onAuthChange) {
-                onAuthChange({ isLoggedIn: loggedIn, isAdmin: admin });
+                onAuthChange({isLoggedIn: loggedIn, isAdmin: admin});
             }
         };
 
@@ -69,22 +68,39 @@ const AuthButton = ({
         window.location.href = '/';
     };
 
+    // Button variant styles matching the Button component
+    const getVariantStyles = (variant) => {
+        const variants = {
+            default: 'bg-white text-black hover:bg-[#e79210] border border-transparent transition-all',
+            destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 border border-transparent hover:border-red-600',
+            outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground hover:border-gray-400',
+            secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-transparent hover:border-gray-400',
+            ghost: 'hover:bg-accent hover:text-accent-foreground border border-transparent hover:border-gray-300',
+            link: 'text-primary underline-offset-4 hover:underline border border-transparent',
+        };
+        return variants[variant] || variants.default;
+    };
+
+    const baseButtonStyles = 'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2';
+
     if (isLoggedIn) {
         return (
-            <Button
+            <button
                 onClick={handleLogout}
-                variant={variant}
-                className={className}
+                className={`${baseButtonStyles} ${getVariantStyles(variant)} ${className}`}
             >
                 Logout
-            </Button>
+            </button>
         );
     }
 
     return (
-        <Button asChild variant={variant} className={className}>
-            <Link to='/login'>Login</Link>
-        </Button>
+        <Link
+            to='/login'
+            className={`${baseButtonStyles} ${getVariantStyles(variant)} ${className}`}
+        >
+            Login
+        </Link>
     );
 };
 

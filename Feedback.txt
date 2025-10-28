@@ -1,0 +1,39 @@
+Backend image for docker fails: error 500
+✅ (done) Make buttons bigger
+✅ (done) Buttons feel random
+(there's fkn breadcrumbs...) Navigation back from a product not clear
+Validation in checkout
+??Keep progress when scrolling
+✅ (done) Button placements for landing page 
+✅ (done) Possibly remove shop all button
+✅ (done) Middle buttons out of place 
+✅ (done, I think) Static things should not have hover effects
+Login fields black
+Login logo make it centered
+Remove one sign up page
+Make confirm easier on each change in admin
+Create new and save all changes look weird next to each other
+Better feedback for changes to stock amounts
+You may also like section used dollars
+Progress doesn’t go down for checkout when something is emptied
+Add an eye to see password
+Rest-in-peace can only be added once to cart, but the price is still added
+Make laptop spinning animation bigger
+Fields like email can be autoflled in checkout
+Product save stock at bottom
+
+
+Default html for date fields 
+Peak end’s end sparkles go out into the footer
+Remove one feedback from image, there is two
+✅ (already a dropdown, but removed from products page for consistency) Make sizes a dropdown
+Make product names consistent 
+✅ Happy with effects
+❌ (can't see issue, same code is being used) Hover animations too slow in footer
+Add the . To the logo
+❌ Change orange and black
+❌ Pornhub colours
+In Brand, make sure everything is Cove.
+Hover effects on google and apple for sign in
+Show active page in navbar
+Add changes to cache for admin page

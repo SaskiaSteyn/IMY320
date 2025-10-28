@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { FaApple, FaDiscord, FaGoogle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import { login, register } from '../backend/api';
-import { Button } from '../components/ui/button.jsx';
+import {useState} from 'react';
+import {FaApple, FaDiscord, FaGoogle} from 'react-icons/fa';
+import {useNavigate} from 'react-router-dom';
+import {login, register} from '../backend/api';
+import {Button} from '../components/ui/button.jsx';
+import Header from '../components/header.jsx';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -11,21 +12,22 @@ const Signup = () => {
         username: '',
         email: '',
         password: '',
+        reenterPassword: '',
         role: 'admin',
     });
     const [error, setError] = useState('');
+    const [validationErrors, setValidationErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: value,
         }));
-        // Clear error when user starts typing
-        if (error) {
-            setError('');
-        }
+        // Clear error for this field when user starts typing
+        setValidationErrors((prev) => ({...prev, [name]: ''}));
+        if (error) setError('');
     };
 
     const handleSubmit = async (e) => {
@@ -33,51 +35,49 @@ const Signup = () => {
         setError('');
         setIsLoading(true);
 
-        // Client-side validation
-        if (!formData.username.trim()) {
-            setError('Please enter your username');
+        // Trim input
+        const username = formData.username.trim();
+        const email = formData.email.trim();
+        const password = formData.password.trim();
+        const reenterPassword = formData.reenterPassword.trim();
+
+        // Validation
+        const errors = {};
+        if (!username) errors.username = 'Please enter your username';
+        if (!email) errors.email = 'Please enter your email';
+        if (!password) errors.password = 'Please enter your password';
+        if (!reenterPassword) errors.reenterPassword = 'Please re-enter your password';
+        if (password && reenterPassword && password !== reenterPassword) {
+            errors.reenterPassword = 'Passwords do not match';
+        }
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~]).{8,}$/;
+        if (password && !passwordRegex.test(password)) {
+            errors.password = 'Password must be at least 8 characters long and include 1 uppercase letter, 1 number, and 1 special character.';
+        }
+
+        setValidationErrors(errors);
+        if (Object.keys(errors).length > 0) {
             setIsLoading(false);
             return;
         }
 
-        if (!formData.email.trim()) {
-            setError('Please enter your email');
-            setIsLoading(false);
-            return;
-        }
-
-        if (!formData.password.trim()) {
-            setError('Please enter your password');
-            setIsLoading(false);
-            return;
-        }
-
+        // Proceed with registration if validation passes
         try {
             const response = await register(formData);
 
             if (response.error) {
                 setError(response.error);
             } else {
-                // Registration successful, now log in the user
-                console.log('Registration successful:', response);
-
-                // Automatically log in with the same credentials
-                const loginResponse = await login(
-                    formData.username,
-                    formData.password
-                );
+                // Auto-login
+                const loginResponse = await login(username, password);
 
                 if (loginResponse.error) {
-                    setError(
-                        'Registration successful, but auto-login failed. Please log in manually.'
-                    );
+                    setError('Registration successful, but auto-login failed. Please log in manually.');
                 } else {
-                    // Store the token and redirect to home page
                     if (loginResponse.token) {
                         localStorage.setItem('token', loginResponse.token);
                     }
-                    console.log('Auto-login successful:', loginResponse);
-                    navigate('/'); // Redirect to home page
+                    navigate('/');
                 }
             }
         } catch {
@@ -95,6 +95,7 @@ const Signup = () => {
                     background: 'linear-gradient(135deg, #19191a, #373737)',
                 }}
             >
+                <Header />
                 <div className='bg-white/90 auth-container p-8 w-full max-w-4xl min-h-[80vh] flex items-center justify-center shadow-lg rounded-lg relative border border-gray-300'>
                     {/* Static Logo positioned like the final state of login page */}
                     <div className='absolute top-4 left-1/2 transform -translate-x-1/2'>
@@ -128,11 +129,7 @@ const Signup = () => {
                             Welcome to Cove! Let's get you started.
                         </div>
 
-                        {error && (
-                            <div className='bg-red-50 text-red-600 p-3 border border-red-200 text-sm text-center mb-4'>
-                                {error}
-                            </div>
-                        )}
+
 
                         <form
                             onSubmit={handleSubmit}
@@ -149,6 +146,7 @@ const Signup = () => {
                                     <div className='flex-1 h-px bg-gray-400' />
                                 </div>
 
+
                                 <div className='flex flex-col'>
                                     <input
                                         type='text'
@@ -159,7 +157,11 @@ const Signup = () => {
                                         placeholder='Username'
                                         className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
                                     />
+                                    {validationErrors.username && (
+                                        <span className='text-red-600 text-xs mt-1'>{validationErrors.username}</span>
+                                    )}
                                 </div>
+
 
                                 <div className='flex flex-col'>
                                     <input
@@ -171,7 +173,11 @@ const Signup = () => {
                                         placeholder='Email'
                                         className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
                                     />
+                                    {validationErrors.email && (
+                                        <span className='text-red-600 text-xs mt-1'>{validationErrors.email}</span>
+                                    )}
                                 </div>
+
 
                                 <div className='flex flex-col'>
                                     <input
@@ -180,9 +186,28 @@ const Signup = () => {
                                         name='password'
                                         value={formData.password}
                                         onChange={handleChange}
-                                        placeholder='Password'
+                                        placeholder='New Password'
                                         className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
                                     />
+                                    {validationErrors.password && (
+                                        <span className='text-red-600 text-xs mt-1'>{validationErrors.password}</span>
+                                    )}
+                                </div>
+
+
+                                <div className='flex flex-col'>
+                                    <input
+                                        type='password'
+                                        id='reenter-password'
+                                        name='reenterPassword'
+                                        value={formData.reenterPassword}
+                                        onChange={handleChange}
+                                        placeholder='Re-enter Password'
+                                        className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
+                                    />
+                                    {validationErrors.reenterPassword && (
+                                        <span className='text-red-600 text-xs mt-1'>{validationErrors.reenterPassword}</span>
+                                    )}
                                 </div>
 
                                 <Button
@@ -196,12 +221,7 @@ const Signup = () => {
                                         : 'Sign Up'}
                                 </Button>
 
-                                {/* Signup Form Error Display */}
-                                {error && (
-                                    <div className='bg-red-50 text-red-600 p-3 border border-red-200 text-sm text-center rounded-md raleway'>
-                                        {error}
-                                    </div>
-                                )}
+
                             </div>
 
                             {/* Second Column - Social Signup */}
