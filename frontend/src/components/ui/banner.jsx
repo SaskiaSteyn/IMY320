@@ -3,7 +3,7 @@ import LaptopSpin from './laptop-spin';
 import './banner.css';
 
 const Banner = ({
-    height = '60vh',
+    height = '100vh',
     className = '',
     children,
     backgroundImage = '/images/new/Background.png',
