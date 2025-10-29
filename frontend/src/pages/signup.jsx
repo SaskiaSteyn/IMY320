@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {FaApple, FaDiscord, FaGoogle} from 'react-icons/fa';
+import {FaApple, FaDiscord, FaGoogle, FaEye, FaEyeSlash} from 'react-icons/fa';
 import {useNavigate} from 'react-router-dom';
 import {login, register} from '../backend/api';
 import {Button} from '../components/ui/button.jsx';
@@ -18,6 +18,8 @@ const Signup = () => {
     const [error, setError] = useState('');
     const [validationErrors, setValidationErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showReenterPassword, setShowReenterPassword] = useState(false);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -133,7 +135,7 @@ const Signup = () => {
 
                         <form
                             onSubmit={handleSubmit}
-                            className='grid grid-cols-2 gap-8 items-start mb-6'
+                            className='grid grid-cols-1 gap-8 items-start mb-6 px-4'
                         >
                             {/* First Column - Main Signup Form */}
                             <div className='flex flex-col gap-4 bg-gray-50 p-4 rounded-lg border border-gray-300'>
@@ -179,34 +181,51 @@ const Signup = () => {
                                 </div>
 
 
-                                <div className='flex flex-col'>
+                                {/* New Password */}
+                                <div className="flex flex-col relative">
                                     <input
-                                        type='password'
-                                        id='password'
-                                        name='password'
+                                        type={showPassword ? 'text' : 'password'}
+                                        id="password"
+                                        name="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                        placeholder='New Password'
-                                        className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
+                                        placeholder="New Password"
+                                        className="p-3 pr-10 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                        tabIndex={-1}
+                                    >
+                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
                                     {validationErrors.password && (
-                                        <span className='text-red-600 text-xs mt-1'>{validationErrors.password}</span>
+                                        <span className="text-red-600 text-xs mt-1">{validationErrors.password}</span>
                                     )}
                                 </div>
 
-
-                                <div className='flex flex-col'>
+                                {/* Re-enter Password */}
+                                <div className="flex flex-col relative">
                                     <input
-                                        type='password'
-                                        id='reenter-password'
-                                        name='reenterPassword'
+                                        type={showReenterPassword ? 'text' : 'password'}
+                                        id="reenter-password"
+                                        name="reenterPassword"
                                         value={formData.reenterPassword}
                                         onChange={handleChange}
-                                        placeholder='Re-enter Password'
-                                        className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
+                                        placeholder="Re-enter Password"
+                                        className="p-3 pr-10 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowReenterPassword(!showReenterPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                        tabIndex={-1}
+                                    >
+                                        {showReenterPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
                                     {validationErrors.reenterPassword && (
-                                        <span className='text-red-600 text-xs mt-1'>{validationErrors.reenterPassword}</span>
+                                        <span className="text-red-600 text-xs mt-1">{validationErrors.reenterPassword}</span>
                                     )}
                                 </div>
 
@@ -221,11 +240,6 @@ const Signup = () => {
                                         : 'Sign Up'}
                                 </Button>
 
-
-                            </div>
-
-                            {/* Second Column - Social Signup */}
-                            <div className='flex flex-col gap-4 p-4'>
                                 {/* Divider */}
                                 <div className='flex items-center gap-4 mb-2'>
                                     <div className='flex-1 h-px bg-gray-400' />
@@ -236,35 +250,32 @@ const Signup = () => {
                                 </div>
 
                                 {/* Social Buttons */}
-                                <div className='flex flex-col gap-4'>
+                                <div className="flex flex-row gap-4 justify-center">
                                     {/* Google */}
                                     <button
-                                        type='button'
+                                        type="button"
                                         onClick={() => navigate('/')}
-                                        className='flex items-center justify-center gap-3 w-full p-3 rounded-md font-medium bg-white hover:bg-gray-50 transition-all duration-200 border-2 raleway text-gray-700 border-gray-300'
+                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-white border-2 border-gray-300 hover:bg-gray-50 transition-all duration-200"
                                     >
-                                        <FaGoogle className='text-red-500' />
-                                        <span>Sign up with Google</span>
+                                        <FaGoogle className="text-red-500 text-xl" />
                                     </button>
 
                                     {/* Apple */}
                                     <button
-                                        type='button'
+                                        type="button"
                                         onClick={() => navigate('/')}
-                                        className='flex items-center justify-center gap-3 w-full p-3 rounded-md font-medium text-white bg-black hover:bg-gray-900 transition-all duration-200 raleway'
+                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-black hover:bg-gray-900 transition-all duration-200"
                                     >
-                                        <FaApple className='text-white text-lg' />
-                                        <span>Sign up with Apple</span>
+                                        <FaApple className="text-white text-xl" />
                                     </button>
 
                                     {/* Discord */}
                                     <button
-                                        type='button'
+                                        type="button"
                                         onClick={() => navigate('/')}
-                                        className='flex items-center justify-center gap-3 w-full p-3 rounded-md font-medium text-white bg-[#5865F2] hover:bg-[#4752c4] transition-all duration-200 raleway'
+                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-[#5865F2] hover:bg-[#4752c4] transition-all duration-200"
                                     >
-                                        <FaDiscord className='text-white text-lg' />
-                                        <span>Sign up with Discord</span>
+                                        <FaDiscord className="text-white text-xl" />
                                     </button>
                                 </div>
                             </div>

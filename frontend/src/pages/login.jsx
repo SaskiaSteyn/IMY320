@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {login} from '../backend/api';
-import {FaApple, FaDiscord, FaGoogle} from 'react-icons/fa';
+import {FaApple, FaDiscord, FaGoogle, FaEye, FaEyeSlash} from 'react-icons/fa';
 import {Button} from '../components/ui/button.jsx';
 import Header from '../components/header.jsx';
 
@@ -14,6 +14,7 @@ const Login = () => {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [animationStarted, setAnimationStarted] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -143,7 +144,7 @@ const Login = () => {
 
                         <form
                             onSubmit={handleSubmit}
-                            className='grid grid-cols-2 gap-8 items-start mb-6'
+                            className='grid grid-cols-1 gap-8 items-start mb-6 px-4'
                         >
                             {/* First Column - Main Login Form */}
                             <div className='flex flex-col gap-4 p-4 rounded-lg border border-gray-300'>
@@ -168,16 +169,24 @@ const Login = () => {
                                     />
                                 </div>
 
-                                <div className='flex flex-col'>
+                                <div className="flex flex-col relative">
                                     <input
-                                        type='password'
-                                        id='password'
-                                        name='password'
+                                        type={showPassword ? 'text' : 'password'}
+                                        id="password"
+                                        name="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                        placeholder='Password'
-                                        className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
+                                        placeholder="Password"
+                                        className="p-3 pr-10 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                        tabIndex={-1}
+                                    >
+                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
                                 </div>
 
                                 <Button
@@ -195,11 +204,7 @@ const Login = () => {
                                         {error}
                                     </div>
                                 )}
-                            </div>
 
-                            {/* Second Column - Social Login & Sign Up */}
-                            <div className='flex flex-col gap-4 p-4'>
-                                {/* Divider */}
                                 <div className='flex items-center gap-4 mb-2'>
                                     <div className='flex-1 h-px bg-gray-400' />
                                     <span className='text-sm text-gray-600'>
@@ -209,35 +214,32 @@ const Login = () => {
                                 </div>
 
                                 {/* Social Buttons */}
-                                <div className='flex flex-col gap-4'>
+                                <div className="flex flex-row gap-4 justify-center">
                                     {/* Google */}
                                     <button
-                                        type='button'
+                                        type="button"
                                         onClick={() => navigate('/')}
-                                        className='flex items-center justify-center gap-3 w-full p-3 rounded-md font-medium text-gray-700 border-2 border-gray-300 bg-white hover:bg-gray-50 transition-all duration-200'
+                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-white border-2 border-gray-300 hover:bg-gray-50 transition-all duration-200"
                                     >
-                                        <FaGoogle className='text-red-500' />
-                                        <span>Sign in with Google</span>
+                                        <FaGoogle className="text-red-500 text-xl" />
                                     </button>
 
                                     {/* Apple */}
                                     <button
-                                        type='button'
+                                        type="button"
                                         onClick={() => navigate('/')}
-                                        className='flex items-center justify-center gap-3 w-full p-3 rounded-md font-medium text-white bg-black hover:bg-gray-900 transition-all duration-200'
+                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-black hover:bg-gray-900 transition-all duration-200"
                                     >
-                                        <FaApple className='text-white text-lg' />
-                                        <span>Sign in with Apple</span>
+                                        <FaApple className="text-white text-xl" />
                                     </button>
 
                                     {/* Discord */}
                                     <button
-                                        type='button'
+                                        type="button"
                                         onClick={() => navigate('/')}
-                                        className='flex items-center justify-center gap-3 w-full p-3 rounded-md font-medium text-white bg-[#5865F2] hover:bg-[#4752c4] transition-all duration-200'
+                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-[#5865F2] hover:bg-[#4752c4] transition-all duration-200"
                                     >
-                                        <FaDiscord className='text-white text-lg' />
-                                        <span>Sign in with Discord</span>
+                                        <FaDiscord className="text-white text-xl" />
                                     </button>
                                 </div>
                             </div>
