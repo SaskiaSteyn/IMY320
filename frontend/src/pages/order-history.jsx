@@ -1,9 +1,9 @@
 
-import { useEffect, useState } from 'react';
-import { getUserOrders } from '../backend/api';
+import {useEffect, useState} from 'react';
+import {getUserOrders} from '../backend/api';
 import Header from '../components/header.jsx';
 import FooterCard from '../cards/footer.jsx';
-import { Button } from '../components/ui/button.jsx';
+import {Button} from '../components/ui/button.jsx';
 
 function getStartOfPeriod(period) {
     const now = new Date();
@@ -23,10 +23,10 @@ function getStartOfPeriod(period) {
 }
 
 const FILTERS = [
-    { key: 'all', label: 'All Time' },
-    { key: 'week', label: 'This Week' },
-    { key: 'month', label: 'This Month' },
-    { key: 'year', label: 'This Year' },
+    {key: 'all', label: 'All Orders'},
+    {key: 'week', label: 'This Week'},
+    {key: 'month', label: 'This Month'},
+    {key: 'year', label: 'This Year'},
 ];
 
 const OrderHistory = () => {
@@ -41,22 +41,22 @@ const OrderHistory = () => {
             setLoading(true);
             setError('');
             try {
-                const userData = JSON.parse(localStorage.getItem('userData'));
-                if (!userData || (!userData.id && !userData.userIDNumber)) {
-                    setError('User not logged in.');
+                const userDataRaw = localStorage.getItem('userData');
+                const userData = userDataRaw ? JSON.parse(userDataRaw) : null;
+                if (!userData || userData.userIDNumber == null) {
+                    setError('User not logged in or missing userIDNumber.');
                     setLoading(false);
                     return;
                 }
-                // userIDNumber is used in backend, but userData.id is _id, so try userData.userIDNumber
-                const userId = userData.userIDNumber || userData.id;
-                const result = await getUserOrders(userId);
+                console.log('userIDNumber used for getUserOrders:', userData.userIDNumber);
+                const result = await getUserOrders(userData.userIDNumber);
                 if (result.error) {
                     setError(result.error);
                 } else {
                     setOrders(result);
                 }
             } catch (e) {
-                setError('Failed to load orders.');
+                setError('Failed to load orders: ' + e.message);
             } finally {
                 setLoading(false);
             }
@@ -96,11 +96,10 @@ const OrderHistory = () => {
                         <button
                             key={filter.key}
                             onClick={() => setSelectedFilter(filter.key)}
-                            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
-                                selectedFilter === filter.key
-                                    ? 'bg-[#e79210] text-black shadow-lg'
-                                    : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
-                            }`}
+                            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${selectedFilter === filter.key
+                                ? 'bg-[#e79210] text-black shadow-lg'
+                                : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600'
+                                }`}
                         >
                             {filter.label}
                         </button>

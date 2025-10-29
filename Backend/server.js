@@ -177,11 +177,15 @@ app.post('/login', async (req, res) => {
         const valid = require('bcryptjs').compareSync(password, user.password)
         if (!valid) return res.status(401).json({error: 'Incorrect password'})
 
-        const token = require('jsonwebtoken').sign({id: user._id, role: user.role}, 'secret123')
+        // Only use userIDNumber as id, do not return _id
+        const token = require('jsonwebtoken').sign({
+            id: user.userIDNumber, role: user.role
+        }, 'secret123')
         res.json({
             token,
             user: {
-                id: user._id,
+                id: user.userIDNumber, // for compatibility, but not Mongo _id
+                userIDNumber: user.userIDNumber, // explicit
                 username: user.username,
                 email: user.email,
                 role: user.role

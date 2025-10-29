@@ -120,10 +120,10 @@ const Header = ({navigationItems = []}) => {
                 {/* Right: Login/Account Button And Cart*/}
                 <div className='flex-1 flex items-center justify-end'>
                     <div className='flex gap-2'>
-                        <OrderHistoryButton
+                        {isLoggedIn ? (<OrderHistoryButton
                             variant='outline'
                             className='relative !text-white !border-white !bg-transparent group-hover:!text-black group-hover:!border-black hover:!bg-white/20 group-hover:hover:!bg-black/10'
-                        />
+                        />) : null}
                         <CartButton
                             variant='outline'
                             className='relative !text-white !border-white !bg-transparent group-hover:!text-black group-hover:!border-black hover:!bg-white/20 group-hover:hover:!bg-black/10'
