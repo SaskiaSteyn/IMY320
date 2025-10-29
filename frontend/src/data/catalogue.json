@@ -1,0 +1,218 @@
+[
+    {
+        "id": "M001",
+        "name": "Classic White Mug",
+        "descriptor": "Clean, minimalist white ceramic mug perfect for your daily writing ritual. Features the subtle Cove logo and holds 11oz of your favorite beverage to fuel your creativity.",
+        "link": "/product/M001",
+        "image": "/images/merch/White mug.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 299.99,
+        "brand": "Cove",
+        "tags": [
+            "mugs"
+        ],
+        "stock": 50,
+        "sizes": [
+            "One size"
+        ]
+    },
+    {
+        "id": "M002",
+        "name": "Earthy Brown Mug",
+        "descriptor": "Warm brown ceramic mug that embodies the cozy writing atmosphere. Handcrafted finish with comfortable grip, perfect for those long writing sessions by the fireplace.",
+        "link": "/product/M002",
+        "image": "/images/merch/Brown mug.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 319.99,
+        "brand": "Cove",
+        "tags": [
+            "mugs"
+        ],
+        "stock": 50,
+        "sizes": [
+            "One size"
+        ]
+    },
+    {
+        "id": "M003",
+        "name": "Forest Green Mug",
+        "descriptor": "Nature-inspired green mug that brings tranquil forest vibes to your writing space. Dishwasher safe with a smooth matte finish and generous 12oz capacity.",
+        "link": "/product/M003",
+        "image": "/images/merch/Green mug.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 319.99,
+        "brand": "Cove",
+        "tags": [
+            "mugs"
+        ],
+        "stock": 50,
+        "sizes": [
+            "One size"
+        ]
+    },
+    {
+        "id": "H001",
+        "name": "Classic White Hoodie - Men's",
+        "descriptor": "Premium cotton-blend hoodie in clean white. Features the Cove logo with minimalist design. Perfect for writers who prefer understated style and maximum comfort.",
+        "link": "/product/H001",
+        "image": "/images/merch/White Hoodie mens.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 499.99,
+        "brand": "Cove",
+        "tags": [
+            "hoodies"
+        ],
+        "stock": 50,
+        "sizes": [
+            "XXS",
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL",
+            "2XL",
+            "3XL",
+            "4XL",
+            "5XL"
+        ]
+    },
+    {
+        "id": "H002",
+        "name": "Women's White Hoodie",
+        "descriptor": "Soft, fitted hoodie designed specifically for women writers. Flattering cut with cozy fleece lining and thoughtful details like thumb holes for extra warmth.",
+        "link": "/product/H002",
+        "image": "/images/merch/Hoodie White Womens.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 499.99,
+        "brand": "Cove",
+        "tags": [
+            "hoodies"
+        ],
+        "stock": 50,
+        "sizes": [
+            "XXS",
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL",
+            "2XL",
+            "3XL",
+            "4XL",
+            "5XL"
+        ]
+    },
+    {
+        "id": "T001",
+        "name": "Classic Tote Bag",
+        "descriptor": "Versatile canvas tote bag perfect for carrying your writing essentials. Spacious main compartment, sturdy handles, and subtle Cove branding. Ideal for library trips and coffee shop sessions.",
+        "link": "/product/T001",
+        "image": "/images/merch/Tote.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 199.99,
+        "brand": "Cove",
+        "tags": [
+            "totes"
+        ],
+        "stock": 50,
+        "sizes": [
+            "One size"
+        ]
+    },
+    {
+        "id": "T002",
+        "name": "Brown Canvas Tote",
+        "descriptor": "Rich brown canvas tote with vintage appeal. Heavy-duty construction with reinforced stitching. Perfect for the writer who appreciates classic, timeless style.",
+        "link": "/product/T002",
+        "image": "/images/merch/Tote Brown.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 199.99,
+        "brand": "Cove",
+        "tags": [
+            "totes"
+        ],
+        "stock": 50,
+        "sizes": [
+            "One size"
+        ]
+    },
+    {
+        "id": "T003",
+        "name": "Forest Green Tote",
+        "descriptor": "Eco-friendly green tote made from sustainable materials. Large enough for laptops, notebooks, and all your writing gear. Features comfortable shoulder straps and interior pocket.",
+        "link": "/product/T003",
+        "image": "/images/merch/Tote Green.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 199.99,
+        "brand": "Cove",
+        "tags": [
+            "totes"
+        ],
+        "stock": 50,
+        "sizes": [
+            "One size"
+        ]
+    },
+    {
+        "id": "S001",
+        "name": "Classic Round Sticker - White",
+        "descriptor": "Clean white circular sticker with the iconic Cove logo. Premium vinyl construction that's waterproof and fade-resistant. Perfect for laptops, water bottles, or notebooks.",
+        "link": "/product/S001",
+        "image": "/images/merch/Round sticker white.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 19.99,
+        "brand": "Cove",
+        "tags": [
+            "stickers"
+        ],
+        "stock": 50,
+        "sizes": [
+            "One size"
+        ]
+    },
+    {
+        "id": "S002",
+        "name": "Earthy Brown Sticker",
+        "descriptor": "Warm brown circular sticker that matches our earthy aesthetic. High-quality vinyl with strong adhesive. Adds a touch of natural warmth to any surface.",
+        "link": "/product/S002",
+        "image": "/images/merch/Round sticker brown.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 19.99,
+        "brand": "Cove",
+        "tags": [
+            "stickers"
+        ],
+        "stock": 50,
+        "sizes": [
+            "One size"
+        ]
+    },
+    {
+        "id": "S003",
+        "name": "Forest Green Sticker",
+        "descriptor": "Nature-inspired green sticker featuring the Cove logo. Durable outdoor vinyl that withstands weather and washing. Perfect for showing your writing community pride.",
+        "link": "/product/S003",
+        "image": "/images/merch/Round sticker green.png",
+        "availability": "In Stock",
+        "availabilityDate": "2025-09-08",
+        "price": 19.99,
+        "brand": "Cove",
+        "tags": [
+            "stickers"
+        ],
+        "stock": 50,
+        "sizes": [
+            "One size"
+        ]
+    }
+]

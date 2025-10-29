@@ -1,0 +1,71 @@
+/* Custom styles for the date picker calendar popup */
+input[type='date'] {
+    position: relative;
+    color-scheme: light;
+}
+
+/* Calendar popup container */
+::-webkit-datetime-edit {
+    padding: 0.5rem;
+}
+
+::-webkit-calendar-picker-indicator {
+    background-color: #e79210;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+::-webkit-calendar-picker-indicator:hover {
+    background-color: #d68410;
+}
+
+/* Calendar header styles */
+::-webkit-calendar-picker {
+    background-color: #19191a;
+    color: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #e79210;
+}
+
+/* Calendar day cells */
+::-webkit-calendar-picker-day-cell {
+    color: white;
+    background-color: #2d2d2e;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+}
+
+::-webkit-calendar-picker-day-cell:hover {
+    background-color: #e79210;
+    color: black;
+}
+
+/* Selected date */
+::-webkit-calendar-picker-day-cell:selected {
+    background-color: #e79210;
+    color: black;
+    font-weight: bold;
+}
+
+/* Today's date */
+::-webkit-calendar-picker-day-cell:today {
+    border: 2px solid #e79210;
+}
+
+/* Month/Year navigation buttons */
+::-webkit-calendar-picker-navigation-button {
+    color: #e79210;
+}
+
+::-webkit-calendar-picker-navigation-button:hover {
+    background-color: #2d2d2e;
+    border-radius: 0.25rem;
+}
+
+/* Weekday headers */
+::-webkit-calendar-picker-weekday-cell {
+    color: #e79210;
+    font-weight: bold;
+}

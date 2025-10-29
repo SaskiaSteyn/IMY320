@@ -4,7 +4,7 @@ import TestimonialBlock from '../components/testimonial-block.jsx';
 const TestimonialsCard = ({ testimonials, zIndex }) => {
     return (
         <div
-            className='h-screen w-full relative card-section bg-[#1E1E1E]'
+            className='h-screen w-full relative card-section bg-[#19191a]'
             style={{ zIndex }}
         >
             <div className='h-full flex flex-col justify-center mb-12'>
@@ -35,7 +35,7 @@ const TestimonialsCard = ({ testimonials, zIndex }) => {
             </div>
 
             {/* Scroll Down Chevron */}
-            <ChevronDown />
+            <ChevronDown backgroundColor='white' textColor='#19191a' />
         </div>
     );
 };

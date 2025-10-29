@@ -1,6 +1,9 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
+import {FaApple, FaDiscord, FaGoogle, FaEye, FaEyeSlash} from 'react-icons/fa';
 import {useNavigate} from 'react-router-dom';
-import {register, login} from '../backend/api';
+import {login, register} from '../backend/api';
+import {Button} from '../components/ui/button.jsx';
+import Header from '../components/header.jsx';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -9,17 +12,24 @@ const Signup = () => {
         username: '',
         email: '',
         password: '',
-        role: 'user'
+        reenterPassword: '',
+        role: 'admin',
     });
     const [error, setError] = useState('');
+    const [validationErrors, setValidationErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showReenterPassword, setShowReenterPassword] = useState(false);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
+        // Clear error for this field when user starts typing
+        setValidationErrors((prev) => ({...prev, [name]: ''}));
+        if (error) setError('');
     };
 
     const handleSubmit = async (e) => {
@@ -27,27 +37,49 @@ const Signup = () => {
         setError('');
         setIsLoading(true);
 
+        // Trim input
+        const username = formData.username.trim();
+        const email = formData.email.trim();
+        const password = formData.password.trim();
+        const reenterPassword = formData.reenterPassword.trim();
+
+        // Validation
+        const errors = {};
+        if (!username) errors.username = 'Please enter your username';
+        if (!email) errors.email = 'Please enter your email';
+        if (!password) errors.password = 'Please enter your password';
+        if (!reenterPassword) errors.reenterPassword = 'Please re-enter your password';
+        if (password && reenterPassword && password !== reenterPassword) {
+            errors.reenterPassword = 'Passwords do not match';
+        }
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~]).{8,}$/;
+        if (password && !passwordRegex.test(password)) {
+            errors.password = 'Password must be at least 8 characters long and include 1 uppercase letter, 1 number, and 1 special character.';
+        }
+
+        setValidationErrors(errors);
+        if (Object.keys(errors).length > 0) {
+            setIsLoading(false);
+            return;
+        }
+
+        // Proceed with registration if validation passes
         try {
             const response = await register(formData);
 
             if (response.error) {
                 setError(response.error);
             } else {
-                // Registration successful, now log in the user
-                console.log('Registration successful:', response);
-
-                // Automatically log in with the same credentials
-                const loginResponse = await login(formData.username, formData.password);
+                // Auto-login
+                const loginResponse = await login(username, password);
 
                 if (loginResponse.error) {
                     setError('Registration successful, but auto-login failed. Please log in manually.');
                 } else {
-                    // Store the token and redirect to home page
                     if (loginResponse.token) {
                         localStorage.setItem('token', loginResponse.token);
                     }
-                    console.log('Auto-login successful:', loginResponse);
-                    navigate('/'); // Redirect to home page
+                    navigate('/');
                 }
             }
         } catch {
@@ -58,100 +90,215 @@ const Signup = () => {
     };
 
     return (
-        <div className="min-h-screen flex bg-cover bg-center bg-no-repeat font-['American_Typewriter',serif] bg-[url('/images/fireplace-reading.jpeg')]">
-            <div className="bg-white/75 backdrop-blur-sm p-20 w-full max-w-md h-screen flex flex-col justify-center shadow-lg">
-                {/* Brand Header */}
-                <div className="mb-8 flex justify-center">
-                    <img
-                        src="/images/CoveLogo.svg"
-                        alt="Cove Logo"
-                        className="w-full h-auto"
-                    />
-                </div>
-
-                <div className="!text-xl !font-medium mb-8 text-[#4e1f08] text-left">
-                    Welcome to Cove! Let's get you started.
-                </div>
-
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    {error && (
-                        <div className="bg-red-50 text-red-600 p-3 border border-red-200 text-sm text-center">
-                            {error}
+        <>
+            <div
+                className='min-h-screen flex justify-center items-center bg-cover bg-center bg-no-repeat py-8 pt-20'
+                style={{
+                    background: 'linear-gradient(135deg, #19191a, #373737)',
+                }}
+            >
+                <Header />
+                <div className='bg-white/90 auth-container p-8 w-full max-w-4xl min-h-[80vh] flex items-center justify-center shadow-lg rounded-lg relative border border-gray-300'>
+                    {/* Static Logo positioned like the final state of login page */}
+                    <div className='absolute top-4 left-1/2 transform -translate-x-1/2'>
+                        <div className='text-center'>
+                            <h1
+                                className='header-logo text-gray-800'
+                                style={{
+                                    fontSize: '6rem',
+                                    lineHeight: '1',
+                                    marginBottom: '0.5rem',
+                                }}
+                            >
+                                COVE
+                            </h1>
+                            <p
+                                className='text-2xl italic text-gray-800'
+                                style={{
+                                    marginTop: '0.25rem',
+                                }}
+                            >
+                                Helping you write in peace
+                            </p>
                         </div>
-                    )}
-
-                    <div className="flex flex-col">
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            required
-                            placeholder="Username"
-                            className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
-                            style={{
-                                backgroundColor: 'transparent !important',
-                                WebkitBoxShadow: '0 0 0 1000px transparent inset !important',
-                                WebkitTextFillColor: '#4e1f08 !important'
-                            }}
-                        />
                     </div>
 
-                    <div className="flex flex-col">
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                            placeholder="Email"
-                            className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
-                            style={{
-                                backgroundColor: 'transparent !important',
-                                WebkitBoxShadow: '0 0 0 1000px transparent inset !important',
-                                WebkitTextFillColor: '#4e1f08 !important'
-                            }}
-                        />
-                    </div>
+                    {/* Signup Form */}
+                    <div className='w-full'>
+                        {/* Spacer for logo - adjusted to better accommodate the larger logo */}
+                        <div className='h-28 mb-4'></div>
+                        <div className='!text-base !font-medium mb-8 text-center text-gray-700'>
+                            Welcome to Cove! Let's get you started.
+                        </div>
 
-                    <div className="flex flex-col">
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                            placeholder="Password"
-                            className="p-3 bg-white/0 focus:bg-white/0 hover:bg-white/0 active:bg-white/0 placeholder-[#4e1f08] focus:outline-none transition-all duration-200 border-2 border-[#4e1f08] text-[#4e1f08] rounded-md [&:-webkit-autofill]:bg-white/0 [&:-webkit-autofill]:!bg-white/0 [&:-webkit-autofill:hover]:bg-white/0 [&:-webkit-autofill:focus]:bg-white/0 [&:-webkit-autofill:active]:bg-white/0 [&:not(:placeholder-shown)]:bg-white/0"
-                            style={{
-                                backgroundColor: 'transparent !important',
-                                WebkitBoxShadow: '0 0 0 1000px transparent inset !important',
-                                WebkitTextFillColor: '#4e1f08 !important'
-                            }}
-                        />
-                    </div>
 
-                    <button
-                        type="submit"
-                        className="py-3 px-6 font-medium cursor-pointer transition-all duration-200 text-white hover:opacity-90 disabled:bg-gray-400 disabled:cursor-not-allowed bg-[#4e1f08] rounded-md"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? 'Creating Account...' : 'Sign Up'}
-                    </button>
 
-                    <div className="text-center text-sm mt-4 text-[#4e1f08]">
-                        Already have an account? {' '}
-                        <a href="/login"
-                            className="!hover:font-bold underline transition-colors duration-200 text-[#4e1f08]">
-                            Login
-                        </a>
+                        <form
+                            onSubmit={handleSubmit}
+                            className='grid grid-cols-1 gap-8 items-start mb-6 px-4'
+                        >
+                            {/* First Column - Main Signup Form */}
+                            <div className='flex flex-col gap-4 bg-gray-50 p-4 rounded-lg border border-gray-300'>
+                                {/* Sign Up Label */}
+                                <div className='flex items-center gap-4 mb-2'>
+                                    <div className='flex-1 h-px bg-gray-400' />
+                                    <span className='text-sm raleway text-gray-700'>
+                                        sign up
+                                    </span>
+                                    <div className='flex-1 h-px bg-gray-400' />
+                                </div>
+
+
+                                <div className='flex flex-col'>
+                                    <input
+                                        type='text'
+                                        id='username'
+                                        name='username'
+                                        value={formData.username}
+                                        onChange={handleChange}
+                                        placeholder='Username'
+                                        className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
+                                    />
+                                    {validationErrors.username && (
+                                        <span className='text-red-600 text-xs mt-1'>{validationErrors.username}</span>
+                                    )}
+                                </div>
+
+
+                                <div className='flex flex-col'>
+                                    <input
+                                        type='email'
+                                        id='email'
+                                        name='email'
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        placeholder='Email'
+                                        className='p-3 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
+                                    />
+                                    {validationErrors.email && (
+                                        <span className='text-red-600 text-xs mt-1'>{validationErrors.email}</span>
+                                    )}
+                                </div>
+
+
+                                {/* New Password */}
+                                <div className="flex flex-col relative">
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        id="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        placeholder="New Password"
+                                        className="p-3 pr-10 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                        tabIndex={-1}
+                                    >
+                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                    {validationErrors.password && (
+                                        <span className="text-red-600 text-xs mt-1">{validationErrors.password}</span>
+                                    )}
+                                </div>
+
+                                {/* Re-enter Password */}
+                                <div className="flex flex-col relative">
+                                    <input
+                                        type={showReenterPassword ? 'text' : 'password'}
+                                        id="reenter-password"
+                                        name="reenterPassword"
+                                        value={formData.reenterPassword}
+                                        onChange={handleChange}
+                                        placeholder="Re-enter Password"
+                                        className="p-3 pr-10 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowReenterPassword(!showReenterPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                        tabIndex={-1}
+                                    >
+                                        {showReenterPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                    {validationErrors.reenterPassword && (
+                                        <span className="text-red-600 text-xs mt-1">{validationErrors.reenterPassword}</span>
+                                    )}
+                                </div>
+
+                                <Button
+                                    type='submit'
+                                    className='w-full py-3 px-6 font-medium transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed raleway'
+                                    disabled={isLoading}
+                                    variant='default'
+                                >
+                                    {isLoading
+                                        ? 'Creating Account...'
+                                        : 'Sign Up'}
+                                </Button>
+
+                                {/* Divider */}
+                                <div className='flex items-center gap-4 mb-2'>
+                                    <div className='flex-1 h-px bg-gray-400' />
+                                    <span className='text-sm raleway text-gray-600'>
+                                        or continue with
+                                    </span>
+                                    <div className='flex-1 h-px bg-gray-400' />
+                                </div>
+
+                                {/* Social Buttons */}
+                                <div className="flex flex-row gap-4 justify-center">
+                                    {/* Google */}
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/')}
+                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-white border-2 border-gray-300 hover:bg-gray-50 transition-all duration-200"
+                                    >
+                                        <FaGoogle className="text-red-500 text-xl" />
+                                    </button>
+
+                                    {/* Apple */}
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/')}
+                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-black hover:bg-gray-900 transition-all duration-200"
+                                    >
+                                        <FaApple className="text-white text-xl" />
+                                    </button>
+
+                                    {/* Discord */}
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/')}
+                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-[#5865F2] hover:bg-[#4752c4] transition-all duration-200"
+                                    >
+                                        <FaDiscord className="text-white text-xl" />
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        {/* Centered Login Link */}
+                        <div className='flex items-center gap-4 mt-4'>
+                            <div className='flex-1 h-px bg-gray-400' />
+                            <div className='text-center text-sm raleway text-gray-600'>
+                                Already have an account?{' '}
+                                <a
+                                    href='/login'
+                                    className='hover:text-orange-600 underline transition-colors duration-200 text-orange-500'
+                                >
+                                    Login
+                                </a>
+                            </div>
+                            <div className='flex-1 h-px bg-gray-400' />
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
