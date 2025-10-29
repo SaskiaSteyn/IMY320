@@ -34,6 +34,8 @@ const AboutCove = () => {
                         backgroundImage='/images/new/image-2.png'
                         title='Get it today!'
                         text='Download the app and start writing with no distrations!'
+                        link='/write-in-peace#pricing'
+                        buttonText='Download the app'
                     />
 
                     {/* Second Column - Row 2 */}
@@ -43,11 +45,6 @@ const AboutCove = () => {
                         text='Create the calmest, coziest space for your crafting needs. Beautiful themes, ambient sounds, and smart scheduling help you find the perfect writing atmosphere.'
                     />
                 </div>
-            </div>
-            <div className='flex justify-center pb-12'>
-                <Link to='/write-in-peace#pricing'>
-                    <Button className='mr-4'>Download the app</Button>
-                </Link>
             </div>
         </div>
     );

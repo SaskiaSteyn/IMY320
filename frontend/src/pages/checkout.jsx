@@ -291,8 +291,24 @@ function Checkout() {
         <div className='min-h-screen bg-[#19191a]'>
             <Header />
 
+            {/* Fixed Progress Bar */}
+            <div className='fixed top-[72px] left-0 right-0 z-40 bg-[#19191a]/80 backdrop-blur-sm py-2 px-4'>
+                <div className='max-w-md mx-auto'>
+                    <div className='flex justify-between text-sm text-gray-300 mb-2'>
+                        <span>Your Progress</span>
+                        <span>{Math.round(progressPercentage)}% Complete</span>
+                    </div>
+                    <div className='w-full bg-gray-600 rounded-full h-3 overflow-hidden'>
+                        <div
+                            className='h-full bg-gradient-to-r from-[#e79210] to-[#e75710] rounded-full transition-all duration-1000 ease-out relative'
+                            style={{ width: `${progressPercentage}%` }}
+                        ></div>
+                    </div>
+                </div>
+            </div>
+
             {/* Hero Section */}
-            <div className='pt-24 pb-16 px-4 sm:px-6 lg:px-8'>
+            <div className='pt-36 pb-16 px-4 sm:px-6 lg:px-8'>
                 <div className='max-w-7xl mx-auto'>
                     <div className='text-center'>
                         <div className='flex justify-center items-center gap-4 mb-6'>
@@ -304,22 +320,6 @@ function Checkout() {
                             Just a few more steps and your awesome stuff will be
                             on its way!
                         </p>
-
-                        {/* Progress Bar */}
-                        <div className='max-w-md mx-auto mb-8'>
-                            <div className='flex justify-between text-sm text-gray-300 mb-2'>
-                                <span>Your Progress</span>
-                                <span>
-                                    {Math.round(progressPercentage)}% Complete
-                                </span>
-                            </div>
-                            <div className='w-full bg-gray-600 rounded-full h-3 overflow-hidden'>
-                                <div
-                                    className='h-full bg-gradient-to-r from-[#e79210] to-[#e75710] rounded-full transition-all duration-1000 ease-out relative'
-                                    style={{ width: `${progressPercentage}%` }}
-                                ></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -366,6 +366,7 @@ function Checkout() {
                                         }
                                         className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent transition-all duration-300 hover:border-[#e79210] hover:shadow-md focus:scale-105'
                                         placeholder='your@email.com'
+                                        autoComplete='email'
                                         required
                                     />
                                 </div>
@@ -385,6 +386,7 @@ function Checkout() {
                                         }
                                         className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
                                         placeholder='+27 12 345 6789'
+                                        autoComplete='tel'
                                     />
                                 </div>
                                 <div>
@@ -403,6 +405,7 @@ function Checkout() {
                                         }
                                         className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
                                         placeholder='John'
+                                        autoComplete='given-name'
                                         required
                                     />
                                 </div>
@@ -422,6 +425,7 @@ function Checkout() {
                                         }
                                         className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
                                         placeholder='Doe'
+                                        autoComplete='family-name'
                                         required
                                     />
                                 </div>
@@ -475,16 +479,17 @@ function Checkout() {
                                         </label>
                                         <input
                                             type='text'
-                                            value={shippingAddress.city}
+                                            value={shippingAddress.address}
                                             onChange={(e) =>
                                                 handleInputChange(
                                                     'shipping',
-                                                    'city',
+                                                    'address',
                                                     e.target.value
                                                 )
                                             }
                                             className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
-                                            placeholder='Cape Town'
+                                            placeholder='123 Your Awesome Street'
+                                            autoComplete='street-address'
                                             required
                                         />
                                     </div>
@@ -502,6 +507,7 @@ function Checkout() {
                                                 )
                                             }
                                             className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
+                                            autoComplete='address-level1'
                                             required
                                         >
                                             <option value=''>
@@ -538,16 +544,17 @@ function Checkout() {
                                         </label>
                                         <input
                                             type='text'
-                                            value={shippingAddress.zipCode}
+                                            value={shippingAddress.city}
                                             onChange={(e) =>
                                                 handleInputChange(
                                                     'shipping',
-                                                    'zipCode',
+                                                    'city',
                                                     e.target.value
                                                 )
                                             }
                                             className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
-                                            placeholder='8001'
+                                            placeholder='Cape Town'
+                                            autoComplete='address-level2'
                                             required
                                         />
                                     </div>
@@ -621,16 +628,17 @@ function Checkout() {
                                         </label>
                                         <input
                                             type='text'
-                                            value={cardInfo.cardholderName}
+                                            value={shippingAddress.zipCode}
                                             onChange={(e) =>
                                                 handleInputChange(
-                                                    'card',
-                                                    'cardholderName',
+                                                    'shipping',
+                                                    'zipCode',
                                                     e.target.value
                                                 )
                                             }
                                             className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
-                                            placeholder='John Doe'
+                                            placeholder='8001'
+                                            autoComplete='postal-code'
                                             required
                                         />
                                     </div>
@@ -652,6 +660,7 @@ function Checkout() {
                                             }
                                             className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
                                             placeholder='1234 5678 9012 3456'
+                                            autoComplete='cc-number'
                                             maxLength='19'
                                             required
                                         />
@@ -675,6 +684,7 @@ function Checkout() {
                                                 }
                                                 className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
                                                 placeholder='MM/YY'
+                                                autoComplete='cc-exp'
                                                 maxLength='5'
                                                 required
                                             />
@@ -698,6 +708,7 @@ function Checkout() {
                                                 }
                                                 className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
                                                 placeholder='123'
+                                                autoComplete='cc-csc'
                                                 maxLength='4'
                                                 required
                                             />

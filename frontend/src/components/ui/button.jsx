@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
-import { IoArrowForward } from 'react-icons/io5';
 import { cn } from '../../lib/utils';
 
 const Button = React.forwardRef(
@@ -51,9 +50,6 @@ const Button = React.forwardRef(
                         <FaShoppingCart className='mr-2 text-sm transition-all duration-300 group-hover:rotate-12' />
                     )}
                     {props.children}
-                    {variant !== 'cart' && (
-                        <IoArrowForward className='ml-2 hidden group-hover:block transition-all duration-200 ease-in-out text-lg' />
-                    )}
                 </span>
             </Comp>
         );

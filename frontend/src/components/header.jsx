@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import AuthButton from './auth-button';
 import CartButton from './cart-button';
 
@@ -25,6 +25,7 @@ const isUserAdmin = () => {
 const Header = ({ navigationItems = [] }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const location = useLocation();
 
     // Handle auth state changes from AuthButton
     const handleAuthChange = ({ isLoggedIn: loggedIn, isAdmin: admin }) => {
@@ -67,33 +68,20 @@ const Header = ({ navigationItems = [] }) => {
         <header className='fixed top-0 w-full z-50 transition-all duration-300 bg-black hover:bg-white group'>
             <style jsx>{`
                 .animated-link {
-                    position: relative;
                     display: inline-block;
                     text-decoration: none;
                     transition: color 0.3s ease;
                     padding: 8px 12px;
                 }
-                .animated-link::after {
-                    content: '';
-                    position: absolute;
-                    bottom: 0px;
-                    left: 12px;
-                    right: 12px;
-                    width: 0;
-                    height: 2px;
-                    background-color: #e79210;
-                    transition: width 0.3s ease;
-                }
-                .animated-link:hover::after {
-                    width: calc(100% - 24px);
-                }
-                .animated-link:hover {
+                .animated-link:hover,
+                .animated-link.active-nav-link {
                     color: #e79210;
                 }
                 .group:hover .animated-link {
                     color: black;
                 }
-                .group:hover .animated-link:hover {
+                .group:hover .animated-link:hover,
+                .group:hover .animated-link.active-nav-link {
                     color: #e79210;
                 }
             `}</style>
@@ -110,15 +98,23 @@ const Header = ({ navigationItems = [] }) => {
 
                 {/* Center: Navigation Items */}
                 <div className='flex-2 flex items-center justify-center gap-2'>
-                    {navItems.map((item, index) => (
-                        <Link
-                            key={index}
-                            to={item.href}
-                            className='animated-link text-white'
-                        >
-                            {item.text}
-                        </Link>
-                    ))}
+                    {navItems.map((item, index) => {
+                        const isActive =
+                            location.pathname === item.href ||
+                            (item.href !== '/' &&
+                                location.pathname.startsWith(item.href));
+                        return (
+                            <Link
+                                key={index}
+                                to={item.href}
+                                className={`animated-link text-white ${
+                                    isActive ? 'active-nav-link' : ''
+                                }`}
+                            >
+                                {item.text}
+                            </Link>
+                        );
+                    })}
                 </div>
 
                 {/* Right: Login/Account Button And Cart*/}
