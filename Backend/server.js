@@ -20,7 +20,6 @@ app.use(cors({
 }))
 
 app.use(express.json())
-app.use(express.json())
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -98,7 +97,26 @@ const ProductSchema = new mongoose.Schema({
     sizes: [String]
 })
 
+// Order Schema
+const OrderSchema = new mongoose.Schema({
+    orderID: String,
+    userIDNumber: Number,
+    orderDate: Date,
+    status: String,
+    totalPrice: Number,
+    items: [{
+        productID: String,
+        name: String,
+        image: String,
+        quantity: Number,
+        price: Number,
+        sizes: [String]
+    }]
+})
+
 const Product = mongoose.model('Product', ProductSchema)
+const Order = mongoose.model('Order', OrderSchema)
+
 
 //
 // REGISTRATION ROUTE
@@ -331,6 +349,62 @@ app.get('/health', (req, res) => {
         mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
     });
 });
+
+
+// Order History
+
+// Create a new order
+app.post('/orders/create', async (req, res) => {
+    const {userIDNumber, items, status} = req.body;
+
+    if (!userIDNumber || !items || !Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({error: 'Missing required order data'});
+    }
+
+    try {
+        // Calculate total price server-side
+        const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+        // Find last order to generate incremental ID
+        const lastOrder = await Order.findOne({}, {}, {sort: {orderID: -1}});
+
+        let nextNumber = 1;
+        if (lastOrder && lastOrder.orderID) {
+            // Extract numeric part from last orderID, e.g., "O123" -> 123
+            const lastNumber = parseInt(lastOrder.orderID.replace(/^O/, ''), 10);
+            if (!isNaN(lastNumber)) nextNumber = lastNumber + 1;
+        }
+
+        const orderID = 'O' + nextNumber;
+
+        const order = await Order.create({
+            orderID,
+            userIDNumber,
+            orderDate: new Date(),
+            status: status || 'Processing',
+            totalPrice,
+            items
+        });
+
+        res.status(201).json(order);
+    } catch (err) {
+        console.error('Error creating order:', err);
+        res.status(500).json({error: 'Failed to create order'});
+    }
+});
+
+// Get all orders
+app.get('/orders', async (req, res) => {
+    try {
+        const orders = await Order.find().sort({orderDate: -1}); // latest orders first
+        res.json(orders);
+    } catch (err) {
+        console.error('Error fetching orders:', err);
+        res.status(500).json({error: 'Failed to fetch orders'});
+    }
+});
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

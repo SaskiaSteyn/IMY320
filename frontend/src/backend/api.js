@@ -221,3 +221,41 @@ export async function testConnection() {
         return {success: false, error: error.message}
     }
 }
+
+//
+// ORDER FUNCTIONS
+//
+
+export async function createOrder(orderData) {
+    try {
+        // console.log('Creating order with data:', orderData);
+        const response = await fetch(`${API_URL}/orders/create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData),
+        })
+
+        return await handleResponse(response, 'Create Order')
+    } catch (error) {
+        console.error('Create Order network error:', error)
+        return {error: 'Network error during Create Order'}
+    }
+}
+
+export async function getAllOrders() {
+    try {
+        // console.log('Fetching all orders from:', `${API_URL}/orders`);
+        const response = await fetch(`${API_URL}/orders`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        return await handleResponse(response, 'Get All Orders')
+    } catch (error) {
+        console.error('Get All Orders network error:', error)
+        return {error: 'Network error during Get All Orders'}
+    }
+}
