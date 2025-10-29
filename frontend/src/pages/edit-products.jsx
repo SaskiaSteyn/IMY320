@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import { FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {FaMinus, FaPlus, FaTrash} from 'react-icons/fa';
+import {Link} from 'react-router-dom';
 import {
     adjustStock,
-    deleteProduct,
+    DeleteProduct,
     getAllProducts,
     updateProduct,
 } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Header from '../components/header.jsx';
 import SaveChangesPopup from '../components/save-changes-popup.jsx';
-import { Button } from '../components/ui/button.jsx';
+import {Button} from '../components/ui/button.jsx';
 
 const EditProducts = () => {
     const [products, setProducts] = useState([]);
@@ -38,7 +38,7 @@ const EditProducts = () => {
             originalProduct.descriptor !== product.descriptor ||
             originalProduct.price !== product.price ||
             JSON.stringify(originalProduct.tags) !==
-                JSON.stringify(product.tags)
+            JSON.stringify(product.tags)
         );
     };
 
@@ -47,7 +47,7 @@ const EditProducts = () => {
     }, []);
 
     const showNotification = (type, message, details = '') => {
-        setPopupData({ type, message, details });
+        setPopupData({type, message, details});
         setShowPopup(true);
     };
 
@@ -161,8 +161,7 @@ const EditProducts = () => {
                 showNotification(
                     'success',
                     'Changes Saved Successfully!',
-                    `Updated ${successCount} product${
-                        successCount !== 1 ? 's' : ''
+                    `Updated ${successCount} product${successCount !== 1 ? 's' : ''
                     }: ${updatedProducts.join(', ')}`
                 );
                 // Refresh the products list to get updated data from database
@@ -174,8 +173,7 @@ const EditProducts = () => {
                 showNotification(
                     'error',
                     'Some Updates Failed',
-                    `Failed to update ${errorCount} product${
-                        errorCount !== 1 ? 's' : ''
+                    `Failed to update ${errorCount} product${errorCount !== 1 ? 's' : ''
                     }. Please try again.`
                 );
             }
@@ -357,13 +355,13 @@ const EditProducts = () => {
                                                                     prevProducts.map(
                                                                         (p) =>
                                                                             p.id ===
-                                                                            product.id
+                                                                                product.id
                                                                                 ? {
-                                                                                      ...p,
-                                                                                      name: e
-                                                                                          .target
-                                                                                          .value,
-                                                                                  }
+                                                                                    ...p,
+                                                                                    name: e
+                                                                                        .target
+                                                                                        .value,
+                                                                                }
                                                                                 : p
                                                                     )
                                                             );
@@ -386,14 +384,14 @@ const EditProducts = () => {
                                                                     prevProducts.map(
                                                                         (p) =>
                                                                             p.id ===
-                                                                            product.id
+                                                                                product.id
                                                                                 ? {
-                                                                                      ...p,
-                                                                                      descriptor:
-                                                                                          e
-                                                                                              .target
-                                                                                              .value,
-                                                                                  }
+                                                                                    ...p,
+                                                                                    descriptor:
+                                                                                        e
+                                                                                            .target
+                                                                                            .value,
+                                                                                }
                                                                                 : p
                                                                     )
                                                             );
@@ -422,19 +420,19 @@ const EditProducts = () => {
                                                                                 p
                                                                             ) =>
                                                                                 p.id ===
-                                                                                product.id
+                                                                                    product.id
                                                                                     ? {
-                                                                                          ...p,
-                                                                                          tags: [
-                                                                                              e
-                                                                                                  .target
-                                                                                                  .value,
-                                                                                              ...(p.tags?.slice(
-                                                                                                  1
-                                                                                              ) ||
-                                                                                                  []),
-                                                                                          ],
-                                                                                      }
+                                                                                        ...p,
+                                                                                        tags: [
+                                                                                            e
+                                                                                                .target
+                                                                                                .value,
+                                                                                            ...(p.tags?.slice(
+                                                                                                1
+                                                                                            ) ||
+                                                                                                []),
+                                                                                        ],
+                                                                                    }
                                                                                     : p
                                                                         )
                                                                 );
@@ -444,12 +442,11 @@ const EditProducts = () => {
                                                             }}
                                                         />
                                                         <span
-                                                            className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
-                                                                product.stock ===
+                                                            className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${product.stock ===
                                                                 0
-                                                                    ? 'bg-red-100 text-red-800'
-                                                                    : 'bg-green-100 text-green-800'
-                                                            }`}
+                                                                ? 'bg-red-100 text-red-800'
+                                                                : 'bg-green-100 text-green-800'
+                                                                }`}
                                                         >
                                                             {(() => {
                                                                 console.log(
@@ -502,11 +499,11 @@ const EditProducts = () => {
                                                                                     p
                                                                                 ) =>
                                                                                     p.id ===
-                                                                                    product.id
+                                                                                        product.id
                                                                                         ? {
-                                                                                              ...p,
-                                                                                              price: value,
-                                                                                          }
+                                                                                            ...p,
+                                                                                            price: value,
+                                                                                        }
                                                                                         : p
                                                                             )
                                                                     );
@@ -538,11 +535,10 @@ const EditProducts = () => {
                                                         disabled={
                                                             product.stock <= 0
                                                         }
-                                                        className={`p-2 border border-gray-300 rounded-lg flex items-center justify-center h-10 w-10 text-base font-bold transition-colors ${
-                                                            product.stock <= 0
-                                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                                                : 'hover:bg-gray-50 cursor-pointer'
-                                                        }`}
+                                                        className={`p-2 border border-gray-300 rounded-lg flex items-center justify-center h-10 w-10 text-base font-bold transition-colors ${product.stock <= 0
+                                                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                            : 'hover:bg-gray-50 cursor-pointer'
+                                                            }`}
                                                         title={
                                                             product.stock <= 0
                                                                 ? 'Stock cannot go below 0'
@@ -601,13 +597,13 @@ const EditProducts = () => {
 
                                                                 // Handle other changes
                                                                 const updateData =
-                                                                    {
-                                                                        name: product.name,
-                                                                        descriptor:
-                                                                            product.descriptor,
-                                                                        price: product.price,
-                                                                        tags: product.tags,
-                                                                    };
+                                                                {
+                                                                    name: product.name,
+                                                                    descriptor:
+                                                                        product.descriptor,
+                                                                    price: product.price,
+                                                                    tags: product.tags,
+                                                                };
 
                                                                 await updateProduct(
                                                                     product.id,
@@ -625,7 +621,7 @@ const EditProducts = () => {
                                                             } catch (err) {
                                                                 showNotification(
                                                                     'error',
-                                                                    'Save Failed',
+                                                                    err,
                                                                     'An unexpected error occurred'
                                                                 );
                                                             } finally {
@@ -701,7 +697,7 @@ const EditProducts = () => {
                                                 name: productToDelete.name,
                                             }
                                         );
-                                        const result = await deleteProduct(
+                                        const result = await DeleteProduct(
                                             productToDelete.id
                                         );
                                         if (result.error) {

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {Link, useLocation} from 'react-router-dom';
 import AuthButton from './auth-button';
 import CartButton from './cart-button';
+import OrderHistoryButton from './orderHistory-button';
 
 // Utility function to check if user has admin role
 const isUserAdmin = () => {
@@ -22,13 +23,13 @@ const isUserAdmin = () => {
     }
 };
 
-const Header = ({ navigationItems = [] }) => {
+const Header = ({navigationItems = []}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const location = useLocation();
 
     // Handle auth state changes from AuthButton
-    const handleAuthChange = ({ isLoggedIn: loggedIn, isAdmin: admin }) => {
+    const handleAuthChange = ({isLoggedIn: loggedIn, isAdmin: admin}) => {
         setIsLoggedIn(loggedIn);
         setIsAdmin(admin);
     };
@@ -53,12 +54,12 @@ const Header = ({ navigationItems = [] }) => {
 
     // Default navigation items if none provided (computed after state updates)
     const defaultNavItems = [
-        { text: 'Home', href: '/' },
-        { text: 'About', href: '/about' },
-        { text: 'Write in Peace', href: '/write-in-peace' },
-        { text: 'Shop Merch', href: '/products' },
+        {text: 'Home', href: '/'},
+        {text: 'About', href: '/about'},
+        {text: 'Write in Peace', href: '/write-in-peace'},
+        {text: 'Shop Merch', href: '/products'},
         // Add admin link if user is admin
-        ...(isAdmin ? [{ text: 'Manage Products', href: '/add-product' }] : []),
+        ...(isAdmin ? [{text: 'Manage Products', href: '/add-product'}] : []),
     ];
 
     const navItems =
@@ -107,9 +108,8 @@ const Header = ({ navigationItems = [] }) => {
                             <Link
                                 key={index}
                                 to={item.href}
-                                className={`animated-link text-white ${
-                                    isActive ? 'active-nav-link' : ''
-                                }`}
+                                className={`animated-link text-white ${isActive ? 'active-nav-link' : ''
+                                    }`}
                             >
                                 {item.text}
                             </Link>
@@ -120,6 +120,10 @@ const Header = ({ navigationItems = [] }) => {
                 {/* Right: Login/Account Button And Cart*/}
                 <div className='flex-1 flex items-center justify-end'>
                     <div className='flex gap-2'>
+                        {isLoggedIn ? (<OrderHistoryButton
+                            variant='outline'
+                            className='relative !text-white !border-white !bg-transparent group-hover:!text-black group-hover:!border-black hover:!bg-white/20 group-hover:hover:!bg-black/10'
+                        />) : null}
                         <CartButton
                             variant='outline'
                             className='relative !text-white !border-white !bg-transparent group-hover:!text-black group-hover:!border-black hover:!bg-white/20 group-hover:hover:!bg-black/10'
