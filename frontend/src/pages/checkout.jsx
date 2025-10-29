@@ -401,15 +401,15 @@ function Checkout() {
                 throw new Error('Please log in to place an order.');
             }
 
-            if (!userData.userIDNumber && !userData.id) {
-                console.error('Missing user ID in userData:', userData);
+            if (!userData.userIDNumber) {
+                console.error('Missing userIDNumber in userData:', userData);
                 throw new Error(
                     'User ID not found. Please try logging in again.'
                 );
             }
 
             // Create order in database first
-            const userID = parseInt(userData.userIDNumber || userData.id, 10);
+            const userID = parseInt(userData.userIDNumber, 10);
             if (isNaN(userID)) {
                 throw new Error(
                     'Invalid user ID. Please try logging in again.'

@@ -184,8 +184,7 @@ app.post('/login', async (req, res) => {
         res.json({
             token,
             user: {
-                id: user.userIDNumber, // for compatibility, but not Mongo _id
-                userIDNumber: user.userIDNumber, // explicit
+                userIDNumber: user.userIDNumber, // Use only userIDNumber for consistency
                 username: user.username,
                 email: user.email,
                 role: user.role
@@ -457,11 +456,7 @@ app.get('/orders/user/:userIDNumber', async (req, res) => {
 
     try {
         const userOrders = await Order.find({ userIDNumber }).sort({ orderDate: -1 })
-
-        if (!userOrders || userOrders.length === 0) {
-            return res.status(404).json({ message: 'No orders found for this user' })
-        }
-
+        // Always return the orders array, even if empty
         res.json(userOrders)
     } catch (err) {
         console.error('Error fetching user orders:', err)

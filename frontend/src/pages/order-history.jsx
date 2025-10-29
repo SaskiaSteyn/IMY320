@@ -76,11 +76,8 @@ const OrderHistory = () => {
                     return;
                 }
 
-                // Try all possible ID fields
-                const userIDNumber =
-                    userData.userIDNumber ||
-                    userData.id ||
-                    (userData._id ? parseInt(userData._id, 10) : null);
+                // Use only userIDNumber for consistency
+                const userIDNumber = userData.userIDNumber;
                 console.log(
                     'User data fields available:',
                     Object.keys(userData)
@@ -104,7 +101,8 @@ const OrderHistory = () => {
                     setError(result.error);
                 } else {
                     console.log('Orders received:', result);
-                    setOrders(result);
+                    // Ensure we always set an array, even if empty
+                    setOrders(Array.isArray(result) ? result : []);
                 }
             } catch (e) {
                 console.error('Error fetching orders:', e);
@@ -237,16 +235,16 @@ const OrderHistory = () => {
                                     <table className='min-w-full divide-y divide-gray-200'>
                                         <thead>
                                             <tr>
-                                                <th className='px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase'>
+                                                <th className='w-1/2 px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase'>
                                                     Product
                                                 </th>
-                                                <th className='px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase'>
+                                                <th className='w-[15%] px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase'>
                                                     Quantity
                                                 </th>
-                                                <th className='px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase'>
+                                                <th className='w-[15%] px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase'>
                                                     Price
                                                 </th>
-                                                <th className='px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase'>
+                                                <th className='w-[20%] px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase'>
                                                     Size(s)
                                                 </th>
                                             </tr>
@@ -254,25 +252,31 @@ const OrderHistory = () => {
                                         <tbody className='bg-white divide-y divide-gray-200'>
                                             {order.items.map((item, idx) => (
                                                 <tr key={item.productID + idx}>
-                                                    <td className='px-4 py-2 flex items-center gap-3'>
-                                                        {item.image && (
-                                                            <img
-                                                                src={item.image}
-                                                                alt={item.name}
-                                                                className='w-12 h-12 object-cover rounded'
-                                                            />
-                                                        )}
-                                                        <span className='font-medium text-gray-900'>
-                                                            {item.name}
-                                                        </span>
+                                                    <td className='w-1/2 px-4 py-2'>
+                                                        <div className='flex items-center gap-3'>
+                                                            {item.image && (
+                                                                <img
+                                                                    src={
+                                                                        item.image
+                                                                    }
+                                                                    alt={
+                                                                        item.name
+                                                                    }
+                                                                    className='w-12 h-12 object-cover rounded'
+                                                                />
+                                                            )}
+                                                            <span className='font-medium text-gray-900'>
+                                                                {item.name}
+                                                            </span>
+                                                        </div>
                                                     </td>
-                                                    <td className='px-4 py-2'>
+                                                    <td className='w-[15%] px-4 py-2 text-center'>
                                                         {item.quantity}
                                                     </td>
-                                                    <td className='px-4 py-2'>
+                                                    <td className='w-[15%] px-4 py-2 text-right'>
                                                         R{item.price}
                                                     </td>
-                                                    <td className='px-4 py-2'>
+                                                    <td className='w-[20%] px-4 py-2 text-center'>
                                                         {item.sizes &&
                                                         item.sizes.length > 0
                                                             ? item.sizes.join(
