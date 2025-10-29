@@ -5,12 +5,12 @@ async function handleResponse(response, operation) {
     // console.log(`${operation} response status:`, response.status);
 
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({error: 'Failed to parse error response'}))
+        const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }))
         console.error(`${operation} failed:`, errorData)
-        return {error: errorData.error || `${operation} failed`}
+        return { error: errorData.error || `${operation} failed` }
     }
 
-    const data = await response.json().catch(() => ({error: 'Failed to parse response'}))
+    const data = await response.json().catch(() => ({ error: 'Failed to parse response' }))
     // console.log(`${operation} successful:`, data);
     return data
 }
@@ -33,7 +33,7 @@ export async function getAllProducts() {
         return await handleResponse(response, 'Get all products')
     } catch (error) {
         console.error('Get all products network error:', error)
-        return {error: 'Network error during fetching all products'}
+        return { error: 'Network error during fetching all products' }
     }
 }
 
@@ -45,13 +45,13 @@ export async function getProductsByTags(tags) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({tagsArray: tags}),
+            body: JSON.stringify({ tagsArray: tags }),
         })
 
         return await handleResponse(response, 'Get products by tags')
     } catch (error) {
         console.error('Get products by tags network error:', error)
-        return {error: 'Network error during fetching products by tags'}
+        return { error: 'Network error during fetching products by tags' }
     }
 }
 
@@ -69,7 +69,7 @@ export async function addProduct(productData) {
         return await handleResponse(response, 'Add product')
     } catch (error) {
         console.error('Add product network error:', error)
-        return {error: 'Network error during adding product'}
+        return { error: 'Network error during adding product' }
     }
 }
 
@@ -87,7 +87,7 @@ export async function updateProduct(productId, updateData) {
         return await handleResponse(response, 'Update product')
     } catch (error) {
         console.error('Update product network error:', error)
-        return {error: 'Network error during updating product'}
+        return { error: 'Network error during updating product' }
     }
 }
 
@@ -99,13 +99,13 @@ export async function adjustStock(productId, adjustment) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({adjustment}),
+            body: JSON.stringify({ adjustment }),
         })
 
         return await handleResponse(response, 'Adjust stock')
     } catch (error) {
         console.error('Adjust stock network error:', error)
-        return {error: 'Network error during stock adjustment'}
+        return { error: 'Network error during stock adjustment' }
     }
 }
 
@@ -122,7 +122,7 @@ export async function DeleteProduct(productId) {
         return await handleResponse(response, 'Delete product')
     } catch (error) {
         console.error('Delete product network error:', error)
-        return {error: 'Network error during product deletion'}
+        return { error: 'Network error during product deletion' }
     }
 }
 
@@ -144,7 +144,7 @@ export async function uploadImage(imageFile) {
         return await handleResponse(response, 'Upload image')
     } catch (error) {
         console.error('Upload image network error:', error)
-        return {error: 'Network error during image upload'}
+        return { error: 'Network error during image upload' }
     }
 }
 
@@ -167,7 +167,7 @@ export async function register(userData) {
         return await handleResponse(response, 'Registration')
     } catch (error) {
         console.error('Registration network error:', error)
-        return {error: 'Network error during registration'}
+        return { error: 'Network error during registration' }
     }
 }
 
@@ -179,7 +179,7 @@ export async function login(username, password) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({username, password}),
+            body: JSON.stringify({ username, password }),
         })
 
         const result = await handleResponse(response, 'Login')
@@ -193,7 +193,7 @@ export async function login(username, password) {
         return result
     } catch (error) {
         console.error('Login network error:', error)
-        return {error: 'Network error during login'}
+        return { error: 'Network error during login' }
     }
 }
 
@@ -216,7 +216,7 @@ export async function logout() {
         console.error('Logout network error:', error)
         // Still clear token even if network request fails
         localStorage.removeItem('token')
-        return {error: 'Network error during logout'}
+        return { error: 'Network error during logout' }
     }
 }
 
@@ -239,7 +239,7 @@ export async function deleteProduct(productId) {
                 errorText,
                 url: response.url
             })
-            return {error: `Failed to delete product (${response.status}: ${response.statusText})`}
+            return { error: `Failed to delete product (${response.status}: ${response.statusText})` }
         }
 
         // Try to parse as JSON, fall back to text if it fails
@@ -249,11 +249,11 @@ export async function deleteProduct(productId) {
             return data
         } catch {
             // If response is not JSON, return success message
-            return {message: 'Product deleted successfully'}
+            return { message: 'Product deleted successfully' }
         }
     } catch (error) {
         console.error('Delete product network error:', error)
-        return {error: 'Network error during product deletion'}
+        return { error: 'Network error during product deletion' }
     }
 }
 
@@ -268,10 +268,10 @@ export async function testConnection() {
         })
 
         // console.log('Connection test response status:', response.status);
-        return {success: true, status: response.status}
+        return { success: true, status: response.status }
     } catch (error) {
         console.error('Connection test failed:', error)
-        return {success: false, error: error.message}
+        return { success: false, error: error.message }
     }
 }
 
@@ -281,19 +281,35 @@ export async function testConnection() {
 
 export async function createOrder(orderData) {
     try {
-        // console.log('Creating order with data:', orderData);
+        const token = localStorage.getItem('token')
+        if (!token) {
+            return { error: 'Please log in to create an order' }
+        }
+
+        // Convert userIDNumber to a number explicitly
+        const modifiedOrderData = {
+            ...orderData,
+            userIDNumber: parseInt(orderData.userIDNumber, 10)
+        }
+
+        if (isNaN(modifiedOrderData.userIDNumber)) {
+            return { error: 'Invalid user ID' }
+        }
+
+        console.log('Creating order with data:', modifiedOrderData)
         const response = await fetch(`${API_URL}/orders/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(orderData),
+            body: JSON.stringify(modifiedOrderData),
         })
 
         return await handleResponse(response, 'Create Order')
     } catch (error) {
         console.error('Create Order network error:', error)
-        return {error: 'Network error during Create Order'}
+        return { error: 'Network error during Create Order' }
     }
 }
 
@@ -309,22 +325,48 @@ export async function getAllOrders() {
         return await handleResponse(response, 'Get All Orders')
     } catch (error) {
         console.error('Get All Orders network error:', error)
-        return {error: 'Network error during Get All Orders'}
+        return { error: 'Network error during Get All Orders' }
     }
 }
 
 export async function getUserOrders(userId) {
     try {
-        // console.log('Fetching all orders from:', `${API_URL}/orders`);
+        console.log('Fetching orders for user:', userId)
+        if (!userId) {
+            console.error('No user ID provided')
+            return { error: 'No user ID provided' }
+        }
+
+        const token = localStorage.getItem('token')
+        if (!token) {
+            console.error('No authentication token found')
+            return { error: 'Please log in to view your orders' }
+        }
+
         const response = await fetch(`${API_URL}/orders/user/${userId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
         })
-        return await handleResponse(response, 'Get User Orders')
+
+        if (!response.ok) {
+            const errorText = await response.text()
+            console.error('Server error response:', errorText)
+            try {
+                const errorJson = JSON.parse(errorText)
+                return { error: errorJson.error || 'Failed to fetch orders' }
+            } catch {
+                return { error: 'Failed to fetch orders' }
+            }
+        }
+
+        const data = await response.json()
+        console.log('Orders response:', data)
+        return data
     } catch (error) {
         console.error('Get User Orders network error:', error)
-        return {error: 'Network error during Get User Orders'}
+        return { error: 'Failed to fetch orders. Please try again.' }
     }
 }

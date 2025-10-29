@@ -1,9 +1,15 @@
-import {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {login} from '../backend/api';
-import {FaApple, FaDiscord, FaGoogle, FaEye, FaEyeSlash} from 'react-icons/fa';
-import {Button} from '../components/ui/button.jsx';
+import { useEffect, useState } from 'react';
+import {
+    FaApple,
+    FaDiscord,
+    FaEye,
+    FaEyeSlash,
+    FaGoogle,
+} from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../backend/api';
 import Header from '../components/header.jsx';
+import { Button } from '../components/ui/button.jsx';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -24,7 +30,7 @@ const Login = () => {
     }, []);
 
     const handleChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: value,
@@ -84,17 +90,19 @@ const Login = () => {
                 <div className='bg-white auth-container p-8 w-full max-w-4xl min-h-[80vh] flex items-center justify-center shadow-lg rounded-lg relative border border-gray-300'>
                     {/* Animated Logo - starts centered and large, moves to top and shrinks */}
                     <div
-                        className={`absolute transition-all duration-2000 ease-out ${animationStarted
-                            ? 'top-4 left-1/2 transform -translate-x-1/2'
-                            : 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
-                            }`}
+                        className={`absolute transition-all duration-2000 ease-out ${
+                            animationStarted
+                                ? 'top-4 left-1/2 transform -translate-x-1/2'
+                                : 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
+                        }`}
                     >
                         <div className='text-center'>
                             <h1
-                                className={`header-logo transition-all duration-2500 ease-out ${animationStarted
-                                    ? 'text-9xl'
-                                    : 'text-[12rem]'
-                                    }`}
+                                className={`header-logo transition-all duration-2500 ease-out ${
+                                    animationStarted
+                                        ? 'text-9xl'
+                                        : 'text-[12rem]'
+                                }`}
                                 style={{
                                     color: '#19191a',
                                     fontSize: animationStarted
@@ -110,11 +118,12 @@ const Login = () => {
                                     transformOrigin: 'center',
                                 }}
                             >
-                                COVE
+                                COVE.
                             </h1>
                             <p
-                                className={`transition-all duration-2500 ease-out italic ${animationStarted ? 'text-2xl' : 'text-2xl'
-                                    }`}
+                                className={`transition-all duration-2500 ease-out italic ${
+                                    animationStarted ? 'text-2xl' : 'text-2xl'
+                                }`}
                                 style={{
                                     color: '#19191a',
                                     marginTop: animationStarted
@@ -133,8 +142,9 @@ const Login = () => {
 
                     {/* Login Form - fades in during logo animation */}
                     <div
-                        className={`w-full transition-opacity duration-1500 ease-out delay-700 ${animationStarted ? 'opacity-100' : 'opacity-0'
-                            }`}
+                        className={`w-full transition-opacity duration-1500 ease-out delay-700 ${
+                            animationStarted ? 'opacity-100' : 'opacity-0'
+                        }`}
                     >
                         {/* Spacer for logo - adjusted to better accommodate the larger logo */}
                         <div className='h-28 mb-4'></div>
@@ -169,23 +179,31 @@ const Login = () => {
                                     />
                                 </div>
 
-                                <div className="flex flex-col relative">
+                                <div className='flex flex-col relative'>
                                     <input
-                                        type={showPassword ? 'text' : 'password'}
-                                        id="password"
-                                        name="password"
+                                        type={
+                                            showPassword ? 'text' : 'password'
+                                        }
+                                        id='password'
+                                        name='password'
                                         value={formData.password}
                                         onChange={handleChange}
-                                        placeholder="Password"
-                                        className="p-3 pr-10 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800"
+                                        placeholder='Password'
+                                        className='p-3 pr-10 bg-white focus:bg-white hover:bg-white active:bg-white focus:outline-none transition-all duration-200 border-2 rounded-md raleway border-gray-300 focus:border-orange-500 text-gray-800'
                                     />
                                     <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                        type='button'
+                                        onClick={() =>
+                                            setShowPassword(!showPassword)
+                                        }
+                                        className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700'
                                         tabIndex={-1}
                                     >
-                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                        {showPassword ? (
+                                            <FaEyeSlash />
+                                        ) : (
+                                            <FaEye />
+                                        )}
                                     </button>
                                 </div>
 
@@ -214,32 +232,32 @@ const Login = () => {
                                 </div>
 
                                 {/* Social Buttons */}
-                                <div className="flex flex-row gap-4 justify-center">
+                                <div className='flex flex-row gap-4 justify-center'>
                                     {/* Google */}
                                     <button
-                                        type="button"
+                                        type='button'
                                         onClick={() => navigate('/')}
-                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-white border-2 border-gray-300 hover:bg-gray-50 transition-all duration-200"
+                                        className='flex items-center justify-center w-12 h-12 rounded-full bg-white border-2 border-gray-300 hover:bg-gray-50 transition-all duration-200'
                                     >
-                                        <FaGoogle className="text-red-500 text-xl" />
+                                        <FaGoogle className='text-red-500 text-xl' />
                                     </button>
 
                                     {/* Apple */}
                                     <button
-                                        type="button"
+                                        type='button'
                                         onClick={() => navigate('/')}
-                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-black hover:bg-gray-900 transition-all duration-200"
+                                        className='flex items-center justify-center w-12 h-12 rounded-full bg-black hover:bg-gray-900 transition-all duration-200'
                                     >
-                                        <FaApple className="text-white text-xl" />
+                                        <FaApple className='text-white text-xl' />
                                     </button>
 
                                     {/* Discord */}
                                     <button
-                                        type="button"
+                                        type='button'
                                         onClick={() => navigate('/')}
-                                        className="flex items-center justify-center w-12 h-12 rounded-full bg-[#5865F2] hover:bg-[#4752c4] transition-all duration-200"
+                                        className='flex items-center justify-center w-12 h-12 rounded-full bg-[#5865F2] hover:bg-[#4752c4] transition-all duration-200'
                                     >
-                                        <FaDiscord className="text-white text-xl" />
+                                        <FaDiscord className='text-white text-xl' />
                                     </button>
                                 </div>
                             </div>

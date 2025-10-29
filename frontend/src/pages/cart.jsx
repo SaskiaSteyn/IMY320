@@ -88,6 +88,11 @@ function Cart() {
 
     // Calculate total price
     const totalPrice = cartItems.reduce((total, item) => {
+        // For subscription items, don't multiply by quantity
+        if (item.type === 'subscription') {
+            return total + item.price;
+        }
+        // For regular items, multiply by quantity
         return total + item.price * item.quantity;
     }, 0);
 

@@ -7,7 +7,7 @@ import {
     FaPaypal,
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import { adjustStock } from '../backend/api.js';
+import { adjustStock, createOrder } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Header from '../components/header.jsx';
 import { Button } from '../components/ui/button.jsx';
@@ -43,6 +43,54 @@ function Checkout() {
         cvv: '',
         cardholderName: '',
     });
+
+    // Form errors state
+    const [errors, setErrors] = useState({
+        customer: {},
+        shipping: {},
+        card: {},
+    });
+    const [orderError, setOrderError] = useState(''); // Validation functions
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    };
+
+    const validatePhone = (phone) => {
+        const re = /^(\+27|0)[1-9][0-9]{8}$/;
+        return phone === '' || re.test(phone); // Optional field
+    };
+
+    const validateName = (name) => {
+        return name.length >= 2;
+    };
+
+    const validateAddress = (address) => {
+        return address.length >= 5;
+    };
+
+    const validateZipCode = (zipCode) => {
+        const re = /^\d{4}$/;
+        return re.test(zipCode);
+    };
+
+    const validateCardNumber = (number) => {
+        const re = /^[\d\s]{16,19}$/;
+        return re.test(number.replace(/\s/g, ''));
+    };
+
+    const validateExpiryDate = (date) => {
+        if (!/^\d{2}\/\d{2}$/.test(date)) return false;
+        const [month, year] = date.split('/');
+        const expiry = new Date(2000 + parseInt(year), parseInt(month) - 1);
+        const today = new Date();
+        return expiry > today;
+    };
+
+    const validateCVV = (cvv) => {
+        const re = /^\d{3,4}$/;
+        return re.test(cvv);
+    };
 
     // Load cart items
     useEffect(() => {
@@ -128,14 +176,100 @@ function Checkout() {
         },
     ];
 
-    // Handle form submissions
+    // Handle form submissions and validation
     const handleInputChange = (section, field, value) => {
+        // Update form state
         if (section === 'customer') {
             setCustomerInfo((prev) => ({ ...prev, [field]: value }));
+
+            // Validate customer info fields
+            setErrors((prev) => ({
+                ...prev,
+                customer: {
+                    ...prev.customer,
+                    [field]: (() => {
+                        switch (field) {
+                            case 'email':
+                                return !validateEmail(value)
+                                    ? 'Please enter a valid email address'
+                                    : '';
+                            case 'phone':
+                                return !validatePhone(value)
+                                    ? 'Please enter a valid phone number (e.g., 0123456789)'
+                                    : '';
+                            case 'firstName':
+                            case 'lastName':
+                                return !validateName(value)
+                                    ? 'Name must be at least 2 characters long'
+                                    : '';
+                            default:
+                                return '';
+                        }
+                    })(),
+                },
+            }));
         } else if (section === 'shipping') {
             setShippingAddress((prev) => ({ ...prev, [field]: value }));
-        } else if (section === 'card') {
+
+            // Validate shipping fields
+            setErrors((prev) => ({
+                ...prev,
+                shipping: {
+                    ...prev.shipping,
+                    [field]: (() => {
+                        switch (field) {
+                            case 'address':
+                                return !validateAddress(value)
+                                    ? 'Please enter a valid address'
+                                    : '';
+                            case 'city':
+                                return !validateName(value)
+                                    ? 'Please enter a valid city name'
+                                    : '';
+                            case 'zipCode':
+                                return !validateZipCode(value)
+                                    ? 'Please enter a valid 4-digit postal code'
+                                    : '';
+                            case 'state':
+                                return !value ? 'Please select a province' : '';
+                            default:
+                                return '';
+                        }
+                    })(),
+                },
+            }));
+        } else if (section === 'card' && selectedPaymentMethod === 'card') {
             setCardInfo((prev) => ({ ...prev, [field]: value }));
+
+            // Validate card fields
+            setErrors((prev) => ({
+                ...prev,
+                card: {
+                    ...prev.card,
+                    [field]: (() => {
+                        switch (field) {
+                            case 'cardNumber':
+                                return !validateCardNumber(value)
+                                    ? 'Please enter a valid card number'
+                                    : '';
+                            case 'expiryDate':
+                                return !validateExpiryDate(value)
+                                    ? 'Please enter a valid expiry date (MM/YY)'
+                                    : '';
+                            case 'cvv':
+                                return !validateCVV(value)
+                                    ? 'Please enter a valid CVV (3-4 digits)'
+                                    : '';
+                            case 'cardholderName':
+                                return !validateName(value)
+                                    ? 'Please enter the cardholder name'
+                                    : '';
+                            default:
+                                return '';
+                        }
+                    })(),
+                },
+            }));
         }
     };
 
@@ -164,19 +298,152 @@ function Checkout() {
         return v;
     };
 
+    // Validate all forms before order placement
+    const validateAllForms = () => {
+        const customerErrors = {
+            email: !validateEmail(customerInfo.email)
+                ? 'Please enter a valid email address'
+                : '',
+            firstName: !validateName(customerInfo.firstName)
+                ? 'First name is required'
+                : '',
+            lastName: !validateName(customerInfo.lastName)
+                ? 'Last name is required'
+                : '',
+            phone: !validatePhone(customerInfo.phone)
+                ? 'Please enter a valid phone number'
+                : '',
+        };
+
+        const shippingErrors = {
+            address: !validateAddress(shippingAddress.address)
+                ? 'Please enter a valid address'
+                : '',
+            city: !validateName(shippingAddress.city) ? 'City is required' : '',
+            state: !shippingAddress.state ? 'Province is required' : '',
+            zipCode: !validateZipCode(shippingAddress.zipCode)
+                ? 'Please enter a valid postal code'
+                : '',
+        };
+
+        const cardErrors =
+            selectedPaymentMethod === 'card'
+                ? {
+                      cardNumber: !validateCardNumber(cardInfo.cardNumber)
+                          ? 'Please enter a valid card number'
+                          : '',
+                      expiryDate: !validateExpiryDate(cardInfo.expiryDate)
+                          ? 'Please enter a valid expiry date'
+                          : '',
+                      cvv: !validateCVV(cardInfo.cvv)
+                          ? 'Please enter a valid CVV'
+                          : '',
+                      cardholderName: !validateName(cardInfo.cardholderName)
+                          ? 'Cardholder name is required'
+                          : '',
+                  }
+                : {};
+
+        setErrors({
+            customer: customerErrors,
+            shipping: shippingErrors,
+            card: cardErrors,
+        });
+
+        const hasCustomerErrors = Object.values(customerErrors).some(
+            (error) => error !== ''
+        );
+        const hasShippingErrors = Object.values(shippingErrors).some(
+            (error) => error !== ''
+        );
+        const hasCardErrors =
+            selectedPaymentMethod === 'card' &&
+            Object.values(cardErrors).some((error) => error !== '');
+
+        return !hasCustomerErrors && !hasShippingErrors && !hasCardErrors;
+    };
+
     // Handle order placement
     const handlePlaceOrder = async () => {
+        if (!validateAllForms()) {
+            // Scroll to the first error
+            const firstErrorElement = document.querySelector('.text-red-500');
+            if (firstErrorElement) {
+                firstErrorElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                });
+            }
+            return;
+        }
+
         setIsProcessing(true);
 
         try {
-            // Adjust stock for each item in the cart
+            // Clear any previous errors
+            setOrderError('');
+
+            // Get user data from localStorage first
+            const token = localStorage.getItem('token');
+            const userDataRaw = localStorage.getItem('userData');
+            let userData;
+
+            try {
+                userData = userDataRaw ? JSON.parse(userDataRaw) : null;
+            } catch (e) {
+                console.error('Failed to parse user data:', e);
+                throw new Error(
+                    'Invalid user session. Please try logging in again.'
+                );
+            }
+
+            if (!token || !userData) {
+                throw new Error('Please log in to place an order.');
+            }
+
+            if (!userData.userIDNumber && !userData.id) {
+                console.error('Missing user ID in userData:', userData);
+                throw new Error(
+                    'User ID not found. Please try logging in again.'
+                );
+            }
+
+            // Create order in database first
+            const userID = parseInt(userData.userIDNumber || userData.id, 10);
+            if (isNaN(userID)) {
+                throw new Error(
+                    'Invalid user ID. Please try logging in again.'
+                );
+            }
+
+            const orderData = {
+                userIDNumber: userID,
+                items: cartItems.map((item) => ({
+                    productID: item.id,
+                    name: item.name,
+                    image: item.image || null,
+                    quantity: parseInt(item.quantity, 10),
+                    price: parseFloat(item.price),
+                    sizes: item.size ? [item.size] : [],
+                })),
+                status: 'Processing',
+            };
+            const orderResponse = await createOrder(orderData);
+
+            if (orderResponse.error) {
+                throw new Error(
+                    'Failed to create order: ' + orderResponse.error
+                );
+            }
+
+            // If order is created successfully, adjust stock
             for (const item of cartItems) {
                 // Skip stock adjustment for subscription items
                 if (item.type === 'subscription') {
                     continue;
                 }
 
-                const stockAdjustment = -item.quantity; // Negative adjustment to decrease stock
+                const stockAdjustment = -item.quantity;
                 const response = await adjustStock(item.id, stockAdjustment);
 
                 if (response.error) {
@@ -189,7 +456,7 @@ function Checkout() {
                 }
             }
 
-            // Simulate payment processing delay
+            // Order completed successfully, update UI after a short delay
             setTimeout(() => {
                 setIsProcessing(false);
                 setOrderComplete(true);
@@ -201,11 +468,13 @@ function Checkout() {
                     top: 0,
                     behavior: 'smooth',
                 });
-            }, 1500); // Reduced delay since we're already processing
+            }, 1500);
         } catch (error) {
             console.error('Error processing order:', error);
             setIsProcessing(false);
-            // You might want to show an error message to the user here
+            setOrderError(
+                error.message || 'Failed to process order. Please try again.'
+            );
         }
     };
 
@@ -354,21 +623,32 @@ function Checkout() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>
                                         Email Address *
                                     </label>
-                                    <input
-                                        type='email'
-                                        value={customerInfo.email}
-                                        onChange={(e) =>
-                                            handleInputChange(
-                                                'customer',
-                                                'email',
-                                                e.target.value
-                                            )
-                                        }
-                                        className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent transition-all duration-300 hover:border-[#e79210] hover:shadow-md focus:scale-105'
-                                        placeholder='your@email.com'
-                                        autoComplete='email'
-                                        required
-                                    />
+                                    <div className='space-y-1'>
+                                        <input
+                                            type='email'
+                                            value={customerInfo.email}
+                                            onChange={(e) =>
+                                                handleInputChange(
+                                                    'customer',
+                                                    'email',
+                                                    e.target.value
+                                                )
+                                            }
+                                            className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent transition-all duration-300 hover:border-[#e79210] hover:shadow-md focus:scale-105 ${
+                                                errors.customer.email
+                                                    ? 'border-red-500'
+                                                    : 'border-gray-300'
+                                            }`}
+                                            placeholder='your@email.com'
+                                            autoComplete='email'
+                                            required
+                                        />
+                                        {errors.customer.email && (
+                                            <p className='text-red-500 text-xs'>
+                                                {errors.customer.email}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                                 <div>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>
@@ -479,17 +759,17 @@ function Checkout() {
                                         </label>
                                         <input
                                             type='text'
-                                            value={shippingAddress.address}
+                                            value={shippingAddress.city}
                                             onChange={(e) =>
                                                 handleInputChange(
                                                     'shipping',
-                                                    'address',
+                                                    'city',
                                                     e.target.value
                                                 )
                                             }
                                             className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
-                                            placeholder='123 Your Awesome Street'
-                                            autoComplete='street-address'
+                                            placeholder='Enter your city'
+                                            autoComplete='address-level2'
                                             required
                                         />
                                     </div>
@@ -544,17 +824,18 @@ function Checkout() {
                                         </label>
                                         <input
                                             type='text'
-                                            value={shippingAddress.city}
+                                            value={shippingAddress.zipCode}
                                             onChange={(e) =>
                                                 handleInputChange(
                                                     'shipping',
-                                                    'city',
+                                                    'zipCode',
                                                     e.target.value
                                                 )
                                             }
                                             className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
-                                            placeholder='Cape Town'
-                                            autoComplete='address-level2'
+                                            placeholder='0000'
+                                            autoComplete='postal-code'
+                                            maxLength='4'
                                             required
                                         />
                                     </div>
@@ -628,17 +909,17 @@ function Checkout() {
                                         </label>
                                         <input
                                             type='text'
-                                            value={shippingAddress.zipCode}
+                                            value={cardInfo.cardholderName}
                                             onChange={(e) =>
                                                 handleInputChange(
-                                                    'shipping',
-                                                    'zipCode',
+                                                    'card',
+                                                    'cardholderName',
                                                     e.target.value
                                                 )
                                             }
                                             className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e79210] focus:border-transparent'
-                                            placeholder='8001'
-                                            autoComplete='postal-code'
+                                            placeholder='John Doe'
+                                            autoComplete='cc-name'
                                             required
                                         />
                                     </div>
@@ -812,6 +1093,11 @@ function Checkout() {
                                 </p>
                             </div>
 
+                            {orderError && (
+                                <div className='text-red-500 text-sm mb-4 p-3 bg-red-50 rounded-lg border border-red-200'>
+                                    {orderError}
+                                </div>
+                            )}
                             {/* Place Order Button */}
                             <Button
                                 className={`w-full mt-6 transform transition-all duration-300 ${

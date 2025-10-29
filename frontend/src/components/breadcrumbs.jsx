@@ -17,7 +17,7 @@ const Breadcrumbs = ({ product, category, showShop = true }) => {
                 <li>
                     <Link
                         to='/'
-                        className='hover:underline font-medium hover:text-white transition-colors'
+                        className='hover:underline hover:text-[#E79210] hover:font-bold font-medium transition-colors'
                     >
                         Home
                     </Link>
@@ -28,7 +28,7 @@ const Breadcrumbs = ({ product, category, showShop = true }) => {
                         <li>
                             <Link
                                 to='/products'
-                                className='hover:underline font-medium hover:text-white transition-colors'
+                                className='hover:underline hover:text-[#E79210] hover:font-bold font-medium transition-colors'
                             >
                                 Shop
                             </Link>
