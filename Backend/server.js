@@ -182,6 +182,7 @@ app.post('/login', async (req, res) => {
             token,
             user: {
                 id: user._id,
+                userIDNumber: user.userIDNumber,
                 username: user.username,
                 email: user.email,
                 role: user.role

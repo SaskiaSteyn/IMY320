@@ -42,13 +42,12 @@ const OrderHistory = () => {
             setError('');
             try {
                 const userData = JSON.parse(localStorage.getItem('userData'));
-                if (!userData || (!userData.id && !userData.userIDNumber)) {
-                    setError('User not logged in.');
+                if (!userData || !userData.userIDNumber) {
+                    setError('User not logged in or session expired.');
                     setLoading(false);
                     return;
                 }
-                // userIDNumber is used in backend, but userData.id is _id, so try userData.userIDNumber
-                const userId = userData.userIDNumber || userData.id;
+                const userId = userData.userIDNumber;
                 const result = await getUserOrders(userId);
                 if (result.error) {
                     setError(result.error);

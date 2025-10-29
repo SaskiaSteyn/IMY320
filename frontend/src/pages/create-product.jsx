@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { addProduct, uploadImage } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Header from '../components/header.jsx';
 import { Button } from '../components/ui/button.jsx';
+import '../components/ui/custom-datepicker.css';
 
 const CreateProduct = () => {
     const navigate = useNavigate();
@@ -691,7 +694,7 @@ const CreateProduct = () => {
                         {/* Availability Date - auto-calculated */}
                         <div>
                             <label className='block text-sm font-medium text-gray-700 mb-1'>
-                                Availability Date *
+                                Availability Date *{' '}
                             </label>
                             <p className='text-xs text-gray-500 mb-2'>
                                 When will this product be available for
@@ -702,11 +705,28 @@ const CreateProduct = () => {
                                     {validationErrors.availabilityDate}
                                 </div>
                             )}
-                            <input
-                                type='date'
-                                name='availabilityDate'
-                                value={formData.availabilityDate}
-                                onChange={handleInputChange}
+                            <DatePicker
+                                selected={
+                                    formData.availabilityDate
+                                        ? new Date(formData.availabilityDate)
+                                        : null
+                                }
+                                onChange={(date) => {
+                                    if (date) {
+                                        const formattedDate = date
+                                            .toISOString()
+                                            .split('T')[0];
+                                        handleInputChange({
+                                            target: {
+                                                name: 'availabilityDate',
+                                                value: formattedDate,
+                                            },
+                                        });
+                                    }
+                                }}
+                                dateFormat='dd/MM/yyyy'
+                                minDate={new Date()}
+                                placeholderText='DD/MM/YYYY'
                                 className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#e79210] focus:border-[#e79210]'
                             />
                             {selectedCategory && (
