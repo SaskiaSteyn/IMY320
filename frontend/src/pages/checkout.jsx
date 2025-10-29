@@ -7,7 +7,7 @@ import {
     FaPaypal,
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import { adjustStock } from '../backend/api.js';
+import { adjustStock, createOrder } from '../backend/api.js';
 import FooterCard from '../cards/footer.jsx';
 import Header from '../components/header.jsx';
 import { Button } from '../components/ui/button.jsx';
@@ -50,8 +50,7 @@ function Checkout() {
         shipping: {},
         card: {},
     });
-
-    // Validation functions
+    const [orderError, setOrderError] = useState(''); // Validation functions
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
@@ -381,14 +380,70 @@ function Checkout() {
         setIsProcessing(true);
 
         try {
-            // Adjust stock for each item in the cart
+            // Clear any previous errors
+            setOrderError('');
+
+            // Get user data from localStorage first
+            const token = localStorage.getItem('token');
+            const userDataRaw = localStorage.getItem('userData');
+            let userData;
+
+            try {
+                userData = userDataRaw ? JSON.parse(userDataRaw) : null;
+            } catch (e) {
+                console.error('Failed to parse user data:', e);
+                throw new Error(
+                    'Invalid user session. Please try logging in again.'
+                );
+            }
+
+            if (!token || !userData) {
+                throw new Error('Please log in to place an order.');
+            }
+
+            if (!userData.userIDNumber && !userData.id) {
+                console.error('Missing user ID in userData:', userData);
+                throw new Error(
+                    'User ID not found. Please try logging in again.'
+                );
+            }
+
+            // Create order in database first
+            const userID = parseInt(userData.userIDNumber || userData.id, 10);
+            if (isNaN(userID)) {
+                throw new Error(
+                    'Invalid user ID. Please try logging in again.'
+                );
+            }
+
+            const orderData = {
+                userIDNumber: userID,
+                items: cartItems.map((item) => ({
+                    productID: item.id,
+                    name: item.name,
+                    image: item.image || null,
+                    quantity: parseInt(item.quantity, 10),
+                    price: parseFloat(item.price),
+                    sizes: item.size ? [item.size] : [],
+                })),
+                status: 'Processing',
+            };
+            const orderResponse = await createOrder(orderData);
+
+            if (orderResponse.error) {
+                throw new Error(
+                    'Failed to create order: ' + orderResponse.error
+                );
+            }
+
+            // If order is created successfully, adjust stock
             for (const item of cartItems) {
                 // Skip stock adjustment for subscription items
                 if (item.type === 'subscription') {
                     continue;
                 }
 
-                const stockAdjustment = -item.quantity; // Negative adjustment to decrease stock
+                const stockAdjustment = -item.quantity;
                 const response = await adjustStock(item.id, stockAdjustment);
 
                 if (response.error) {
@@ -401,7 +456,7 @@ function Checkout() {
                 }
             }
 
-            // Simulate payment processing delay
+            // Order completed successfully, update UI after a short delay
             setTimeout(() => {
                 setIsProcessing(false);
                 setOrderComplete(true);
@@ -413,11 +468,13 @@ function Checkout() {
                     top: 0,
                     behavior: 'smooth',
                 });
-            }, 1500); // Reduced delay since we're already processing
+            }, 1500);
         } catch (error) {
             console.error('Error processing order:', error);
             setIsProcessing(false);
-            // You might want to show an error message to the user here
+            setOrderError(
+                error.message || 'Failed to process order. Please try again.'
+            );
         }
     };
 
@@ -1036,6 +1093,11 @@ function Checkout() {
                                 </p>
                             </div>
 
+                            {orderError && (
+                                <div className='text-red-500 text-sm mb-4 p-3 bg-red-50 rounded-lg border border-red-200'>
+                                    {orderError}
+                                </div>
+                            )}
                             {/* Place Order Button */}
                             <Button
                                 className={`w-full mt-6 transform transition-all duration-300 ${

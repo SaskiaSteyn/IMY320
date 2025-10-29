@@ -591,19 +591,21 @@ const CreateProduct = () => {
                                         onChange={handleImageChange}
                                         className='hidden'
                                     />
-                                    <Button
-                                        type='button'
-                                        onClick={() =>
-                                            document
-                                                .getElementById(
-                                                    'image-file-input'
-                                                )
-                                                .click()
-                                        }
-                                        className='bg-[#e79210] hover:bg-[#d68410] text-black font-medium px-6 py-2 w-full sm:w-auto mb-4'
-                                    >
-                                        Choose File
-                                    </Button>
+                                    {!imagePreview && (
+                                        <Button
+                                            type='button'
+                                            onClick={() =>
+                                                document
+                                                    .getElementById(
+                                                        'image-file-input'
+                                                    )
+                                                    .click()
+                                            }
+                                            className='bg-[#e79210] hover:bg-[#d68410] text-black font-medium px-6 py-2 w-full sm:w-auto mb-4'
+                                        >
+                                            Choose File
+                                        </Button>
+                                    )}
 
                                     {/* Image Preview */}
                                     {imagePreview ? (

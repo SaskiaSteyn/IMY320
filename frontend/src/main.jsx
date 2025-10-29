@@ -21,6 +21,7 @@ import TestSpin from './pages/test-spin.jsx';
 import WeeklyChallenge from './pages/weekly-challenge.jsx';
 import WriteInPeace from './pages/write-in-peace.jsx';
 import ScrollToTop from './scroll-to-top.jsx';
+import OrderHistory from './pages/order-history.jsx';
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
@@ -46,6 +47,7 @@ createRoot(document.getElementById('root')).render(
                 <Route path='/create-product' element={<CreateProduct />} />
                 <Route path='/cart' element={<Cart />} />
                 <Route path='/checkout' element={<Checkout />} />
+                <Route path='/order-history' element={<OrderHistory />} />
             </Routes>
         </Router>
     </StrictMode>
