@@ -426,6 +426,28 @@ app.get('/orders', async (req, res) => {
     }
 });
 
+// Get orders by user ID
+app.get('/orders/user/:userIDNumber', async (req, res) => {
+    const userIDNumber = parseInt(req.params.userIDNumber, 10);
+
+    if (isNaN(userIDNumber)) {
+        return res.status(400).json({error: 'Invalid userIDNumber format'});
+    }
+
+    try {
+        const userOrders = await Order.find({userIDNumber}).sort({orderDate: -1});
+
+        if (!userOrders || userOrders.length === 0) {
+            return res.status(404).json({message: 'No orders found for this user'});
+        }
+
+        res.json(userOrders);
+    } catch (err) {
+        console.error('Error fetching user orders:', err);
+        res.status(500).json({error: 'Failed to fetch user orders'});
+    }
+});
+
 
 
 const PORT = process.env.PORT || 3000;
