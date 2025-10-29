@@ -317,6 +317,28 @@ app.post('/products/:id/adjust-stock', async (req, res) => {
     }
 })
 
+//  Delete a product by ID
+app.delete('/products/:id', async (req, res) => {
+    const productId = req.params.id;
+
+    try {
+        const deletedProduct = await Product.findOneAndDelete({id: productId});
+
+        if (!deletedProduct) {
+            return res.status(404).json({error: 'Product not found'});
+        }
+
+        res.json({
+            success: true,
+            message: `Product with ID ${productId} has been deleted`,
+            deletedProduct
+        });
+    } catch (err) {
+        console.error('Error deleting product:', err);
+        res.status(500).json({error: 'Failed to delete product'});
+    }
+});
+
 // POST endpoint for image upload
 app.post('/upload-image', upload.single('image'), (req, res) => {
     try {

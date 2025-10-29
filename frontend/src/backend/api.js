@@ -109,6 +109,23 @@ export async function adjustStock(productId, adjustment) {
     }
 }
 
+export async function DeleteProduct(productId) {
+    try {
+        // console.log('Deleting product with ID:', productId);
+        const response = await fetch(`${API_URL}/products/${productId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        return await handleResponse(response, 'Delete product')
+    } catch (error) {
+        console.error('Delete product network error:', error)
+        return {error: 'Network error during product deletion'}
+    }
+}
+
 //
 // IMAGE UPLOAD FUNCTIONS
 //
